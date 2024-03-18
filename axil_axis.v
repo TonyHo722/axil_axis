@@ -95,6 +95,16 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
   output wire          mb_irq          // Generate interrupt only when mailbox write by remote, i.e. from Axi-stream
  
 );
+  localparam TUSER_AXIS = 2'b00;
+  localparam TUSER_AXILITE_WRITE = 2'b01;
+  localparam TUSER_AXILITE_READ_REQ = 2'b10;
+  localparam TUSER_AXILITE_READ_CPL = 2'b11;
+
+  localparam TID_DN_UP = 2'b00;
+  localparam TID_DN_AA = 2'b01;
+  localparam TID_UP_UP = 2'b00;
+  localparam TID_UP_AA = 2'b01;
+  localparam TID_UP_LA = 2'b10;
 
 // naming rule
 // r_   : registered/latched
@@ -215,8 +225,8 @@ assign m_wstrb  = r_ss_wstrb;
 // From SS
 //   - write/read AA  => no need to trigger SS state machine
 //   - write Mbox
-wire ss_aa_reg  = ( r_ss_rw_addr[27:8] == 20'h000_21 );   // xxxx_3xxx, xxxx_2xxx only compare addr[11:8];
-wire ss_aa_mbox = ( r_ss_rw_addr[27:8] == 20'h000_20 );  
+wire ss_aa_reg  = ( as_aa_tdata[27:8] == 20'h000_21 );   // xxxx_3xxx, xxxx_2xxx only compare addr[11:8];
+wire ss_aa_mbox = ( as_aa_tdata[27:8] == 20'h000_20 );  
 
 wire ls_aa_reg  = ( r_ls_rw_addr[11:8] == 4'h1 );
 wire ls_aa_mbox = ( r_ls_rw_addr[11:8] == 4'h0 );
@@ -279,7 +289,7 @@ assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // f
 //               2nd T = r_ls_wdata
 // 2. SS read response  : r_lm_rs_data
 // 
-assign aa_as_tdata =  ({32{sm_wr_t1}}  & r_ls_rw_addr)     // LS->SM
+assign aa_as_tdata =  ({32{sm_wr_t1}}  & {r_ls_wstrb, r_ls_rw_addr[27:0]} )     // LS->SM
                    |  ({32{sm_wr_t2}}  & r_ls_wdata ) 
                    |  ({32{r_ss_cyc & !ss_aa_reg}} & r_lm_rs_data )  // SS read
                    |  ({32{r_ss_cyc  &  ss_aa_reg}} & sm_aa_internal_data) 
@@ -400,6 +410,14 @@ assign s_awready = r_ls_cyc & r_ls_wr & ls_done;
 assign s_wready  = s_awready;
 assign s_arready  = (ls_sm_fsm == `LS_RD);
 assign s_rvalid = r_ls_cyc & !r_ls_wr & ls_done;
+
+// interface signals  - axis master
+assign aa_as_tvalid = r_ls_sm_cyc;
+assign aa_as_tstrb = r_ls_wstrb;
+assign aa_as_tkeep = 0;
+assign aa_as_tlast = 0;
+assign aa_as_tuser = TUSER_AXILITE_WRITE;
+
 
 // control signals
 // {ls_sm_enable, ls_sm_wr, sm_ready, sm_rs_ready}
@@ -598,15 +616,15 @@ end
 // 
 
 always @( posedge axis_clk ) begin
-    if( r_ls_only_cyc & (s_awready | s_arready))  begin
-        r_ls_rw_addr <= s_awready ? s_awaddr : s_araddr;   // 
+    if( r_ls_only_cyc & (s_awvalid | s_arvalid))  begin   //use valid to latch addr.
+        r_ls_rw_addr <= s_awvalid ? s_awaddr : s_araddr;   //r_ls_rw_addr[31:15] awlays = 0
     end else begin
         r_ls_rw_addr <= r_ls_rw_addr; 
     end
 end
 
 always @( posedge axis_clk ) begin
-    if( r_ls_only_cyc & s_wready )  begin
+    if( r_ls_only_cyc & s_wvalid )  begin
         r_ls_wstrb <= s_wstrb;
         r_ls_wdata <= s_wdata;
     end else begin
