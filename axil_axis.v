@@ -1,16 +1,16 @@
 // AXIL-AXIS (AA module) - AXILite-AXIS Protcol Conversion
 //  Specification: https://github.com/bol-edu/fsic_fpga/blob/main/fsic-spec-dev/modules/FSIC-AXIS%20interface%20specification.md
-//
-// The code is based on axil_axis.sv by Zack, and make the following modification
+// 
 // - Simplify the design, no fifo
 //   Assuming there is no pipeline ss->lm transaction
-//   Assuming there is no pipeline ls->sm tranaction
-//
-// - Support
-//   Axis-slave to Axilite Master (ss->lm) read/write
-//   Axilite slave to Axis-master (ls -> sm) read/write
-//   mailbox - support on 2 x DW register (DW#0 - FSIC, DW#1 - FPGA)
-//
+//   Assuming there is no pipeline ls->sm tranaction 
+//   Assuming there is no concurrent ss, ls transaction, i.e. either ss, or ls transaction is only, it will stall the other.
+// 
+// - Support 
+//   Axis-slave to Axilite Master (ss->lm -> sm) read/write 
+//   Axilite slave to Axis-master (ls -> sm -> ss) read/write
+//   mailbox - support on 8 DW register (DW#0 - FSIC, DW#1 - FPGA)
+// 
 
 
 
@@ -25,6 +25,7 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
   input  wire          axis_clk,
   input  wire          axis_rst_n
 
+// LM - Axilite Master
 // LM AW Channel
   output wire          m_awvalid,
   output wire  [31: 0] m_awaddr,
@@ -33,7 +34,7 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
 // LM  W Channel
   output wire          m_wvalid,
   output wire  [31: 0] m_wdata,
-  output wire   [3: 0] m_wstrb,    // always asserted - 32-bit write
+  output wire   [3: 0] m_wstrb,    // follow axis 2nd cycle ss_tdata[31:28]
   input  wire          m_wready,
 
 /// LM AR Channel
@@ -46,6 +47,8 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
   input  wire          m_rvalid,
   input  wire  [31: 0] m_rdata,
 
+
+// LS - Axilite Slave
 // LS AW Channel
   output wire          s_awready,
   input  wire          s_awvalid,
@@ -54,7 +57,7 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
 // LS W Channel
   output wire          s_wready,
   input  wire          s_wvalid,
-  input  wire  [31: 0] s_wdata,
+  input  wire  [31: 0] s_wdata,  
   input  wire   [3: 0] s_wstrb,
 
 // LS AR Channel
@@ -62,15 +65,14 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
   input  wire          s_arvalid,
   input  wire  [14: 0] s_araddr,
 
-// LS R Channel
+ // LS R Channel
   output wire  [31: 0] s_rdata,
   output wire          s_rvalid,
   input  wire          s_rready,
 
-
 // -- Stream Interface with Axi-Switch (AS)
 
-// SS
+// SS - Stream Slave
   input  wire  [31: 0] as_aa_tdata,
   input  wire   [3: 0] as_aa_tstrb,
   input  wire   [3: 0] as_aa_tkeep,
@@ -79,7 +81,7 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
   input  wire   [1: 0] as_aa_tuser,
   output  wire         aa_as_tready,
 
-// Sm
+// SM - Stream Master
   output wire  [31: 0] aa_as_tdata,
   output wire   [3: 0] aa_as_tstrb,
   output wire   [3: 0] aa_as_tkeep,
@@ -91,23 +93,40 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
 // Misc
   input  wire          cc_aa_enable,   // all Axilite Slave transaction should be qualified by cc_aa_enable
   output wire          mb_irq          // Generate interrupt only when mailbox write by remote, i.e. from Axi-stream
-
+ 
 );
+
+// naming rule
+// r_   : registered/latched
+// _n   : active low
+// _cyc : transaction cycle 
+// interface ports:
+// - ss (stream slave)
+// - sm (stream master)
+// - ls (axilite slave)
+// - lm (axilite master)
+// cycle type indicators:
+// - wr : write transaction
+// - rd : read transaction
+// - rs : read response
+
+// aa_reset_n - AA module reset, active low
+// 1. system reset
+// 2. cc_aa_enable = 0 : if AA is not enable, treated as reset
+wire aa_reset_n = axis_rst_n;
 
 
 //
 //   SS Cycle type - decode from tuser, refer to fsic-axis specification
 //   tuser = 2'b00    - axis cycle, ignored, we don't handle pure axi-stream transaction
-//   tuser = 2'b01      - axilite write - 2T  T1:address, T2:data
-//   tuser = 2'b10      - axilite read - address
-//   tuser = 2'b11      - axilite read - data response
+//   tuser = 2'b01    - axilite write - 2T  T1:address, T2:data
+//   tuser = 2'b10    - axilite read - address
+//   tuser = 2'b11    - axilite read - data response
 // Note: we should use latched tuser ----
-wire ss_axis_cyc    = (r_ss_tuser = 2'b00);    // actually, we won't receive this cycle, as should filter it out
-wire ss_wr_cyc      = (r_ss_tuser = 2'b01);    // tready is return as long as address/data latch is ok (ss_w_addr_data_ok)
-wire ss_rd_cyc      = (r_ss_tuser = 2'b10);    // tready is return as long as ss_rw_addr latch is ok
-wire ss_rs_cyc      = (r_ss_tuser = 2'b11);
-wire ls_read_resp   = ss_axil_read_data_cyc;                   // it is used to terminate ls_read
-wire ss_axil_cyc    = ss_axil_write_cycle | ss_axil_read_addr_cyc;
+wire ss_axis_cyc    = (as_aa_tuser = 2'b00);    // actually, we won't receive this cycle, as should filter it out
+wire ss_wr_cyc      = (as_aa_tuser = 2'b01);    // tready is return as long as address/data latch is ok (ss_w_addr_data_ok)
+wire ss_rd_cyc      = (as_aa_tuser = 2'b10);    // tready is return as long as ss_rw_addr latch is ok
+wire ss_rs_cyc      = (as_aa_tuser = 2'b11); 
 
 
 // --------------------------------
@@ -118,16 +137,16 @@ wire ss_axil_cyc    = ss_axil_write_cycle | ss_axil_read_addr_cyc;
 // SS -> LM  write : latch address (1st T) and data (2nd T)
 // SS -> LM  read :  latch address (1st T)
 // LS -> SS  write : latch address (@awvalid), data (@wvalid)
-// LS -> SS  read : latch address (@arvalid), data @(rready)
+// LS -> SS  read : latch address (@arvalid), data @(rready) 
 //
 
 // ----------------------------
-// cycle tracking
+// cycle tracking  - r_ss_cyc, r_ls_cyc
 // ----------------------------
 // ------  SS -> LM  -----------
-reg r_ss_wr;                  // status: latched ss transaction is read(0) or write(1)
+reg  r_ss_wr;                  // status: latched ss transaction is read(0) or write(1)
 wire r_ss_rd = ~r_ss_wr;
-reg r_ss_cyc;                 // indicate there is ss_cyc pending, set by ss, reset by axil transaction complete
+reg  r_ss_cyc;                 // indicate there is ss_cyc pending, set by ss, reset by axil transaction complete
 wire r_lm_ready;               // axil master transaction complete, m_wready (write), m_rvalid(read)
 wire r_lm_done = r_lm_ready;    // same as lm_ready
 // reg r_ss_rresp;               // ss read data is complete, generate sm response data ??
@@ -144,73 +163,68 @@ reg r_sm_done;              // sm write transferred, or sm read address sent
 //  Lached Input address / data from SS, LS, LM (response data)
 // ----------------------------------
 // --- SS ------------
-reg [31:0] r_ss_rw_addr;      // ss-axil address latch for read and write - shared
-reg [31:0] r_ss_w_data;
-// reg [31:0] r_ss_rs_data;      // ss data for tuser = 2'b11, used as ls respond data, i.e. s_rdata
+reg [31:0] r_ss_rw_addr;            // ss-axil address latch for read and write - shared
+reg [31:0] r_ss_w_data;             // ss-axil data latch for write, 
+                                    //    also used for ss-axil read response data, guarantee exclusive ss w/rs by not responding ss_ready
+                                    //    if r_ss_cyc is on-going, don't asserts ss_tready
+reg [3:0]  r_ss_wstb;               // ss-axil wstb latch - from SS 1T tdata[31:28]
+reg [1:0]  r_tuser;                 // tuser is encoded with cycle type            
+
+
+// reg [31:0] r_ss_rs_data;         // ss data for tuser = 2'b11, used as ls respond data, i.e. s_rdata
 wire [31:0] r_ss_rs_data = r_ss_w_data;  // shared, guarantee exclusive ss w/rs by not responding ss_ready, the code may be confusing
-reg [1:0] r_tuser;
 
+
+// ---  LS -----------  Axilite Slave
 // ls side latched address, data, or read data to send
-reg [31:0] r_ls_rw_addr;
-reg [31:0] r_ls_w_data;
-reg [3:0]  r_ls_w_wstrb;
+reg [31:0] r_ls_rw_addr;            // ls address
+reg [31:0] r_ls_w_data;             // ls write data
+reg [3:0]  r_ls_w_wstrb;            // ls wstrb
 
+// --- LM  ------------ Axilite Master
 // lm side - latch read response data
-reg [31:0] r_lm_rs_data;    // lm read response data
+reg [31:0] r_lm_rs_data;            // lm read response data 
 
+
+// ----------------------------------
+//  Module Interface signals - Address/Data to LM, SM from internal latched registers
 // ---------------------------------
-// Output Addrss/Data to LM, SM from internal latched registers
-// ---------------------------------
-// ----  LM - Adddress/Data
+
+
+// ----  LM - Adddress/Data   - from SS latched address/data
 assign m_awaddr = r_ss_rw_addr;
-assign m_araddr = r_ss_rm_addr;
+assign m_araddr = r_ss_rw_addr;
 assign m_wdata  = r_ss_w_data;
+assign m_wstrb  = r_ss_wstrb;
+
 
 // ----- LS - Data Source
-// 1. SS RS data  - r_ss_rs_data
+// 1. SS RS data  - r_ss_rs_data 
 // 2. ls_aa_internal data
-assign s_rdata  = ls_aa_internal ?  ls_aa_internal_data            // TBD
-                                 : r_ss_rs_data;
+// TBD: ls_aa_internal_data
+// TBD: ls_aa_internal 
+assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // TBD: 
+                                 : r_ss_rs_data;        // from SS read-response tuser=11
 
 // ---- SM - data has several sources
 // 1. LS write - 1st T = r_ls_rw_addr
 //               2nd T = r_ls_w_data
-// 2. LM RS  : r_lm_rs_data
-//
-assign aa_as_tdata = 32'bx;         // TBD
+// 2. SS read response  : r_lm_rs_data
+// 
+assign aa_as_tdata =  (32{sm_wr_t1}  & r_ls_rw_addr)    // LS->SM
+                   |  (32{sm_wr_t2}  & r_ls_w_data )
+                   |  (32{r_ss_cycle & !ss_aa_reg} & r_lm_rs_data )  // SS read
+                   |  (32{r_ss_cyce  &  ss_aa_reg} & sm_aa_internal_data)
+                   ;
 
 
 // ---------------------------------------
-// Output: control signals
+// Mailbox 
+// - Memory-mapped address (32'h3000_2000~3000_201f)
+//   Use address[4:2]  to index mb_regs
 // ---------------------------------------
-// ------ LM -----
-assign m_awvalid =
-
-// ------- LS ------
-assign s_awready = ~r_ls_cyc;       // if there is pending LS cycle, don't return s_awready
-assign s_wready  = ~r_ls_cyc;       // same as s_awready
-assign s_arready = ~r_ls_cyc;
-assign s_rvalid  = r_ls_cyc & (  aa_internal        // if aa internal return immediate
-                               | (ss)
-
-
-
-reg r_sm_wr_cyc;                // ls_write -> sm write
-reg r_sm_rd_cyc                 // ls_read -> sm read
-
-
-// ---------------------------------------
-// Mailbox
-// - Memory-mapped address (32'h3000_3000~3000_3xxx)
-// - We support only 2 * DW register
-//   DW[0] @ Caravel side
-//   DW[1] @ FPGA side
-//   Axis_Axilite (32'h3000_2000~32'h3000_2xxx)
-//   Mailbox (32'h3000_3000~32'h3000_3xxx)
-//   We only need to compare Addr[15:12] = 'h2, or 'h3
-// ---------------------------------------
-parameter MBOX_BASE_  32'h
-reg [31:0] mb_regs[1:0];    // only support 2*DW to save space
+parameter MBOX_BASE_  
+reg [31:0] mb_regs[7:0];    // only support 8*DW to save space
 
 
 // ---------------------------------------
@@ -224,312 +238,351 @@ reg [31:0] mb_regs[1:0];    // only support 2*DW to save space
     //       1 = enable interrupt signal
     // offset 4-7 (32bit):
     //   bit 0: Interrupt Status
-    //       0: interrupt has occurred
+    //       1: interrupt has occurred
     //       0: no interrupt
     //--------------------------------------------------
 reg intr_enable;  // rw: offset:0, bit0  - use addr[2] to select
 reg intr_status;  // ro: offset:4, bit0
 
-//
+// 
 // aa_internal - address hit internal aa configuration or mailbox
-// either from ss, or ls
-//
-wire ss_aa_internal = { r_ss_rw_addr[11:8] == 3'b001 );   // xxxx_3xxx, xxxx_2xxx only compare addr[11:8];
-wire ls_aa_internal = { r_ls_rw_addr[11:8] == 3'b001 ) & cc_aa_enable;
+// From SS
+// AA  'h3000_2xxx   r_ss_rw_addr[27:0]
+// aa_reg (internal) a[27:0] = 28'h000_21xx
+// aa_mbox           a[27:0] = 28'h000_20xx
+// From LS
+// use r_ls_rw_addr[11:0]
+//    aa_reg   12'h1xx
+//    aa_mbox  12'h0xx
+// 
+// From LS
+//   - read ( AA, MBOX), Write AA   => no need trigger LS state machine
+// From SS
+//   - write/read AA  => no need to trigger SS state machine
+//   - write Mbox
+wire ss_aa_reg  = ( r_ss_rw_addr[27:8] == 20'h000_21 );   // xxxx_3xxx, xxxx_2xxx only compare addr[11:8];
+wire ss_aa_mbox = ( r_ss_rw_addr[27:8] == 20'h000_20 );  
+wire ls_aa_reg  = ( r_ls_rw_addr[11:8] == 4'h1 );
+wire ls_aa_mbox = ( r_ls_rw_addr[11:8] == 4'h0 );
+
 /// wire [31:0] ss_aa_internal_data;        // ss won't read aa internal data
-wire [31:0] ls_aa_internal_data = r_ls_rw_addr[8] ? (r_ls_rw_addr[2] ? mb_regs[1]           // 'h3000_3004  mbox[1]
-                                                                     : mb_regs[0] )         // 'h3000_3000  mbox[0]
-                                                  : (r_ls_rw_addr[2] ? {31'b0, intr_status}         // 'h3000_2004  aa_reg[4-7]
-                                                                     : {31'b0, intr_intr_enable} )   // 'h3000_2000  aa_reg[3-0]
-                                                  ;
+wire [31:0] ls_aa_internal_data = ls_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_status}
+                                                               : {31'b0, intr_enable});                                             
+                                            : mb_regs[r_ls_rw_addr[4:2]];
 
 
-
-// --------------------------------------
-// SS, SM, LS, LM output generation
-// --------------------------------------
-// AxiL AW  :  m_awvalid, m_awaddr
-// Axil W   :  m_wvalid, m_wdata, m_wstrb
-// Axil AR  :  m_arvalid, m_araddr
-// Axil R   :  m_rready;
-//
-//
-// LM output
-reg         r_awvalid;
-reg         r_wvalid;
-reg         r_arvalid;
-
-assign  m_awvalid   = r_awvalid;
-assign  m_awaddr    = {4'b0000, r_ss_rw_addr[27:0]};
-assign  m_wvalid    = r_wvalid;
-assign  m_wdata     = r_ss_w_data;
-assign  m_wstrb     = r_ss_rw_addr[31:28];
-assign  m_arvalid   = r_arvalid;
-assign  m_araddr    = r_ss_rw_addr;
-assign  m_rready    = 1'b1;             // axilite master read can always accept data
-
-// LS output
-
-// SM output
-// Axi-stream Master
-//   output wire  [31: 0] aa_as_tdata,
-  output wire   [3: 0] aa_as_tstrb,
-  output wire   [3: 0] aa_as_tkeep,
-  output wire          aa_as_tlast,
-  output wire          aa_as_tvalid,
-  output wire   [1: 0] aa_as_tuser,
-  input  wire          as_aa_tready
-
-// LS ouput
+// for SS read 
+wire [31:0] sm_aa_internal_data = ss_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_status}
+                                                                : {31'b0, intr_enable});                                             
+                                            : mb_regs[r_ss_rw_addr[4:2]];
 
 
-
-
-//
-// -- Protocol Conversiion Waveform
-// SS (W) -> LM (W)
-// clk      |   |   |   |   |   |   |   |   |   |
-// tvalid   _/-----------
-// tdata    _<AAAAAA><DDD>
-// tready   _____/-------\_______________________
-// en       ______/-------\______________________
-// --- LM AW/W Channel
-// awvalid/wvalid   _____/----------------------
-// awdata/awaddr---------<AD---->
-// awready  _________________/--\______________
-// wready   _____________________/--\__________
-//
-//  Note: tready only asserts if latch is free, e.g. ss_w_addr_data_ok
-//
-// Receive SS W Address
-// note: as long as ss_w_addr_data_ok asserted, we can asserts tready
-// Receiving ss_w_addr, and ss_w_data is two steps processes addr -> data
-// use a flag to indicate it is first step or 2nd step
-//  ！ss_w_flag & aa_as_tvalid  -> 1st T
-//  ss_w_flag & aa_as_tvalid -> 2nd T
-
-// some of the interface signal can simply wired to internal state registers
-// aa_as_tready if tuser = 2'b01 - write, as long as ss_w_addr_data_ok, i.e. address & data latch is free, we can asserts
-assign aa_as_tready = !r_ss_cyc;   // if r_ss_cyc = 1, there is pending ss->axil, the address/data latch is occupied
-
-reg ss_w_flag；  // toggle 0->1->0, use it to generate ss_rw_addr, ss_w_data latch enable
-always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
-    if( !axis_rst_n ) begin
-        ss_w_flag <= 0;
+// ----------------------------
+// mb_regs, intr_status, inter_enalbe
+// LS write - s_wready qualify by ls_aa_reg, ls_aa_mbx
+// SS write - ss_t2 @ clk  qualify by ss_aa_reg ls_aa_mbox
+reg r_ss_t2;   // one cycle after ss_t2 to ensure ss address/data is valid
+always @(posedge axis_clk or negedge axis_rst_n) begin
+    if(! axis_rst_n)  begin
+        r_ss_t2 <= 0;
     end else begin
-        if(  aa_as_tready & ss_axil_write_cyc & !ss_w_flag ) begin
-            ss_w_flag <= 1;
-        end else begin
-            ss_w_flag <= 0;
-        end
+        r_ss_t2 <= ss_t2;
     end
 end
 
-//
-// r_ss_rw_addr, r_ss_wdata
-//  - ss side address/data latch
-// Note: it does not need reset, why ? when it is used, the content will be valid anyway
-//
-always @( posedge axis_clk ) begin
-    if( ss_axil_cyc & ss_as_tready ) begin
-        if( !ss_w_flag ) begin
-            r_ss_rw_addr <= ss_as_tdata;
-        end else begin
-            r_ss_w_data <= ss_as_tdata;
-        end
-    end
-end
-
-//
-// r_ss_cyc  - there is pending ss->axil cycle pending, r_ss_rw_addr, r_ss_w_data is not free
-// it is set when ss_axil_
-// reset when axil cycle complete  - r_lm_ready m_wready (write), m_rvalid(read)
-//
-always @( posedge axis_clk or negedge axis_rst_n) begin
-    if( !axis_rst_n) begin
-        r_ss_cyc <= 0;
-    end else begin
-        if( ss_axil_cyc & ss_as_tready) begin
-            r_ss_cyc <= 1;
-        end else if(  r_lm_ready ) begin
-            r_ss_cyc <= 0;
-        end
-    end
-end
-
-//
-// r_ss_rw - a status indicate the pending ss-axil is write (1) or read(0)
-// it is a status, when used, it must be qualified by command, thus, it does not need reset
-// it can be unknow (X) before the first ss-axil cycle, it is dont-care anyway
-//
-always @( posedge axis_clk) begin
-    if( ss_axil_cyc) r_ss_rw = ss_axil_write_cyc;
-end
-
-//
-// r_ss_rdata
-//
-reg [31:0] r_ss_resp_data;    // ss data for tuser = 2'b11, i.e. ls read response data from ss
-
-always @( posedge axis_clk ) begin
-    if( ss_axil_read_data_cyc) r_ls_r_data <= ss_as_tdata;
-end
-
-// ---------------------------------------
-// Start Axil master transaction
-// ---------------------------------------
-// Axil master write - triggered by r_ss_cyc & r_ss_wr
-//  AW, W channel will assert awvalid, wvalid at the same timing
-//  reset to wready -> AW and
-// Note: if address hit Mailbox or AA internal register -> does not generate Axil master cycle
-// -- awvalid
-always @( posedge axis_clk or negedge axis_rst_n) begin
-    if( !axis_rst_n) begin
-        r_awvalid <= 0;
-    end else begin
-        if( r_ss_cyc & r_ss_wr & !r_awvalid & !ss_aa_internal) begin      // set valid, when there is pending r_ss_cyc & r_ss_wr
-            r_awvalid <= 1;                             // note: r_ss_cyc is a level signal, see it only when r_awvalid = 0
-        end else if( m_awready ) begin                  // reset when sample m_awready
-            r_awvalid <= 0;
-        end
-    end
-end
-// -- wvalid
-always @( posedge axis_clk or negedge axis_rst_n) begin
-    if( !axis_rst_n) begin
-        r_wvalid <= 0;
-    end else begin
-        if( r_ss_cyc & r_ss_wr & !r_wvalid & !ss_aa_internal) begin      // set valid, when there is pending r_ss_cyc & r_ss_wr
-            r_wvalid <= 1;                             // note: r_ss_cyc is a level signal, see it only when r_awvalid = 0
-        end else if( m_wready ) begin                  // reset when sample m_wready
-            r_wvalid <= 0;
-        end
-    end
-end
-
-
-//
-// axil master read - ar triggered by r_ss_cyc & !r_ss_wr
-// response rvalid -> should trigger sm tuser=1'b11  read response
-//
-//  -- arvalid
-always @( posedge axis_clk or negedge axis_rst_n) begin
-    if( !axis_rst_n) begin
-        r_arvalid <= 0;
-    end else begin
-        if( r_ss_cyc & !r_ss_wr & !r_arvalid & !ss_aa_internal) begin      // set valid, when there is pending r_ss_cyc & r_ss_wr
-            r_arvalid <= 1;                             // note: r_ss_cyc is a level signal, see it only when r_awvalid = 0
-        end else if( m_arready ) begin                  // reset when sample m_wready
-            r_arvalid <= 0;
-        end
-    end
-end
-
-// TBD
-// Mailbox or AA register read/write from SS
-// combine from SS, and LS
-//
-
-//
-// axil read response  -
-// -- rvalid - is used to latch into r_
-// -- m_rready is always asserted
-//
-// -- r_ss_rresp, r_ss_rdata
+// 
+// intr_status
+//  set by ss write to mbox
+//  reset by ls write to status with 1  (write one to clear)
+// 
 always @(posedge axis_clk or negedge axis_rst_n) begin
     if( !axis_rst_n ) begin
-        r_ss_rresp <= 0;
+        intr_status <= 0;
     end else begin
-        if( r_ss_cyc & !r_ss_wr & m_rvalid & !r_ss_rresp ) begin
-            r_ss_rresp <= 1;
-            r_ss_rdata <= m_rdata;          // latch the read data
-        end else begin
-            r_ss_rresp <= 0;
-        end
+
+        // intr_staus
+        if(s_wready & ls_aa_reg & r_ls_rw_addr[2] & r_ls_wdata[0]) 
+            intr_status <= 1'b0;    // write-one-to clear 
+        else if( r_ss_t2  & ss_aa_mbox ) 
+            intr_status <= 1'b1;    // mbox write set status
+
     end
-end
+end 
 
-
-// -----------------------------------------
-// Axilite-Slave  - ls
-//  Write: latch address and data -> pass to sm
-//  Read:
-//     - latch read address -> pass to sm
-//     - ss response, generate LS read response
-//       assume the AR, and R can not be interrupted
-// -----------------------------------------
-
-//
-// LS-write - latch address / data used for SM
-//
-// Axilite Slave AW Channel
-
-// -- r_ls_rw_addr  - s_awvalid or s_arvalid
-always @( posedge axis_clk) begin
-    if( cc_aa_enable & ((s_awvalid & s_awready) | (s_arvalid & s_arready)) begin
-        r_ls_rw_addr <= {17'b0, s_awaddr};           // what address should be passed to the other end?
-    end
-end
-
-// -- r_ls_w_wstrb
-always @( posedge axis_clk) begin
-    if( cc_aa_enable & s_awvalid & s_awready ) begin
-        r_ls_w_data <= s_wdata;
-        r_ls_w_wstrb <= s_wstrb;
-    end
-end
-
-// r_ls_wr
-always @( posedge axis_clk) begin
-    if( cc_aa_enable & (s_awvalid & s_awready)) begin
-        r_ls_wr <= 1;
-    end else if( c_aa_enable & (s_arvalid & s_arready) begin
-        r_ls_wr <= 0;
-    end else begin
-        r_ls_wr <= 0;
-    end
-end
-
-// r_ls_cyc  - asserts from s_awvalid or s_arvalid to r_sm_done
-always @( posedge axis_clk or negedge axis_rst_n) begin
+always @(posedge axis_clk or negedge axis_rst_n) begin
     if( !axis_rst_n ) begin
-        r_ls_cyc <= 1'b0;
-    end else if( (s_awvalid | s_arvalid) & !r_ls_cyc ) begin
-        r_ls_cyc <= 1'b1;
-    end else if( r_sm_done ) begin
-        r_ls_cyc <= 0;
+        intr_status <= 0;
+        intr_enable <= 0;
+    end else begin
+
+        // intr_enable
+        if(s_wready & ls_aa_reg & !r_ls_rw_addr[2] ) 
+            intr_enable <= r_ls_wdata[0];
+        else if( r_ss_t2  & ss_aa_reg & !r_ss_rw_addr[2] ) 
+            intr_enable  <= r_ss_wdata[0];
+        else 
+            intr_enable <= intr_enable ;
+
+        // mbox
+        if(s_wready & ls_aa_mbox) 
+            mb_regs[r_ls_wr_addr[4:2]] <= r_ls_wdata;
+        else if( r_ss_t2  & ss_aa_mbox ) 
+            mb_regs[r_ss_wr_addr[4:2]] <= r_ss_wdata;
     end
 end
 
+// --- mb_irq ---
+// asserts mb_irq when  intr_status = 1 & intr_enable
 //
-// LS Read  -
-//  AR:  latch r_ls_rw_addr, it is already done in LS write
-//  R:  need to get data from SS - tuser = 2'b11
-//     source of read data
-//      1. mailbox
-//      2. aa_reg
-//      3. ss_read_resp
+assign mb_irq = intr_status & intr_enable; 
+
+// -------------------------------------------------------
+// LS State Machine - Tracking LS -> SM Conversion
+// Note： LS State machine & SS State machine can not run currently
+//  LS read AA reg + MBOX LS_RD -> LS_DONE
+//  LS write AA_reg       LS_WR -> LS_DONE
+//  LS write AA_MBOX   pass to FPGA -> LS_WR_SM1
+// -------------------------------------------------------
+reg [4:0] ls_sm_fsm;
+
 //
-wire [31:0] mbox_read =
-wire [31:0] aa_reg = {31'b0, }
+// sm fsm state encoding is used to generate related control signal
+//                         {r_ls_cyc, r_ls_wr, r_sm_cyc, w1/w2 or ss_read, done}
+`define LS_IDLE             5'b0_0_0_0_0              
+`define LS_RD               5'b1_0_0_0_0
+`define LS_WR               5'b1_1_0_0_0
+`define LS_WR_SM1           5'b1_1_1_0_0
+`define LS_WR_SM2           5'b1_1_1_1_0
+`define LS_RD_SM_REQ        5'b1_0_1_1_0
+`define LS_RD_SS_WAIT_RS    5'b1_0_1_0_0
+`define LS_DONE             5'b1_0_0_0_1
+
+// cycle indicator and control signal generaion
+assign r_ls_cyc = ls_sm_fsm[4];
+wire   r_ls_only_cyc = ls_sm_fsm[4] & !ls_sm_fsm[2];  // LS_RD, LS_WR
+assign r_ls_wr  = ls_sm_fsm[3];
+assign r_ls_sm_cyc = ls_sm_fsm[2];
+assign sm_wr_t1 = (ls_sm_fsm == `LS_WR_SM1);
+assign sm_wr_t2 = (ls_sm_fsm == `LS_WR_SM2);
+assign ls_done  = ls_sm_fsm[0];
+
+// interface signals  - axilite slave
+assign s_awready = r_ls_cyc & r_ls_wr & ls_done;
+assign s_wready  = s_awready;
+assign s_arready  = (ls_sm_fsm == `LS_RD);
+assign s_rvalid = r_ls_cyc & !r_ls_wr & ls_done;
+
+// control signals
+// {ls_sm_enable, ls_sm_wr, sm_ready, sm_rs_ready}
+// Note: LS, SS State machine is exclusive 
+wire ls_sm_enable = !r_ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arvalid);   // axilite AW & W AR request asserts
+wire ls_sm_wr = s_awvalid;                  // axilite AW - write transaction
+wire sm_ready = as_aa_tready;               // sm bus ready if write 2 cycle
+wire ss_rs_ready = as_aa_tvalid & ss_rs_cyc; // axis slave receives read completion
+wire ls_ready  = ls_sm_wr ? ls_done : ls_done & s_rready;      // ls read need to wait s_rreay
+
+// State Machine - ls_sm_fsm
+always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
+    if( !axis_rst_n ) begin
+        ls_sm_fsm = `LS_IDLE;
+    end else begin
+        case(ls_sm_fsm) 
+            `LS_IDLE : 
+                if(ls_sm_enable) begin
+                    if(ls_sm_wr) ls_sm_fsm <= `LS_WR;
+                    else         ls_sm_fsm <= `LS_RD;
+                end else begin
+                                ls_sm_fsm <= `LS_IDLE;
+                end
+            `LS_WR:  
+                if(ls_aa_reg)   ls_sm_fsm <= `LS_DONE;
+                else            ls_sm_fsm <= `LS_WR_SM1;
+            `LS_WR_SM1: 
+                if(sm_ready)    ls_sm_fsm <= `LS_WR_SM2;
+                else            ls_sm_fsm <= `LS_WR_SM1;
+            `LS_WR_SM2:
+                if(sm_ready)    ls_sm_fsm <= `LS_DONE;
+                else            ls_sm_fsm <= `LS_WRI_SM2;
+            `LS_RD:             
+                if( ls_aa_reg | ls_aa_mbox ) ls_sm_fsm <= `LS_DONE;
+                else                         ls_sm_fsm <= `LS_RD_SM_REQ;
+            `LS_RD_SM_REQ:                  // send 1T read request
+                if(sm_ready)    ls_sm_fsm <= `LS_RD_SS_WAIT_RS;
+                else            ls_sm_fsm <= `LS_RD_SM_REQ;
+            `LS_RD_SS_WAIT_RS:
+                if(ss_rs_ready) ls_sm_fsm <= `LS_DONE;
+                else            ls_sm_fsm <= `LS_RD_SS_WAIT_RS;
+            `LS_DONE:           
+                if(ls_ready)    ls_sm_fsm <= `LS_IDLE;
+                else            ls_sm_fsm <= `LS_DONE;
+            default:            ls_sm_fsm <= `LS_IDLE;
+        endcase
+    end
+end 
 
 
-// -----------------------------------------
-// Stream-master cycle - SN transaction
-// Trigger by r_ls_cyc & !ls_aa_internal
-// note: write to mailbox will send to SM
-// -----------------------------------------
-reg r_sm_done;          // indicate sm transaction complete
+// ------------------------------------------------------
+// SS State machine - tracking SS -> LM 
+reg [5:0] ss_lm_fsm;
+
+//
+// sm fsm state encoding is used to generate related control signal
+//  SS read AA inernal  SS_RD     -> SS_RD_SM_RS
+//  SS write AA internal SS_WR_S2 -> SS_DONE
+// 
+//                          {r_ss_cyc, r_ss_wr, r_lm_cyc, r_sm_cyc, w1/w2 or lm_read_ar/r, done}
+`define SS_IDLE             6'b0_0_0_0_0_0
+`define SS_RD               6'b1_0_0_0_0_0
+`define SS_WR_S1            6'b1_1_0_0_0_0
+`define SS_WR_S2            6'b1_1_0_0_1_0
+`define SS_WR_LM            6'b0_1_1_0_0_0
+`define SS_RD_LM_AR         6'b0_0_1_0_0_0
+`define SS_RD_LM_R          6'b0_0_1_0_1_0
+`define SS_RD_SM_RS         6'b0_0_0_1_0_0
+`define SS_DONE             6'b0_0_0_0_0_1
+
+// cycle indicator and control signal generaion
+wire r_ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];
+wire r_ss_only_cyc = ss_lm_fsm[5];
+wire r_ss_wr  = ss_lm_fsm[4];
+wire r_lm_cyc = ss_lm_fsm[3];
+wire r_ss_sm_cyc = ss_lm_fsm[2];
+wire ss_t1  = r_ss_wr & !ss_lm_fsm[1];
+wire ss_t2  = r_ss_wr & ss_lm_fsm[1];
+wire ss_done  = ss_lm_fsm[0];
+
+// combine from lm->sm
+wire r_sm_cyc = r_ss_sm_cyc | r_ls_sm_cyc;
+
+// interface signals - axis slave
+assign aa_as_tready = r_ss_only_cyc;
+
+// interface signal - axis master
+//   assign aa_as_tdata 
+
+// LM interface signal - lm master
+assign m_awvdlid = r_lm_cyc & r_ss_wr;
+assign m_wvalid = m_awvalid;
+assign m_arvalid = r_lm_cyc & !r_ss_wr;
+assign m_rready  = m_arvalid;
+
+// control signals
+// Note: LS, SS state mchine are exclusive
+wire ss_lm_enable = !r_ls_cyc & as_aa_tvalid & !ss_aa_internal;
+wire lm_wr_ready  = m_awready & m_wready;
+
+        
+// State Machine - ss_lm_fsm
+always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
+    if( !axis_rst_n ) begin
+        ss_lm_fsm = `SS_IDLE;
+    end else begin
+        case(ss_lm_fsm) 
+            `SS_IDLE : 
+                if(ss_lm_enable) begin
+                    if(ss_wr_cyc)             ss_lm_fsm <=  `SS_WR_S1;
+                    else if(ss_rd_cyc)        ss_lm_fsm <= `LS_RD;
+                    else                      ss_lm_fsm <= `LS_IDLE;
+                end else begin
+                    ss_lm_fsm <= `LS_IDLE
+                end
+            `SS_WR_S1:  
+                if(as_aa_tvalid)   ss_lm_fsm <= `SS_WR_S2;
+                else               ss_lm_fsm <= `SS_WR_S1;
+            `SS_WR_S2:
+                if(as_aa_tvalid)   begin
+                    if(ss_aa_reg | ss_aa_mbox)  ss_lm_fsm <= `SS_DONE;
+                    else                        ss_lm_fsm <= `SS_WR_LM;
+                end else  begin 
+                    ss_lm_fsm <= `SS_WR_S2;
+                end
+            `SS_WR_LM:
+                if(lm_wr_ready)     ss_lm_fsm <= `SS_DONE;
+                else                ss_lm_fsm <= `SS_WR_LM;
+            `SS_RD:
+                if(ss_aa_reg | ss_aa_mbx) ss_lm_fsm <= `SS_RD_SM_RS;
+                else                      ss_lm_fsm <= `SS_RD_LM;
+            `SS_RD_LM_AR:
+                if( !m_arready )                ss_lm_fsm <= `SS_RD_LM_AR;
+                else if( m_arready & !m_rvalid ) ss_lm_fsm <= `SS_RD_LM_R;
+                else                            ss_lm_fsm <= `SS_RD_SM_RS;
+            `SS_RD_LM_R:
+                if( !m_rvalid )      ss_lm_fsm <= `SS_RD_LM_R;
+                else                 ss_lm_fsm <= `SS_RD_SM_RS;
+            `SS_RD_SM_RS:
+                if( !as_aa_tready)   ss_lm_fsm <= `SS_RD_SM_RS;
+                else                 ss_lm_fsm <= `SS_DONE;
+            `SS_DONE:               ss_lm_fsm <= `SS_IDLE;
+            default:            ss_lm_fsm <= `SS_IDLE;
+        endcase
+    end
+end        
 
 
+// ------------------------------------------------------
+//  Address / Data Storage
+// ------------------------------------------------------
+
+// ---------   SS    ---------------
+// SS - r_ss_rw_addr, r_ss_wdata, r_ss_wstb, r_tuser
+//  - ss side address/data latch
+// Note: it does not need reset, why ? when it is used, the content will be valid anyway
+// -------------------------
+
+always @( posedge axis_clk ) begin              // T1 - address
+    if( r_ss_only_cyc & (!r_ss_wr | ss_t1) & aa_as_tready) begin
+        r_ss_rw_addr <= ss_as_tdata;
+        r_ss_wstb <= as_aa_tstrb;
+        r_tuser <= as_aa_tuser;
+    end else begin
+        r_ss_rw_addr <= r_ss_rw_addr;
+        r_ss_wstb <= r_ss_wstb;
+        r_tuser <= as_aa_tuser;
+    end
+end
+
+always @(posedge axis_clk) begin                // T2 - data
+    if( r_ss_only_cyc & ss_t2 & ss_as_tready) begin
+        r_ss_w_data <= ss_as_tdata;
+    end else begin
+        r_ss_w_data <= r_ss_w_data;
+    end
+end
 
 
+// ----------  LS     ---------------------------
+// r_ls_rw_address   - LS address    @awvaid, arvalid
+// r_ls_w_data       - LS write data @wvalid
+// r_ls_wstrb      - ls write strb @awvalid
+// 
+always @( posedge axis_clk ) begin
+    if( r_ls_only_cyc & (s_awready | s_arready))  begin
+        r_ls_rw_address <= s_awready ? s_awaddr : s_araddr;   // 
+    end else begin
+        r_ls_rw_address <= r_ls_rw_address; 
+    end
+end
+always @( posedge axis_clk ) begin
+    if( r_ls_only_cyc & s_wready )  begin
+        r_ls_wstrb <= s_wstrb;
+        r_ls_wdata <= s_wdata;
+    end else begin
+        r_ls_wstrb <= r_ls_wstrb;
+        r_ls_wdata <= r_ls_wdata;
+    end
+end
 
 
-// ss_w_addr_data_ok is reset to 1
-// set to 0 when ss_axil_write_cycle or ss_axil_read_addr_cycle
-// set to 1 when correponding axilite master cycle complete
-// Note: there is no pipeline
-
+// ---------- LM   --------------------
+//  r_lm_rs_data           // latch read response data used for SM to return RS data
+//
+always @( posedge axis_clk ) begin
+    if( ls_sm_fsm == `LS_RD_SS_WAIT_RS & ss_rs_ready ) begin
+        r_lm_rs_data <= as_aa_tdata;
+    end else begin
+        r_lm_rs_data <= r_lm_rs_data;
+    end
+end
+ 
 
 endmodule // AXIL_AXIS
