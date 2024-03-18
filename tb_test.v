@@ -157,15 +157,15 @@ module tb_test ();
     reset_n = 0;
     init_value();
     
-    #10;
-    #10;
-    #10;
+    #50;
     reset_n = 1;
     #100;
-    soc_internal_axilite_write_req( 15'h100, 32'h1, 4'b001);  //set intr_enable = 1
-
-    #10;
-    soc_internal_axilite_read_req( 15'h100);  //read intr_enable
+    @ (posedge clk);
+    soc_to_internal_aa_reg_access();
+    
+    @ (posedge clk);
+    //soc_to_fpga_cfg_access();
+    
     #100;
     $finish;
   end
@@ -222,7 +222,82 @@ module tb_test ();
     end
   endtask
 
-  task soc_internal_axilite_write_req;
+
+  task fpga_to_soc_cfg_access;
+    begin
+      ls_cfg_w( 15'h0000, 32'h5a5a5a5a, 4'b1111);  //write to UP 
+      ls_cfg_r( 15'h0000);  //read UP
+    end
+  endtask
+
+
+  task soc_to_internal_aa_reg_access;
+    begin
+      ls_cfg_r( 15'h100);  //read soc aa_reg intr_enable
+      ls_cfg_w( 15'h100, 32'h1, 4'b001);  //set soc aa_reg intr_enable = 1
+      ls_cfg_r( 15'h100);  //read soc aa_reg intr_enable
+    end
+  endtask
+    
+
+  task ls_cfg_w;
+    input [14:0] address;
+    input [3:0] wstrb;
+    input [31:0] data;
+    begin
+      s_awaddr <= address;
+      s_awvalid <= 1'b1;
+      s_wdata <= data;
+      s_wstrb <= wstrb;
+      s_wvalid <= 1'b1;
+      
+      $display($time, "=> ls_cfg_w %x, %x, %x", address, wstrb, data);
+      
+      @ (posedge clk);
+      while (s_awready == 0 || s_wready == 0) begin            // LS must set both s_awready == 1 and s_wready == 1
+        @ (posedge clk);
+      end
+      s_awvalid <= 1'b0;
+      s_wvalid <= 1'b0;
+
+      @ (posedge clk);
+
+    end
+  endtask
+
+
+  reg [31:0] cfg_read_data;
+  task ls_cfg_r;
+    input [14:0] address;
+    begin
+      s_araddr <= address;
+      s_arvalid <= 1'b1;
+
+      $display($time, "=> ls_cfg_r %x", address);
+      
+      @ (posedge clk);
+      while (s_arready == 0 ) begin
+        @ (posedge clk);
+      end
+      
+      s_arvalid <= 1'b0;
+      s_rready <= 1'b1;
+
+      @ (posedge clk);
+      while (s_rvalid == 0 ) begin
+        @ (posedge clk);
+      end
+      s_rready <= 1'b0;
+      cfg_read_data <= s_rdata;
+
+      @ (posedge clk);
+
+      $display($time, "=> ls_cfg_r result = %x", cfg_read_data);
+
+    end
+  endtask
+
+  task fpga_to_soc_cfg_write_req;
     input [14:0] address;
     input [31:0] data;
     input [3:0] wstrb;
@@ -247,60 +322,5 @@ module tb_test ();
     end
   endtask
 
-/*
-// LS - Axilite Slave
-// LS AW Channel
-  output wire          s_awready,
-  input  wire          s_awvalid,
-  input  wire  [14: 0] s_awaddr,
-
-// LS W Channel
-  output wire          s_wready,
-  input  wire          s_wvalid,
-  input  wire  [31: 0] s_wdata,
-  input  wire   [3: 0] s_wstrb,
-
-// LS AR Channel
-  output wire          s_arready,
-  input  wire          s_arvalid,
-  input  wire  [14: 0] s_araddr,
-
- // LS R Channel
-  output wire  [31: 0] s_rdata,
-  output wire          s_rvalid,
-  input  wire          s_rready,
-
-*/
-
-  reg [31:0] cfg_read_data;
-  task soc_internal_axilite_read_req;
-    input [14:0] address;
-    begin
-      s_araddr <= address;
-      s_arvalid <= 1'b1;
-
-      $display($time, "=> soc_internal_axilite_read_req %x", address);
-      
-      @ (posedge clk);
-      while (s_arready == 0 ) begin
-        @ (posedge clk);
-      end
-      
-      s_arvalid <= 1'b0;
-      s_rready <= 1'b1;
-
-      @ (posedge clk);
-      while (s_rvalid == 0 ) begin
-        @ (posedge clk);
-      end
-      s_rready <= 1'b0;
-      cfg_read_data <= s_rdata;
-
-      @ (posedge clk);
-
-      $display($time, "=> soc_internal_axilite_read_req result = %x", cfg_read_data);
-
-    end
-  endtask
-
 endmodule
+

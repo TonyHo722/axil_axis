@@ -10,194 +10,198 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0 ns"></ZoomStartTime>
-      <ZoomEndTime time="698 ns"></ZoomEndTime>
-      <Cursor1Time time="239 ns"></Cursor1Time>
+      <ZoomStartTime time="150 ns"></ZoomStartTime>
+      <ZoomEndTime time="343 ns"></ZoomEndTime>
+      <Cursor1Time time="225 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="370"></NameColumnWidth>
-      <ValueColumnWidth column_width="137"></ValueColumnWidth>
+      <ValueColumnWidth column_width="117"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="46" />
-   <wvobject type="logic" fp_name="/tb_test/reset_n">
-      <obj_property name="ElementShortName">reset_n</obj_property>
-      <obj_property name="ObjectShortName">reset_n</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/clk">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_awvalid">
-      <obj_property name="ElementShortName">m_awvalid</obj_property>
-      <obj_property name="ObjectShortName">m_awvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/m_awaddr">
-      <obj_property name="ElementShortName">m_awaddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">m_awaddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_awready">
-      <obj_property name="ElementShortName">m_awready</obj_property>
-      <obj_property name="ObjectShortName">m_awready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_wvalid">
-      <obj_property name="ElementShortName">m_wvalid</obj_property>
-      <obj_property name="ObjectShortName">m_wvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/m_wdata">
-      <obj_property name="ElementShortName">m_wdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">m_wdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/m_wstrb">
-      <obj_property name="ElementShortName">m_wstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">m_wstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_wready">
-      <obj_property name="ElementShortName">m_wready</obj_property>
-      <obj_property name="ObjectShortName">m_wready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_arvalid">
-      <obj_property name="ElementShortName">m_arvalid</obj_property>
-      <obj_property name="ObjectShortName">m_arvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/m_araddr">
-      <obj_property name="ElementShortName">m_araddr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">m_araddr[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_arready">
-      <obj_property name="ElementShortName">m_arready</obj_property>
-      <obj_property name="ObjectShortName">m_arready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_rready">
-      <obj_property name="ElementShortName">m_rready</obj_property>
-      <obj_property name="ObjectShortName">m_rready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/m_rvalid">
-      <obj_property name="ElementShortName">m_rvalid</obj_property>
-      <obj_property name="ObjectShortName">m_rvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/m_rdata">
-      <obj_property name="ElementShortName">m_rdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">m_rdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_awready">
-      <obj_property name="ElementShortName">s_awready</obj_property>
-      <obj_property name="ObjectShortName">s_awready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_awvalid">
-      <obj_property name="ElementShortName">s_awvalid</obj_property>
-      <obj_property name="ObjectShortName">s_awvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/s_awaddr">
-      <obj_property name="ElementShortName">s_awaddr[14:0]</obj_property>
-      <obj_property name="ObjectShortName">s_awaddr[14:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_wready">
-      <obj_property name="ElementShortName">s_wready</obj_property>
-      <obj_property name="ObjectShortName">s_wready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_wvalid">
-      <obj_property name="ElementShortName">s_wvalid</obj_property>
-      <obj_property name="ObjectShortName">s_wvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/s_wdata">
-      <obj_property name="ElementShortName">s_wdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_wdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/s_wstrb">
-      <obj_property name="ElementShortName">s_wstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">s_wstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_arready">
-      <obj_property name="ElementShortName">s_arready</obj_property>
-      <obj_property name="ObjectShortName">s_arready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_arvalid">
-      <obj_property name="ElementShortName">s_arvalid</obj_property>
-      <obj_property name="ObjectShortName">s_arvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/s_araddr">
-      <obj_property name="ElementShortName">s_araddr[14:0]</obj_property>
-      <obj_property name="ObjectShortName">s_araddr[14:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/s_rdata">
-      <obj_property name="ElementShortName">s_rdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">s_rdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_rvalid">
-      <obj_property name="ElementShortName">s_rvalid</obj_property>
-      <obj_property name="ObjectShortName">s_rvalid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/s_rready">
-      <obj_property name="ElementShortName">s_rready</obj_property>
-      <obj_property name="ObjectShortName">s_rready</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/as_aa_tdata">
-      <obj_property name="ElementShortName">as_aa_tdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/as_aa_tstrb">
-      <obj_property name="ElementShortName">as_aa_tstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/as_aa_tkeep">
-      <obj_property name="ElementShortName">as_aa_tkeep[3:0]</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tkeep[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/as_aa_tlast">
-      <obj_property name="ElementShortName">as_aa_tlast</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tlast</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/as_aa_tvalid">
-      <obj_property name="ElementShortName">as_aa_tvalid</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/as_aa_tuser">
-      <obj_property name="ElementShortName">as_aa_tuser[1:0]</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tuser[1:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/aa_as_tready">
-      <obj_property name="ElementShortName">aa_as_tready</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tready</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/aa_as_tdata">
-      <obj_property name="ElementShortName">aa_as_tdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tdata[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/aa_as_tstrb">
-      <obj_property name="ElementShortName">aa_as_tstrb[3:0]</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tstrb[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/aa_as_tkeep">
-      <obj_property name="ElementShortName">aa_as_tkeep[3:0]</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tkeep[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/aa_as_tlast">
-      <obj_property name="ElementShortName">aa_as_tlast</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tlast</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/aa_as_tvalid">
-      <obj_property name="ElementShortName">aa_as_tvalid</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tvalid</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/aa_as_tuser">
-      <obj_property name="ElementShortName">aa_as_tuser[1:0]</obj_property>
-      <obj_property name="ObjectShortName">aa_as_tuser[1:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/as_aa_tready">
-      <obj_property name="ElementShortName">as_aa_tready</obj_property>
-      <obj_property name="ObjectShortName">as_aa_tready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/cc_aa_enable">
-      <obj_property name="ElementShortName">cc_aa_enable</obj_property>
-      <obj_property name="ObjectShortName">cc_aa_enable</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb_test/mb_irq">
-      <obj_property name="ElementShortName">mb_irq</obj_property>
-      <obj_property name="ObjectShortName">mb_irq</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb_test/cfg_read_data">
-      <obj_property name="ElementShortName">cfg_read_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">cfg_read_data[31:0]</obj_property>
+   <WVObjectSize size="2" />
+   <wvobject type="group" fp_name="group151">
+      <obj_property name="label">top</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/tb_test/reset_n">
+         <obj_property name="ElementShortName">reset_n</obj_property>
+         <obj_property name="ObjectShortName">reset_n</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_awvalid">
+         <obj_property name="ElementShortName">m_awvalid</obj_property>
+         <obj_property name="ObjectShortName">m_awvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/m_awaddr">
+         <obj_property name="ElementShortName">m_awaddr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_awaddr[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_awready">
+         <obj_property name="ElementShortName">m_awready</obj_property>
+         <obj_property name="ObjectShortName">m_awready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_wvalid">
+         <obj_property name="ElementShortName">m_wvalid</obj_property>
+         <obj_property name="ObjectShortName">m_wvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/m_wdata">
+         <obj_property name="ElementShortName">m_wdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_wdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/m_wstrb">
+         <obj_property name="ElementShortName">m_wstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">m_wstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_wready">
+         <obj_property name="ElementShortName">m_wready</obj_property>
+         <obj_property name="ObjectShortName">m_wready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_arvalid">
+         <obj_property name="ElementShortName">m_arvalid</obj_property>
+         <obj_property name="ObjectShortName">m_arvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/m_araddr">
+         <obj_property name="ElementShortName">m_araddr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_araddr[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_arready">
+         <obj_property name="ElementShortName">m_arready</obj_property>
+         <obj_property name="ObjectShortName">m_arready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_rready">
+         <obj_property name="ElementShortName">m_rready</obj_property>
+         <obj_property name="ObjectShortName">m_rready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/m_rvalid">
+         <obj_property name="ElementShortName">m_rvalid</obj_property>
+         <obj_property name="ObjectShortName">m_rvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/m_rdata">
+         <obj_property name="ElementShortName">m_rdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">m_rdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_awready">
+         <obj_property name="ElementShortName">s_awready</obj_property>
+         <obj_property name="ObjectShortName">s_awready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_awvalid">
+         <obj_property name="ElementShortName">s_awvalid</obj_property>
+         <obj_property name="ObjectShortName">s_awvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/s_awaddr">
+         <obj_property name="ElementShortName">s_awaddr[14:0]</obj_property>
+         <obj_property name="ObjectShortName">s_awaddr[14:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_wready">
+         <obj_property name="ElementShortName">s_wready</obj_property>
+         <obj_property name="ObjectShortName">s_wready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_wvalid">
+         <obj_property name="ElementShortName">s_wvalid</obj_property>
+         <obj_property name="ObjectShortName">s_wvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/s_wdata">
+         <obj_property name="ElementShortName">s_wdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">s_wdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/s_wstrb">
+         <obj_property name="ElementShortName">s_wstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">s_wstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_arready">
+         <obj_property name="ElementShortName">s_arready</obj_property>
+         <obj_property name="ObjectShortName">s_arready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_arvalid">
+         <obj_property name="ElementShortName">s_arvalid</obj_property>
+         <obj_property name="ObjectShortName">s_arvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/s_araddr">
+         <obj_property name="ElementShortName">s_araddr[14:0]</obj_property>
+         <obj_property name="ObjectShortName">s_araddr[14:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/s_rdata">
+         <obj_property name="ElementShortName">s_rdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">s_rdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_rvalid">
+         <obj_property name="ElementShortName">s_rvalid</obj_property>
+         <obj_property name="ObjectShortName">s_rvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/s_rready">
+         <obj_property name="ElementShortName">s_rready</obj_property>
+         <obj_property name="ObjectShortName">s_rready</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/as_aa_tdata">
+         <obj_property name="ElementShortName">as_aa_tdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/as_aa_tstrb">
+         <obj_property name="ElementShortName">as_aa_tstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/as_aa_tkeep">
+         <obj_property name="ElementShortName">as_aa_tkeep[3:0]</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tkeep[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/as_aa_tlast">
+         <obj_property name="ElementShortName">as_aa_tlast</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tlast</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/as_aa_tvalid">
+         <obj_property name="ElementShortName">as_aa_tvalid</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/as_aa_tuser">
+         <obj_property name="ElementShortName">as_aa_tuser[1:0]</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tuser[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/aa_as_tready">
+         <obj_property name="ElementShortName">aa_as_tready</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tready</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/aa_as_tdata">
+         <obj_property name="ElementShortName">aa_as_tdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/aa_as_tstrb">
+         <obj_property name="ElementShortName">aa_as_tstrb[3:0]</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tstrb[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/aa_as_tkeep">
+         <obj_property name="ElementShortName">aa_as_tkeep[3:0]</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tkeep[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/aa_as_tlast">
+         <obj_property name="ElementShortName">aa_as_tlast</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tlast</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/aa_as_tvalid">
+         <obj_property name="ElementShortName">aa_as_tvalid</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/aa_as_tuser">
+         <obj_property name="ElementShortName">aa_as_tuser[1:0]</obj_property>
+         <obj_property name="ObjectShortName">aa_as_tuser[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/as_aa_tready">
+         <obj_property name="ElementShortName">as_aa_tready</obj_property>
+         <obj_property name="ObjectShortName">as_aa_tready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/cc_aa_enable">
+         <obj_property name="ElementShortName">cc_aa_enable</obj_property>
+         <obj_property name="ObjectShortName">cc_aa_enable</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_test/mb_irq">
+         <obj_property name="ElementShortName">mb_irq</obj_property>
+         <obj_property name="ObjectShortName">mb_irq</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_test/cfg_read_data">
+         <obj_property name="ElementShortName">cfg_read_data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">cfg_read_data[31:0]</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject type="group" fp_name="group46">
       <obj_property name="label">dut</obj_property>
@@ -219,406 +223,215 @@
          <obj_property name="ElementShortName">axis_rst_n</obj_property>
          <obj_property name="ObjectShortName">axis_rst_n</obj_property>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_awvalid">
-         <obj_property name="ElementShortName">m_awvalid</obj_property>
-         <obj_property name="ObjectShortName">m_awvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/m_awaddr">
-         <obj_property name="ElementShortName">m_awaddr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">m_awaddr[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_awready">
-         <obj_property name="ElementShortName">m_awready</obj_property>
-         <obj_property name="ObjectShortName">m_awready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_wvalid">
-         <obj_property name="ElementShortName">m_wvalid</obj_property>
-         <obj_property name="ObjectShortName">m_wvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/m_wdata">
-         <obj_property name="ElementShortName">m_wdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">m_wdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/m_wstrb">
-         <obj_property name="ElementShortName">m_wstrb[3:0]</obj_property>
-         <obj_property name="ObjectShortName">m_wstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_wready">
-         <obj_property name="ElementShortName">m_wready</obj_property>
-         <obj_property name="ObjectShortName">m_wready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_arvalid">
-         <obj_property name="ElementShortName">m_arvalid</obj_property>
-         <obj_property name="ObjectShortName">m_arvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/m_araddr">
-         <obj_property name="ElementShortName">m_araddr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">m_araddr[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_arready">
-         <obj_property name="ElementShortName">m_arready</obj_property>
-         <obj_property name="ObjectShortName">m_arready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_rready">
-         <obj_property name="ElementShortName">m_rready</obj_property>
-         <obj_property name="ObjectShortName">m_rready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_rvalid">
-         <obj_property name="ElementShortName">m_rvalid</obj_property>
-         <obj_property name="ObjectShortName">m_rvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/m_rdata">
-         <obj_property name="ElementShortName">m_rdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">m_rdata[31:0]</obj_property>
+      <wvobject type="group" fp_name="group152">
+         <obj_property name="label">lm</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_awvalid">
+            <obj_property name="ElementShortName">m_awvalid</obj_property>
+            <obj_property name="ObjectShortName">m_awvalid</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/dut/m_awaddr">
+            <obj_property name="ElementShortName">m_awaddr[31:0]</obj_property>
+            <obj_property name="ObjectShortName">m_awaddr[31:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_awready">
+            <obj_property name="ElementShortName">m_awready</obj_property>
+            <obj_property name="ObjectShortName">m_awready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_wvalid">
+            <obj_property name="ElementShortName">m_wvalid</obj_property>
+            <obj_property name="ObjectShortName">m_wvalid</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/dut/m_wdata">
+            <obj_property name="ElementShortName">m_wdata[31:0]</obj_property>
+            <obj_property name="ObjectShortName">m_wdata[31:0]</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/dut/m_wstrb">
+            <obj_property name="ElementShortName">m_wstrb[3:0]</obj_property>
+            <obj_property name="ObjectShortName">m_wstrb[3:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_wready">
+            <obj_property name="ElementShortName">m_wready</obj_property>
+            <obj_property name="ObjectShortName">m_wready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_arvalid">
+            <obj_property name="ElementShortName">m_arvalid</obj_property>
+            <obj_property name="ObjectShortName">m_arvalid</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/dut/m_araddr">
+            <obj_property name="ElementShortName">m_araddr[31:0]</obj_property>
+            <obj_property name="ObjectShortName">m_araddr[31:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_arready">
+            <obj_property name="ElementShortName">m_arready</obj_property>
+            <obj_property name="ObjectShortName">m_arready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_rready">
+            <obj_property name="ElementShortName">m_rready</obj_property>
+            <obj_property name="ObjectShortName">m_rready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/m_rvalid">
+            <obj_property name="ElementShortName">m_rvalid</obj_property>
+            <obj_property name="ObjectShortName">m_rvalid</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/dut/m_rdata">
+            <obj_property name="ElementShortName">m_rdata[31:0]</obj_property>
+            <obj_property name="ObjectShortName">m_rdata[31:0]</obj_property>
+         </wvobject>
       </wvobject>
       <wvobject type="group" fp_name="group150">
          <obj_property name="label">ls</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/axi_clk">
+            <obj_property name="ElementShortName">axi_clk</obj_property>
+            <obj_property name="ObjectShortName">axi_clk</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/axi_reset_n">
+            <obj_property name="ElementShortName">axi_reset_n</obj_property>
+            <obj_property name="ObjectShortName">axi_reset_n</obj_property>
+         </wvobject>
          <wvobject type="logic" fp_name="/tb_test/dut/cc_aa_enable">
             <obj_property name="ElementShortName">cc_aa_enable</obj_property>
             <obj_property name="ObjectShortName">cc_aa_enable</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_awready">
-            <obj_property name="ElementShortName">s_awready</obj_property>
-            <obj_property name="ObjectShortName">s_awready</obj_property>
+         <wvobject type="array" fp_name="/tb_test/dut/ls_sm_fsm">
+            <obj_property name="ElementShortName">ls_sm_fsm[4:0]</obj_property>
+            <obj_property name="ObjectShortName">ls_sm_fsm[4:0]</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_awvalid">
-            <obj_property name="ElementShortName">s_awvalid</obj_property>
-            <obj_property name="ObjectShortName">s_awvalid</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_reg_lw">
+            <obj_property name="ElementShortName">ls_aa_reg_lw</obj_property>
+            <obj_property name="ObjectShortName">ls_aa_reg_lw</obj_property>
          </wvobject>
-         <wvobject type="array" fp_name="/tb_test/dut/s_awaddr">
-            <obj_property name="ElementShortName">s_awaddr[14:0]</obj_property>
-            <obj_property name="ObjectShortName">s_awaddr[14:0]</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_mbox_lw">
+            <obj_property name="ElementShortName">ls_aa_mbox_lw</obj_property>
+            <obj_property name="ObjectShortName">ls_aa_mbox_lw</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_wready">
-            <obj_property name="ElementShortName">s_wready</obj_property>
-            <obj_property name="ObjectShortName">s_wready</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/r_ls_wr">
+            <obj_property name="ElementShortName">r_ls_wr</obj_property>
+            <obj_property name="ObjectShortName">r_ls_wr</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_wvalid">
-            <obj_property name="ElementShortName">s_wvalid</obj_property>
-            <obj_property name="ObjectShortName">s_wvalid</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/r_ls_cyc">
+            <obj_property name="ElementShortName">r_ls_cyc</obj_property>
+            <obj_property name="ObjectShortName">r_ls_cyc</obj_property>
          </wvobject>
-         <wvobject type="array" fp_name="/tb_test/dut/s_wdata">
-            <obj_property name="ElementShortName">s_wdata[31:0]</obj_property>
-            <obj_property name="ObjectShortName">s_wdata[31:0]</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_done">
+            <obj_property name="ElementShortName">ls_done</obj_property>
+            <obj_property name="ObjectShortName">ls_done</obj_property>
          </wvobject>
-         <wvobject type="array" fp_name="/tb_test/dut/s_wstrb">
-            <obj_property name="ElementShortName">s_wstrb[3:0]</obj_property>
-            <obj_property name="ObjectShortName">s_wstrb[3:0]</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/intr_enable">
+            <obj_property name="ElementShortName">intr_enable</obj_property>
+            <obj_property name="ObjectShortName">intr_enable</obj_property>
+            <obj_property name="CustomSignalColor">#FF0000</obj_property>
+            <obj_property name="UseCustomSignalColor">true</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_arready">
-            <obj_property name="ElementShortName">s_arready</obj_property>
-            <obj_property name="ObjectShortName">s_arready</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/intr_status">
+            <obj_property name="ElementShortName">intr_status</obj_property>
+            <obj_property name="ObjectShortName">intr_status</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_arvalid">
-            <obj_property name="ElementShortName">s_arvalid</obj_property>
-            <obj_property name="ObjectShortName">s_arvalid</obj_property>
+         <wvobject type="array" fp_name="/tb_test/dut/r_ls_rw_addr">
+            <obj_property name="ElementShortName">r_ls_rw_addr[31:0]</obj_property>
+            <obj_property name="ObjectShortName">r_ls_rw_addr[31:0]</obj_property>
          </wvobject>
-         <wvobject type="array" fp_name="/tb_test/dut/s_araddr">
-            <obj_property name="ElementShortName">s_araddr[14:0]</obj_property>
-            <obj_property name="ObjectShortName">s_araddr[14:0]</obj_property>
+         <wvobject type="group" fp_name="group165">
+            <obj_property name="label">AW</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_awvalid">
+               <obj_property name="ElementShortName">s_awvalid</obj_property>
+               <obj_property name="ObjectShortName">s_awvalid</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_awready">
+               <obj_property name="ElementShortName">s_awready</obj_property>
+               <obj_property name="ObjectShortName">s_awready</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/tb_test/dut/s_awaddr">
+               <obj_property name="ElementShortName">s_awaddr[14:0]</obj_property>
+               <obj_property name="ObjectShortName">s_awaddr[14:0]</obj_property>
+            </wvobject>
          </wvobject>
-         <wvobject type="array" fp_name="/tb_test/dut/s_rdata">
-            <obj_property name="ElementShortName">s_rdata[31:0]</obj_property>
-            <obj_property name="ObjectShortName">s_rdata[31:0]</obj_property>
+         <wvobject type="group" fp_name="group166">
+            <obj_property name="label">W</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_wvalid">
+               <obj_property name="ElementShortName">s_wvalid</obj_property>
+               <obj_property name="ObjectShortName">s_wvalid</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_wready">
+               <obj_property name="ElementShortName">s_wready</obj_property>
+               <obj_property name="ObjectShortName">s_wready</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/tb_test/dut/s_wdata">
+               <obj_property name="ElementShortName">s_wdata[31:0]</obj_property>
+               <obj_property name="ObjectShortName">s_wdata[31:0]</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/tb_test/dut/s_wstrb">
+               <obj_property name="ElementShortName">s_wstrb[3:0]</obj_property>
+               <obj_property name="ObjectShortName">s_wstrb[3:0]</obj_property>
+            </wvobject>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_rvalid">
-            <obj_property name="ElementShortName">s_rvalid</obj_property>
-            <obj_property name="ObjectShortName">s_rvalid</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_reg_lr">
+            <obj_property name="ElementShortName">ls_aa_reg_lr</obj_property>
+            <obj_property name="ObjectShortName">ls_aa_reg_lr</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/dut/s_rready">
-            <obj_property name="ElementShortName">s_rready</obj_property>
-            <obj_property name="ObjectShortName">s_rready</obj_property>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_mbox_lr">
+            <obj_property name="ElementShortName">ls_aa_mbox_lr</obj_property>
+            <obj_property name="ObjectShortName">ls_aa_mbox_lr</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_reg">
+            <obj_property name="ElementShortName">ls_aa_reg</obj_property>
+            <obj_property name="ObjectShortName">ls_aa_reg</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_mbox">
+            <obj_property name="ElementShortName">ls_aa_mbox</obj_property>
+            <obj_property name="ObjectShortName">ls_aa_mbox</obj_property>
+         </wvobject>
+         <wvobject type="group" fp_name="group99">
+            <obj_property name="label">AR</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_arvalid">
+               <obj_property name="ElementShortName">s_arvalid</obj_property>
+               <obj_property name="ObjectShortName">s_arvalid</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_arready">
+               <obj_property name="ElementShortName">s_arready</obj_property>
+               <obj_property name="ObjectShortName">s_arready</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/tb_test/dut/s_araddr">
+               <obj_property name="ElementShortName">s_araddr[14:0]</obj_property>
+               <obj_property name="ObjectShortName">s_araddr[14:0]</obj_property>
+            </wvobject>
+         </wvobject>
+         <wvobject type="group" fp_name="group100">
+            <obj_property name="label">R</obj_property>
+            <obj_property name="DisplayName">label</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_rvalid">
+               <obj_property name="ElementShortName">s_rvalid</obj_property>
+               <obj_property name="ObjectShortName">s_rvalid</obj_property>
+            </wvobject>
+            <wvobject type="array" fp_name="/tb_test/dut/s_rdata">
+               <obj_property name="ElementShortName">s_rdata[31:0]</obj_property>
+               <obj_property name="ObjectShortName">s_rdata[31:0]</obj_property>
+            </wvobject>
+            <wvobject type="logic" fp_name="/tb_test/dut/s_rready">
+               <obj_property name="ElementShortName">s_rready</obj_property>
+               <obj_property name="ObjectShortName">s_rready</obj_property>
+            </wvobject>
          </wvobject>
       </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/as_aa_tdata">
-         <obj_property name="ElementShortName">as_aa_tdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tdata[31:0]</obj_property>
+      <wvobject type="logic" fp_name="/tb_test/dut/axi_clk">
+         <obj_property name="ElementShortName">axi_clk</obj_property>
+         <obj_property name="ObjectShortName">axi_clk</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/as_aa_tstrb">
-         <obj_property name="ElementShortName">as_aa_tstrb[3:0]</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/as_aa_tkeep">
-         <obj_property name="ElementShortName">as_aa_tkeep[3:0]</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tkeep[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/as_aa_tlast">
-         <obj_property name="ElementShortName">as_aa_tlast</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tlast</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/as_aa_tvalid">
-         <obj_property name="ElementShortName">as_aa_tvalid</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/as_aa_tuser">
-         <obj_property name="ElementShortName">as_aa_tuser[1:0]</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tuser[1:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/aa_as_tready">
-         <obj_property name="ElementShortName">aa_as_tready</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tready</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/aa_as_tdata">
-         <obj_property name="ElementShortName">aa_as_tdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/aa_as_tstrb">
-         <obj_property name="ElementShortName">aa_as_tstrb[3:0]</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/aa_as_tkeep">
-         <obj_property name="ElementShortName">aa_as_tkeep[3:0]</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tkeep[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/aa_as_tlast">
-         <obj_property name="ElementShortName">aa_as_tlast</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tlast</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/aa_as_tvalid">
-         <obj_property name="ElementShortName">aa_as_tvalid</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/aa_as_tuser">
-         <obj_property name="ElementShortName">aa_as_tuser[1:0]</obj_property>
-         <obj_property name="ObjectShortName">aa_as_tuser[1:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/as_aa_tready">
-         <obj_property name="ElementShortName">as_aa_tready</obj_property>
-         <obj_property name="ObjectShortName">as_aa_tready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/mb_irq">
-         <obj_property name="ElementShortName">mb_irq</obj_property>
-         <obj_property name="ObjectShortName">mb_irq</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/aa_reset_n">
-         <obj_property name="ElementShortName">aa_reset_n</obj_property>
-         <obj_property name="ObjectShortName">aa_reset_n</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_t2">
-         <obj_property name="ElementShortName">ss_t2</obj_property>
-         <obj_property name="ObjectShortName">ss_t2</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_axis_cyc">
-         <obj_property name="ElementShortName">ss_axis_cyc</obj_property>
-         <obj_property name="ObjectShortName">ss_axis_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_wr_cyc">
-         <obj_property name="ElementShortName">ss_wr_cyc</obj_property>
-         <obj_property name="ObjectShortName">ss_wr_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_rd_cyc">
-         <obj_property name="ElementShortName">ss_rd_cyc</obj_property>
-         <obj_property name="ObjectShortName">ss_rd_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_rs_cyc">
-         <obj_property name="ElementShortName">ss_rs_cyc</obj_property>
-         <obj_property name="ObjectShortName">ss_rs_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ss_cyc">
-         <obj_property name="ElementShortName">r_ss_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ss_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_lm_ready">
-         <obj_property name="ElementShortName">r_lm_ready</obj_property>
-         <obj_property name="ObjectShortName">r_lm_ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_lm_done">
-         <obj_property name="ElementShortName">r_lm_done</obj_property>
-         <obj_property name="ObjectShortName">r_lm_done</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ls_wr">
-         <obj_property name="ElementShortName">r_ls_wr</obj_property>
-         <obj_property name="ObjectShortName">r_ls_wr</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ls_cyc">
-         <obj_property name="ElementShortName">r_ls_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ls_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_sm_done">
-         <obj_property name="ElementShortName">r_sm_done</obj_property>
-         <obj_property name="ObjectShortName">r_sm_done</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ss_rw_addr">
-         <obj_property name="ElementShortName">r_ss_rw_addr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ss_rw_addr[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ss_wdata">
-         <obj_property name="ElementShortName">r_ss_wdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ss_wdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ss_wstrb">
-         <obj_property name="ElementShortName">r_ss_wstrb[3:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ss_wstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_tuser">
-         <obj_property name="ElementShortName">r_tuser[1:0]</obj_property>
-         <obj_property name="ObjectShortName">r_tuser[1:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ss_rs_data">
-         <obj_property name="ElementShortName">r_ss_rs_data[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ss_rs_data[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ls_rw_addr">
-         <obj_property name="ElementShortName">r_ls_rw_addr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ls_rw_addr[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ls_wdata">
-         <obj_property name="ElementShortName">r_ls_wdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ls_wdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_ls_wstrb">
-         <obj_property name="ElementShortName">r_ls_wstrb[3:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ls_wstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/r_lm_rs_data">
-         <obj_property name="ElementShortName">r_lm_rs_data[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_lm_rs_data[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_aa_reg">
-         <obj_property name="ElementShortName">ss_aa_reg</obj_property>
-         <obj_property name="ObjectShortName">ss_aa_reg</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_aa_mbox">
-         <obj_property name="ElementShortName">ss_aa_mbox</obj_property>
-         <obj_property name="ObjectShortName">ss_aa_mbox</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_reg">
-         <obj_property name="ElementShortName">ls_aa_reg</obj_property>
-         <obj_property name="ObjectShortName">ls_aa_reg</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ls_aa_mbox">
-         <obj_property name="ElementShortName">ls_aa_mbox</obj_property>
-         <obj_property name="ObjectShortName">ls_aa_mbox</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/intr_enable">
-         <obj_property name="ElementShortName">intr_enable</obj_property>
-         <obj_property name="ObjectShortName">intr_enable</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/intr_status">
-         <obj_property name="ElementShortName">intr_status</obj_property>
-         <obj_property name="ObjectShortName">intr_status</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/mb_regs">
-         <obj_property name="ElementShortName">mb_regs[7:0][31:0]</obj_property>
-         <obj_property name="ObjectShortName">mb_regs[7:0][31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/ls_aa_internal_data">
-         <obj_property name="ElementShortName">ls_aa_internal_data[31:0]</obj_property>
-         <obj_property name="ObjectShortName">ls_aa_internal_data[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/sm_aa_internal_data">
-         <obj_property name="ElementShortName">sm_aa_internal_data[31:0]</obj_property>
-         <obj_property name="ObjectShortName">sm_aa_internal_data[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ss_t2">
-         <obj_property name="ElementShortName">r_ss_t2</obj_property>
-         <obj_property name="ObjectShortName">r_ss_t2</obj_property>
+      <wvobject type="logic" fp_name="/tb_test/dut/axi_reset_n">
+         <obj_property name="ElementShortName">axi_reset_n</obj_property>
+         <obj_property name="ObjectShortName">axi_reset_n</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/tb_test/dut/ls_sm_fsm">
          <obj_property name="ElementShortName">ls_sm_fsm[4:0]</obj_property>
          <obj_property name="ObjectShortName">ls_sm_fsm[4:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ls_only_cyc">
-         <obj_property name="ElementShortName">r_ls_only_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ls_only_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ls_sm_enable">
-         <obj_property name="ElementShortName">ls_sm_enable</obj_property>
-         <obj_property name="ObjectShortName">ls_sm_enable</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ls_sm_wr">
-         <obj_property name="ElementShortName">ls_sm_wr</obj_property>
-         <obj_property name="ObjectShortName">ls_sm_wr</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/sm_ready">
-         <obj_property name="ElementShortName">sm_ready</obj_property>
-         <obj_property name="ObjectShortName">sm_ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_rs_ready">
-         <obj_property name="ElementShortName">ss_rs_ready</obj_property>
-         <obj_property name="ObjectShortName">ss_rs_ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ls_ready">
-         <obj_property name="ElementShortName">ls_ready</obj_property>
-         <obj_property name="ObjectShortName">ls_ready</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/ss_lm_fsm">
-         <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-         <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ss_only_cyc">
-         <obj_property name="ElementShortName">r_ss_only_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ss_only_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ss_wr">
-         <obj_property name="ElementShortName">r_ss_wr</obj_property>
-         <obj_property name="ObjectShortName">r_ss_wr</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_lm_cyc">
-         <obj_property name="ElementShortName">r_lm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_lm_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ss_sm_cyc">
-         <obj_property name="ElementShortName">r_ss_sm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ss_sm_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_t1">
-         <obj_property name="ElementShortName">ss_t1</obj_property>
-         <obj_property name="ObjectShortName">ss_t1</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_done">
-         <obj_property name="ElementShortName">ss_done</obj_property>
-         <obj_property name="ObjectShortName">ss_done</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ss_rd">
-         <obj_property name="ElementShortName">r_ss_rd</obj_property>
-         <obj_property name="ObjectShortName">r_ss_rd</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_sm_cyc">
-         <obj_property name="ElementShortName">r_sm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_sm_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_aa_internal">
-         <obj_property name="ElementShortName">ss_aa_internal</obj_property>
-         <obj_property name="ObjectShortName">ss_aa_internal</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ss_lm_enable">
-         <obj_property name="ElementShortName">ss_lm_enable</obj_property>
-         <obj_property name="ObjectShortName">ss_lm_enable</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/lm_wr_ready">
-         <obj_property name="ElementShortName">lm_wr_ready</obj_property>
-         <obj_property name="ObjectShortName">lm_wr_ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/r_ls_sm_cyc">
-         <obj_property name="ElementShortName">r_ls_sm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ls_sm_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/sm_wr_t1">
-         <obj_property name="ElementShortName">sm_wr_t1</obj_property>
-         <obj_property name="ObjectShortName">sm_wr_t1</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/sm_wr_t2">
-         <obj_property name="ElementShortName">sm_wr_t2</obj_property>
-         <obj_property name="ObjectShortName">sm_wr_t2</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/ls_done">
-         <obj_property name="ElementShortName">ls_done</obj_property>
-         <obj_property name="ObjectShortName">ls_done</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/dut/m_awvdlid">
-         <obj_property name="ElementShortName">m_awvdlid</obj_property>
-         <obj_property name="ObjectShortName">m_awvdlid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/pADDR_WIDTH">
-         <obj_property name="ElementShortName">pADDR_WIDTH[31:0]</obj_property>
-         <obj_property name="ObjectShortName">pADDR_WIDTH[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/dut/pDATA_WIDTH">
-         <obj_property name="ElementShortName">pDATA_WIDTH[31:0]</obj_property>
-         <obj_property name="ObjectShortName">pDATA_WIDTH[31:0]</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

@@ -179,6 +179,7 @@ wire [31:0] r_ss_rs_data = r_ss_wdata;  // shared, guarantee exclusive ss w/rs b
 // ---  LS -----------  Axilite Slave
 // ls side latched address, data, or read data to send
 reg [31:0] r_ls_rw_addr;            // ls address
+
 reg [31:0] r_ls_wdata;              // ls write data
 reg [3:0]  r_ls_wstrb;            // ls wstrb
 
@@ -216,9 +217,15 @@ assign m_wstrb  = r_ss_wstrb;
 //   - write Mbox
 wire ss_aa_reg  = ( r_ss_rw_addr[27:8] == 20'h000_21 );   // xxxx_3xxx, xxxx_2xxx only compare addr[11:8];
 wire ss_aa_mbox = ( r_ss_rw_addr[27:8] == 20'h000_20 );  
+
 wire ls_aa_reg  = ( r_ls_rw_addr[11:8] == 4'h1 );
 wire ls_aa_mbox = ( r_ls_rw_addr[11:8] == 4'h0 );
 
+wire ls_aa_reg_lw  = ( s_awaddr[11:8] == 4'h1 );   //ls_aa_reg local write
+wire ls_aa_mbox_lw = ( s_awaddr[11:8] == 4'h0 );   //s_aa_mbox local write
+
+wire ls_aa_reg_lr  = ( s_araddr[11:8] == 4'h1 );   //ls_aa_reg local read
+wire ls_aa_mbox_lr = ( s_araddr[11:8] == 4'h0 );   //s_aa_mbox local read
 
 // ---------------------------------------
 // AA-register
@@ -247,7 +254,9 @@ reg [31:0] mb_regs[7:0];    // only support 8*DW to save space
 
 
 /// wire [31:0] ss_aa_internal_data;        // ss won't read aa internal data
-wire [31:0] ls_aa_internal_data = ls_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_status}
+
+// for local read - r_ls_rw_addr is valid
+wire [31:0] ls_aa_internal_data = ls_aa_reg ? (r_ls_rw_addr[2] ? {31'b0, intr_status}
                                                                : {31'b0, intr_enable})                                             
                                             : mb_regs[r_ls_rw_addr[4:2]];
 
@@ -262,9 +271,7 @@ wire [31:0] sm_aa_internal_data = ss_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_st
 // ----- LS - Data Source
 // 1. SS RS data  - r_ss_rs_data 
 // 2. ls_aa_internal data
-// TBD: ls_aa_internal_data
-// TBD: ls_aa_internal 
-assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // TBD: 
+assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // for Local read
                                  : r_ss_rs_data;        // from SS read-response tuser=11
 
 // ---- SM - data has several sources
@@ -306,9 +313,9 @@ always @(posedge axis_clk or negedge axis_rst_n) begin
     end else begin
 
         // intr_staus
-        if(s_wready & ls_aa_reg & r_ls_rw_addr[2] & r_ls_wdata[0]) 
+        if(s_wready & ls_aa_reg_lw & s_awaddr[2] & s_wdata[0] & & s_wstrb[0]) //local write one to clear
             intr_status <= 1'b0;    // write-one-to clear 
-        else if( r_ss_t2  & ss_aa_mbox ) 
+        else if( r_ss_t2  & ss_aa_mbox & (|r_ss_wstrb) ) //Remote write any mbox register to set
             intr_status <= 1'b1;    // mbox write set status
 
     end
@@ -321,18 +328,34 @@ always @(posedge axis_clk or negedge axis_rst_n) begin
     end else begin
 
         // intr_enable
-        if(s_wready & ls_aa_reg & !r_ls_rw_addr[2] ) 
-            intr_enable <= r_ls_wdata[0];
-        else if( r_ss_t2  & ss_aa_reg & !r_ss_rw_addr[2] ) 
+        if(s_wready & ls_aa_reg_lw & !s_awaddr[2] & s_wstrb[0])    //local access 
+            intr_enable <= s_wdata[0];
+        else if( r_ss_t2  & ss_aa_reg & !r_ss_rw_addr[2] & r_ss_wstrb[0])  //Remote access 
             intr_enable  <= r_ss_wdata[0];
         else 
             intr_enable <= intr_enable ;
 
         // mbox
-        if(s_wready & ls_aa_mbox) 
-            mb_regs[r_ls_rw_addr[4:2]] <= r_ls_wdata;
-        else if( r_ss_t2  & ss_aa_mbox ) 
-            mb_regs[r_ss_rw_addr[4:2]] <= r_ss_wdata;
+        if(s_wready & ls_aa_mbox_lw) begin 
+            if ( s_wstrb[0] ) mb_regs[s_awaddr[4:2]][7:0] <= s_wdata[7:0];
+            else              mb_regs[s_awaddr[4:2]][7:0] <= mb_regs[s_awaddr[4:2]][7:0];
+            if ( s_wstrb[1] ) mb_regs[s_awaddr[4:2]][15:8] <= s_wdata[15:8];
+            else              mb_regs[s_awaddr[4:2]][15:8] <= mb_regs[s_awaddr[4:2]][15:8];
+            if ( s_wstrb[2] ) mb_regs[s_awaddr[4:2]][23:16] <= s_wdata[23:16];
+            else              mb_regs[s_awaddr[4:2]][23:16] <= mb_regs[s_awaddr[4:2]][23:16];
+            if ( s_wstrb[3] ) mb_regs[s_awaddr[4:2]][31:24] <= s_wdata[31:24];
+            else              mb_regs[s_awaddr[4:2]][31:24] <= mb_regs[s_awaddr[4:2]][31:24];
+        end    
+        else if( r_ss_t2  & ss_aa_mbox ) begin
+            if ( r_ss_wstrb[0] ) mb_regs[r_ss_rw_addr[4:2]][7:0] <= r_ss_wdata[7:0];
+            else              mb_regs[r_ss_rw_addr[4:2]][7:0] <= mb_regs[r_ss_rw_addr[4:2]][7:0];
+            if ( r_ss_wstrb[1] ) mb_regs[r_ss_rw_addr[4:2]][15:8] <= r_ss_wdata[15:8];
+            else              mb_regs[r_ss_rw_addr[4:2]][15:8] <= mb_regs[r_ss_rw_addr[4:2]][15:8];
+            if ( r_ss_wstrb[2] ) mb_regs[r_ss_rw_addr[4:2]][23:16] <= r_ss_wdata[23:16];
+            else              mb_regs[r_ss_rw_addr[4:2]][23:16] <= mb_regs[r_ss_rw_addr[4:2]][23:16];
+            if ( r_ss_wstrb[3] ) mb_regs[r_ss_rw_addr[4:2]][31:24] <= r_ss_wdata[31:24];
+            else              mb_regs[r_ss_rw_addr[4:2]][31:24] <= mb_regs[r_ss_rw_addr[4:2]][31:24];
+        end    
     end
 end
 
@@ -344,8 +367,8 @@ assign mb_irq = intr_status & intr_enable;
 // -------------------------------------------------------
 // LS State Machine - Tracking LS -> SM Conversion
 // Note： LS State machine & SS State machine can not run currently
-//  LS read AA reg + MBOX LS_RD -> LS_DONE
-//  LS write AA_reg       LS_WR -> LS_DONE
+//  LS read AA reg + MBOX LS_RD -> LS_R_DONE
+//  LS write AA_reg       LS_WR -> LS_W_DONE
 //  LS write AA_MBOX   pass to FPGA -> LS_WR_SM1
 // -------------------------------------------------------
 reg [4:0] ls_sm_fsm;
@@ -360,11 +383,12 @@ reg [4:0] ls_sm_fsm;
 `define LS_WR_SM2           5'b1_1_1_1_0
 `define LS_RD_SM_REQ        5'b1_0_1_1_0
 `define LS_RD_SS_WAIT_RS    5'b1_0_1_0_0
-`define LS_DONE             5'b1_0_0_0_1
+`define LS_R_DONE           5'b1_0_0_0_1
+`define LS_W_DONE           5'b1_1_0_0_1
 
 // cycle indicator and control signal generaion
 assign r_ls_cyc = ls_sm_fsm[4];
-wire   r_ls_only_cyc = ls_sm_fsm[4] & !ls_sm_fsm[2];  // LS_RD, LS_WR
+wire   r_ls_only_cyc = ls_sm_fsm[4] & !ls_sm_fsm[2];  // LS_RD, LS_WR 
 assign r_ls_wr  = ls_sm_fsm[3];
 assign r_ls_sm_cyc = ls_sm_fsm[2];
 assign sm_wr_t1 = (ls_sm_fsm == `LS_WR_SM1);
@@ -384,7 +408,7 @@ wire ls_sm_enable = !r_ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arval
 wire ls_sm_wr = s_awvalid;                  // axilite AW - write transaction
 wire sm_ready = as_aa_tready;               // sm bus ready if write 2 cycle
 wire ss_rs_ready = as_aa_tvalid & ss_rs_cyc; // axis slave receives read completion
-wire ls_ready  = ls_sm_wr ? ls_done : ls_done & s_rready;      // ls read need to wait s_rreay
+wire ls_ready  = ls_sm_wr ? ls_done : ls_done & s_rready;      // ls read need to wait s_rready
 
 // State Machine - ls_sm_fsm
 always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
@@ -400,30 +424,34 @@ always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
                                 ls_sm_fsm <= `LS_IDLE;
                 end
             `LS_WR:  
-                if(ls_aa_reg)   ls_sm_fsm <= `LS_DONE;
+                if(ls_aa_reg_lw)   ls_sm_fsm <= `LS_W_DONE;    
                 else            ls_sm_fsm <= `LS_WR_SM1;
             `LS_WR_SM1: 
                 if(sm_ready)    ls_sm_fsm <= `LS_WR_SM2;
                 else            ls_sm_fsm <= `LS_WR_SM1;
             `LS_WR_SM2:
-                if(sm_ready)    ls_sm_fsm <= `LS_DONE;
+                if(sm_ready)    ls_sm_fsm <= `LS_W_DONE;
                 else            ls_sm_fsm <= `LS_WR_SM2;
             `LS_RD:             
-                if( ls_aa_reg | ls_aa_mbox ) ls_sm_fsm <= `LS_DONE;
-                else                         ls_sm_fsm <= `LS_RD_SM_REQ;
+                if( ls_aa_reg_lr | ls_aa_mbox_lr ) ls_sm_fsm <= `LS_R_DONE; 
+                else                               ls_sm_fsm <= `LS_RD_SM_REQ;
             `LS_RD_SM_REQ:                  // send 1T read request
                 if(sm_ready)    ls_sm_fsm <= `LS_RD_SS_WAIT_RS;
                 else            ls_sm_fsm <= `LS_RD_SM_REQ;
             `LS_RD_SS_WAIT_RS:
-                if(ss_rs_ready) ls_sm_fsm <= `LS_DONE;
+                if(ss_rs_ready) ls_sm_fsm <= `LS_R_DONE;
                 else            ls_sm_fsm <= `LS_RD_SS_WAIT_RS;
-            `LS_DONE:           
+            `LS_R_DONE:           
                 if(ls_ready)    ls_sm_fsm <= `LS_IDLE;
-                else            ls_sm_fsm <= `LS_DONE;
+                else            ls_sm_fsm <= `LS_R_DONE;
+            `LS_W_DONE:           
+                if(ls_ready)    ls_sm_fsm <= `LS_IDLE;
+                else            ls_sm_fsm <= `LS_W_DONE;
             default:            ls_sm_fsm <= `LS_IDLE;
         endcase
     end
 end 
+
 
 
 // ------------------------------------------------------
@@ -576,6 +604,7 @@ always @( posedge axis_clk ) begin
         r_ls_rw_addr <= r_ls_rw_addr; 
     end
 end
+
 always @( posedge axis_clk ) begin
     if( r_ls_only_cyc & s_wready )  begin
         r_ls_wstrb <= s_wstrb;
@@ -600,4 +629,5 @@ end
  
 
 endmodule // AXIL_AXIS
+
 

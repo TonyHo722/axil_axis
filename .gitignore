@@ -1,0 +1,12 @@
+*.jou
+*.log
+*.str
+*.pb
+xsim.dir/
+.Xil/
+//	.axil_axis.v.swp
+//	.gitignore
+//	.tb_test.v.swp
+//	tb_test_xelab.wdb
+
+no changes added to commit (use "git add" and/or "git commit -a")
