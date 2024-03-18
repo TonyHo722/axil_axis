@@ -23,7 +23,7 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
   input  wire          axi_clk,
   input  wire          axi_reset_n,
   input  wire          axis_clk,
-  input  wire          axis_rst_n
+  input  wire          axis_rst_n,
 
 // LM - Axilite Master
 // LM AW Channel
@@ -115,7 +115,7 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
 // 2. cc_aa_enable = 0 : if AA is not enable, treated as reset
 wire aa_reset_n = axis_rst_n;
 
-
+wire ss_t2;
 //
 //   SS Cycle type - decode from tuser, refer to fsic-axis specification
 //   tuser = 2'b00    - axis cycle, ignored, we don't handle pure axi-stream transaction
@@ -123,10 +123,10 @@ wire aa_reset_n = axis_rst_n;
 //   tuser = 2'b10    - axilite read - address
 //   tuser = 2'b11    - axilite read - data response
 // Note: we should use latched tuser ----
-wire ss_axis_cyc    = (as_aa_tuser = 2'b00);    // actually, we won't receive this cycle, as should filter it out
-wire ss_wr_cyc      = (as_aa_tuser = 2'b01);    // tready is return as long as address/data latch is ok (ss_w_addr_data_ok)
-wire ss_rd_cyc      = (as_aa_tuser = 2'b10);    // tready is return as long as ss_rw_addr latch is ok
-wire ss_rs_cyc      = (as_aa_tuser = 2'b11); 
+wire ss_axis_cyc    = (as_aa_tuser == 2'b00);    // actually, we won't receive this cycle, as should filter it out
+wire ss_wr_cyc      = (as_aa_tuser == 2'b01);    // tready is return as long as address/data latch is ok (ss_w_addr_data_ok)
+wire ss_rd_cyc      = (as_aa_tuser == 2'b10);    // tready is return as long as ss_rw_addr latch is ok
+wire ss_rs_cyc      = (as_aa_tuser == 2'b11); 
 
 
 // --------------------------------
@@ -144,9 +144,10 @@ wire ss_rs_cyc      = (as_aa_tuser = 2'b11);
 // cycle tracking  - r_ss_cyc, r_ls_cyc
 // ----------------------------
 // ------  SS -> LM  -----------
-reg  r_ss_wr;                  // status: latched ss transaction is read(0) or write(1)
-wire r_ss_rd = ~r_ss_wr;
-reg  r_ss_cyc;                 // indicate there is ss_cyc pending, set by ss, reset by axil transaction complete
+//reg  r_ss_wr;                  // status: latched ss transaction is read(0) or write(1)
+//wire r_ss_rd = ~r_ss_wr;
+//reg  r_ss_cyc;                 // indicate there is ss_cyc pending, set by ss, reset by axil transaction complete
+wire r_ss_cyc;
 wire r_lm_ready;               // axil master transaction complete, m_wready (write), m_rvalid(read)
 wire r_lm_done = r_lm_ready;    // same as lm_ready
 // reg r_ss_rresp;               // ss read data is complete, generate sm response data ??
@@ -164,22 +165,22 @@ reg r_sm_done;              // sm write transferred, or sm read address sent
 // ----------------------------------
 // --- SS ------------
 reg [31:0] r_ss_rw_addr;            // ss-axil address latch for read and write - shared
-reg [31:0] r_ss_w_data;             // ss-axil data latch for write, 
+reg [31:0] r_ss_wdata;             // ss-axil data latch for write, 
                                     //    also used for ss-axil read response data, guarantee exclusive ss w/rs by not responding ss_ready
                                     //    if r_ss_cyc is on-going, don't asserts ss_tready
-reg [3:0]  r_ss_wstb;               // ss-axil wstb latch - from SS 1T tdata[31:28]
+reg [3:0]  r_ss_wstrb;               // ss-axil wstb latch - from SS 1T tdata[31:28]
 reg [1:0]  r_tuser;                 // tuser is encoded with cycle type            
 
 
 // reg [31:0] r_ss_rs_data;         // ss data for tuser = 2'b11, used as ls respond data, i.e. s_rdata
-wire [31:0] r_ss_rs_data = r_ss_w_data;  // shared, guarantee exclusive ss w/rs by not responding ss_ready, the code may be confusing
+wire [31:0] r_ss_rs_data = r_ss_wdata;  // shared, guarantee exclusive ss w/rs by not responding ss_ready, the code may be confusing
 
 
 // ---  LS -----------  Axilite Slave
 // ls side latched address, data, or read data to send
 reg [31:0] r_ls_rw_addr;            // ls address
-reg [31:0] r_ls_w_data;             // ls write data
-reg [3:0]  r_ls_w_wstrb;            // ls wstrb
+reg [31:0] r_ls_wdata;              // ls write data
+reg [3:0]  r_ls_wstrb;            // ls wstrb
 
 // --- LM  ------------ Axilite Master
 // lm side - latch read response data
@@ -194,55 +195,8 @@ reg [31:0] r_lm_rs_data;            // lm read response data
 // ----  LM - Adddress/Data   - from SS latched address/data
 assign m_awaddr = r_ss_rw_addr;
 assign m_araddr = r_ss_rw_addr;
-assign m_wdata  = r_ss_w_data;
+assign m_wdata  = r_ss_wdata;
 assign m_wstrb  = r_ss_wstrb;
-
-
-// ----- LS - Data Source
-// 1. SS RS data  - r_ss_rs_data 
-// 2. ls_aa_internal data
-// TBD: ls_aa_internal_data
-// TBD: ls_aa_internal 
-assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // TBD: 
-                                 : r_ss_rs_data;        // from SS read-response tuser=11
-
-// ---- SM - data has several sources
-// 1. LS write - 1st T = r_ls_rw_addr
-//               2nd T = r_ls_w_data
-// 2. SS read response  : r_lm_rs_data
-// 
-assign aa_as_tdata =  (32{sm_wr_t1}  & r_ls_rw_addr)    // LS->SM
-                   |  (32{sm_wr_t2}  & r_ls_w_data )
-                   |  (32{r_ss_cycle & !ss_aa_reg} & r_lm_rs_data )  // SS read
-                   |  (32{r_ss_cyce  &  ss_aa_reg} & sm_aa_internal_data)
-                   ;
-
-
-// ---------------------------------------
-// Mailbox 
-// - Memory-mapped address (32'h3000_2000~3000_201f)
-//   Use address[4:2]  to index mb_regs
-// ---------------------------------------
-parameter MBOX_BASE_  
-reg [31:0] mb_regs[7:0];    // only support 8*DW to save space
-
-
-// ---------------------------------------
-// AA-register
-// - Memory-mapped Address (32'h3000_2000 ~'h3000_2xxx) - cc_aa_enable
-    //--------------------------------------------------
-    // for AA_REG description
-    // offset 0-3 (32bit):
-    //   bit 0: Enable Interrupt
-    //       0 = disable interrupt signal
-    //       1 = enable interrupt signal
-    // offset 4-7 (32bit):
-    //   bit 0: Interrupt Status
-    //       1: interrupt has occurred
-    //       0: no interrupt
-    //--------------------------------------------------
-reg intr_enable;  // rw: offset:0, bit0  - use addr[2] to select
-reg intr_status;  // ro: offset:4, bit0
 
 // 
 // aa_internal - address hit internal aa configuration or mailbox
@@ -265,16 +219,67 @@ wire ss_aa_mbox = ( r_ss_rw_addr[27:8] == 20'h000_20 );
 wire ls_aa_reg  = ( r_ls_rw_addr[11:8] == 4'h1 );
 wire ls_aa_mbox = ( r_ls_rw_addr[11:8] == 4'h0 );
 
+
+// ---------------------------------------
+// AA-register
+// - Memory-mapped Address (32'h3000_2000 ~'h3000_2xxx) - cc_aa_enable
+    //--------------------------------------------------
+    // for AA_REG description
+    // offset 0-3 (32bit):
+    //   bit 0: Enable Interrupt
+    //       0 = disable interrupt signal
+    //       1 = enable interrupt signal
+    // offset 4-7 (32bit):
+    //   bit 0: Interrupt Status
+    //       1: interrupt has occurred
+    //       0: no interrupt
+    //--------------------------------------------------
+reg intr_enable;  // rw: offset:0, bit0  - use addr[2] to select
+reg intr_status;  // ro: offset:4, bit0
+
+// ---------------------------------------
+// Mailbox 
+// - Memory-mapped address (32'h3000_2000~3000_201f)
+//   Use address[4:2]  to index mb_regs
+// ---------------------------------------
+// parameter MBOX_BASE_  
+reg [31:0] mb_regs[7:0];    // only support 8*DW to save space
+
+
 /// wire [31:0] ss_aa_internal_data;        // ss won't read aa internal data
 wire [31:0] ls_aa_internal_data = ls_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_status}
-                                                               : {31'b0, intr_enable});                                             
+                                                               : {31'b0, intr_enable})                                             
                                             : mb_regs[r_ls_rw_addr[4:2]];
 
 
 // for SS read 
 wire [31:0] sm_aa_internal_data = ss_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_status}
-                                                                : {31'b0, intr_enable});                                             
+                                                                : {31'b0, intr_enable})
                                             : mb_regs[r_ss_rw_addr[4:2]];
+
+
+
+// ----- LS - Data Source
+// 1. SS RS data  - r_ss_rs_data 
+// 2. ls_aa_internal data
+// TBD: ls_aa_internal_data
+// TBD: ls_aa_internal 
+assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // TBD: 
+                                 : r_ss_rs_data;        // from SS read-response tuser=11
+
+// ---- SM - data has several sources
+// 1. LS write - 1st T = r_ls_rw_addr
+//               2nd T = r_ls_wdata
+// 2. SS read response  : r_lm_rs_data
+// 
+assign aa_as_tdata =  ({32{sm_wr_t1}}  & r_ls_rw_addr)     // LS->SM
+                   |  ({32{sm_wr_t2}}  & r_ls_wdata ) 
+                   |  ({32{r_ss_cyc & !ss_aa_reg}} & r_lm_rs_data )  // SS read
+                   |  ({32{r_ss_cyc  &  ss_aa_reg}} & sm_aa_internal_data) 
+                   ;
+
+
+
 
 
 // ----------------------------
@@ -325,9 +330,9 @@ always @(posedge axis_clk or negedge axis_rst_n) begin
 
         // mbox
         if(s_wready & ls_aa_mbox) 
-            mb_regs[r_ls_wr_addr[4:2]] <= r_ls_wdata;
+            mb_regs[r_ls_rw_addr[4:2]] <= r_ls_wdata;
         else if( r_ss_t2  & ss_aa_mbox ) 
-            mb_regs[r_ss_wr_addr[4:2]] <= r_ss_wdata;
+            mb_regs[r_ss_rw_addr[4:2]] <= r_ss_wdata;
     end
 end
 
@@ -402,7 +407,7 @@ always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
                 else            ls_sm_fsm <= `LS_WR_SM1;
             `LS_WR_SM2:
                 if(sm_ready)    ls_sm_fsm <= `LS_DONE;
-                else            ls_sm_fsm <= `LS_WRI_SM2;
+                else            ls_sm_fsm <= `LS_WR_SM2;
             `LS_RD:             
                 if( ls_aa_reg | ls_aa_mbox ) ls_sm_fsm <= `LS_DONE;
                 else                         ls_sm_fsm <= `LS_RD_SM_REQ;
@@ -442,14 +447,18 @@ reg [5:0] ss_lm_fsm;
 `define SS_DONE             6'b0_0_0_0_0_1
 
 // cycle indicator and control signal generaion
-wire r_ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];
+//wire r_ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];
+assign r_ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];
 wire r_ss_only_cyc = ss_lm_fsm[5];
 wire r_ss_wr  = ss_lm_fsm[4];
 wire r_lm_cyc = ss_lm_fsm[3];
 wire r_ss_sm_cyc = ss_lm_fsm[2];
 wire ss_t1  = r_ss_wr & !ss_lm_fsm[1];
-wire ss_t2  = r_ss_wr & ss_lm_fsm[1];
+//wire ss_t2  = r_ss_wr & ss_lm_fsm[1];
+assign ss_t2  = r_ss_wr & ss_lm_fsm[1];
 wire ss_done  = ss_lm_fsm[0];
+
+wire r_ss_rd = ~r_ss_wr;
 
 // combine from lm->sm
 wire r_sm_cyc = r_ss_sm_cyc | r_ls_sm_cyc;
@@ -468,6 +477,7 @@ assign m_rready  = m_arvalid;
 
 // control signals
 // Note: LS, SS state mchine are exclusive
+wire ss_aa_internal = ss_aa_reg || ss_aa_mbox;
 wire ss_lm_enable = !r_ls_cyc & as_aa_tvalid & !ss_aa_internal;
 wire lm_wr_ready  = m_awready & m_wready;
 
@@ -475,16 +485,17 @@ wire lm_wr_ready  = m_awready & m_wready;
 // State Machine - ss_lm_fsm
 always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
     if( !axis_rst_n ) begin
-        ss_lm_fsm = `SS_IDLE;
+        ss_lm_fsm <= `SS_IDLE;
     end else begin
         case(ss_lm_fsm) 
-            `SS_IDLE : 
+            `SS_IDLE: 
                 if(ss_lm_enable) begin
                     if(ss_wr_cyc)             ss_lm_fsm <=  `SS_WR_S1;
                     else if(ss_rd_cyc)        ss_lm_fsm <= `LS_RD;
                     else                      ss_lm_fsm <= `LS_IDLE;
-                end else begin
-                    ss_lm_fsm <= `LS_IDLE
+                end 
+                else begin
+                    ss_lm_fsm <= `LS_IDLE;
                 end
             `SS_WR_S1:  
                 if(as_aa_tvalid)   ss_lm_fsm <= `SS_WR_S2;
@@ -493,15 +504,16 @@ always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
                 if(as_aa_tvalid)   begin
                     if(ss_aa_reg | ss_aa_mbox)  ss_lm_fsm <= `SS_DONE;
                     else                        ss_lm_fsm <= `SS_WR_LM;
-                end else  begin 
+                end 
+                else  begin 
                     ss_lm_fsm <= `SS_WR_S2;
                 end
             `SS_WR_LM:
                 if(lm_wr_ready)     ss_lm_fsm <= `SS_DONE;
                 else                ss_lm_fsm <= `SS_WR_LM;
             `SS_RD:
-                if(ss_aa_reg | ss_aa_mbx) ss_lm_fsm <= `SS_RD_SM_RS;
-                else                      ss_lm_fsm <= `SS_RD_LM;
+                if(ss_aa_reg | ss_aa_mbox) ss_lm_fsm <= `SS_RD_SM_RS;
+                else                      ss_lm_fsm <= `SS_RD_LM_AR;    //read cfg target not in AA
             `SS_RD_LM_AR:
                 if( !m_arready )                ss_lm_fsm <= `SS_RD_LM_AR;
                 else if( m_arready & !m_rvalid ) ss_lm_fsm <= `SS_RD_LM_R;
@@ -524,42 +536,44 @@ end
 // ------------------------------------------------------
 
 // ---------   SS    ---------------
-// SS - r_ss_rw_addr, r_ss_wdata, r_ss_wstb, r_tuser
+// SS - r_ss_rw_addr, r_ss_wdata, r_ss_wstrb, r_tuser
 //  - ss side address/data latch
 // Note: it does not need reset, why ? when it is used, the content will be valid anyway
 // -------------------------
 
 always @( posedge axis_clk ) begin              // T1 - address
     if( r_ss_only_cyc & (!r_ss_wr | ss_t1) & aa_as_tready) begin
-        r_ss_rw_addr <= ss_as_tdata;
-        r_ss_wstb <= as_aa_tstrb;
+        r_ss_rw_addr <= as_aa_tdata;
+        r_ss_wstrb <= as_aa_tstrb;
         r_tuser <= as_aa_tuser;
     end else begin
         r_ss_rw_addr <= r_ss_rw_addr;
-        r_ss_wstb <= r_ss_wstb;
-        r_tuser <= as_aa_tuser;
+        r_ss_wstrb <= r_ss_wstrb;
+        // r_tuser <= as_aa_tuser;
+        r_tuser <= r_tuser;
     end
 end
 
 always @(posedge axis_clk) begin                // T2 - data
-    if( r_ss_only_cyc & ss_t2 & ss_as_tready) begin
-        r_ss_w_data <= ss_as_tdata;
+    if( r_ss_only_cyc & ss_t2 & aa_as_tready) begin
+        r_ss_wdata <= aa_as_tdata;
     end else begin
-        r_ss_w_data <= r_ss_w_data;
+        r_ss_wdata <= r_ss_wdata;
     end
 end
 
 
 // ----------  LS     ---------------------------
-// r_ls_rw_address   - LS address    @awvaid, arvalid
-// r_ls_w_data       - LS write data @wvalid
+// r_ls_rw_addr   - LS address    @awvaid, arvalid
+// r_ls_wdata       - LS write data @wvalid
 // r_ls_wstrb      - ls write strb @awvalid
 // 
+
 always @( posedge axis_clk ) begin
     if( r_ls_only_cyc & (s_awready | s_arready))  begin
-        r_ls_rw_address <= s_awready ? s_awaddr : s_araddr;   // 
+        r_ls_rw_addr <= s_awready ? s_awaddr : s_araddr;   // 
     end else begin
-        r_ls_rw_address <= r_ls_rw_address; 
+        r_ls_rw_addr <= r_ls_rw_addr; 
     end
 end
 always @( posedge axis_clk ) begin
@@ -586,3 +600,4 @@ end
  
 
 endmodule // AXIL_AXIS
+
