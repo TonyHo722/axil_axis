@@ -435,11 +435,15 @@ module tb_test ();
     end
   endtask
 
-
+  reg [31:0] i;
+  
   task fpga_to_soc_cfg_access;
     begin
-      fpga_ls_cfg_w( 15'h0000, 4'b1111, 32'h5a5a5a5a);  //write to UP in soc
-      fpga_ls_cfg_r( 15'h0000);  //read UP in soc
+      for (i=0; i<32; i=i+4) begin
+        fpga_ls_cfg_w( 15'h0000 + i, 4'b1111, $random);  //write to UP in soc
+        @( posedge clk);
+        fpga_ls_cfg_r( 15'h0000 + i);  //read UP in soc
+      end
     end
   endtask
 
@@ -571,9 +575,9 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
 
   task soc_to_internal_aa_reg_access;
     begin
-      soc_ls_cfg_r( 15'h100);  //read soc aa_reg intr_enable
-      soc_ls_cfg_w( 15'h100, 32'h1, 4'b001);  //set soc aa_reg intr_enable = 1
-      soc_ls_cfg_r( 15'h100);  //read soc aa_reg intr_enable
+      soc_ls_cfg_r( 15'h2100);  //read soc aa_reg intr_enable
+      soc_ls_cfg_w( 15'h2100, 32'h1, 4'b001);  //set soc aa_reg intr_enable = 1
+      soc_ls_cfg_r( 15'h2100);  //read soc aa_reg intr_enable
     end
   endtask
     
@@ -611,7 +615,7 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
       soc_s_araddr <= address;
       soc_s_arvalid <= 1'b1;
 
-      $display($time, "=> ls_cfg_r %x", address);
+      $display($time, "=> soc_ls_cfg_r %x", address);
       
       @ (posedge clk);
       while (soc_s_arready == 0 ) begin
@@ -668,7 +672,7 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
       fpga_s_araddr <= address;
       fpga_s_arvalid <= 1'b1;
 
-      $display($time, "=> ls_cfg_r %x", address);
+      $display($time, "=> fpga_ls_cfg_r %x", address);
       
       @ (posedge clk);
       while (fpga_s_arready == 0 ) begin

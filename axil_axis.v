@@ -125,6 +125,8 @@ module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
 // 2. cc_aa_enable = 0 : if AA is not enable, treated as reset
 wire aa_reset_n = axis_rst_n;
 
+// move here for early declaraion before use it.
+wire r_ss_sm_cyc;
 wire ss_t2;
 //
 //   SS Cycle type - decode from tuser, refer to fsic-axis specification
@@ -228,14 +230,14 @@ assign m_wstrb  = r_ss_wstrb;
 wire ss_aa_reg  = ( as_aa_tdata[27:8] == 20'h000_21 );   // xxxx_3xxx, xxxx_2xxx only compare addr[11:8];
 wire ss_aa_mbox = ( as_aa_tdata[27:8] == 20'h000_20 );  
 
-wire ls_aa_reg  = ( r_ls_rw_addr[11:8] == 4'h1 );
-wire ls_aa_mbox = ( r_ls_rw_addr[11:8] == 4'h0 );
+wire ls_aa_reg  = ( r_ls_rw_addr[14:12] == 3'b010 && r_ls_rw_addr[11:8] == 4'h1);
+wire ls_aa_mbox = ( r_ls_rw_addr[14:12] == 3'b010 && r_ls_rw_addr[11:8] == 4'h0 );
 
-wire ls_aa_reg_lw  = ( s_awaddr[11:8] == 4'h1 );   //ls_aa_reg local write
-wire ls_aa_mbox_lw = ( s_awaddr[11:8] == 4'h0 );   //s_aa_mbox local write
+wire ls_aa_reg_lw  = ( s_awaddr[14:12] == 3'b010 && s_awaddr[11:8] == 4'h1 );   //ls_aa_reg local write
+wire ls_aa_mbox_lw = ( s_awaddr[14:12] == 3'b010 && s_awaddr[11:8] == 4'h0 );   //s_aa_mbox local write
 
-wire ls_aa_reg_lr  = ( s_araddr[11:8] == 4'h1 );   //ls_aa_reg local read
-wire ls_aa_mbox_lr = ( s_araddr[11:8] == 4'h0 );   //s_aa_mbox local read
+wire ls_aa_reg_lr  = ( s_araddr[14:12] == 3'b010 && s_araddr[11:8] == 4'h1 );   //ls_aa_reg local read
+wire ls_aa_mbox_lr = ( s_araddr[14:12] == 3'b010 && s_araddr[11:8] == 4'h0 );   //s_aa_mbox local read
 
 // ---------------------------------------
 // AA-register
@@ -284,16 +286,6 @@ wire [31:0] sm_aa_internal_data = ss_aa_reg ? (r_ss_rw_addr[2] ? {31'b0, intr_st
 assign s_rdata  = (ls_aa_reg | ls_aa_mbox) ? ls_aa_internal_data            // for Local read
                                  : r_ss_rs_data;        // from SS read-response tuser=11
 
-// ---- SM - data has several sources
-// 1. LS write - 1st T = r_ls_rw_addr
-//               2nd T = r_ls_wdata
-// 2. SS read response  : r_lm_rs_data
-// 
-assign aa_as_tdata =  ({32{sm_wr_t1}}  & {r_ls_wstrb, r_ls_rw_addr[27:0]} )     // LS->SM
-                   |  ({32{sm_wr_t2}}  & r_ls_wdata ) 
-                   |  ({32{r_ss_cyc & !ss_aa_reg}} & r_lm_rs_data )  // SS read
-                   |  ({32{r_ss_cyc  &  ss_aa_reg}} & sm_aa_internal_data) 
-                   ;
 
 
 
@@ -385,7 +377,7 @@ reg [4:0] ls_sm_fsm;
 
 //
 // sm fsm state encoding is used to generate related control signal
-//                         {r_ls_cyc, r_ls_wr, r_sm_cyc, w1/w2 or ss_read, done}
+//                         {r_ls_cyc, r_ls_wr, r_ls_sm_cyc, w1/w2 or ss_read, done}
 `define LS_IDLE             5'b0_0_0_0_0              
 `define LS_RD               5'b1_0_0_0_0
 `define LS_WR               5'b1_1_0_0_0
@@ -396,6 +388,8 @@ reg [4:0] ls_sm_fsm;
 `define LS_R_DONE           5'b1_0_0_0_1
 `define LS_W_DONE           5'b1_1_0_0_1
 
+wire r_sm_cyc;
+
 // cycle indicator and control signal generaion
 assign r_ls_cyc = ls_sm_fsm[4];
 wire   r_ls_only_cyc = ls_sm_fsm[4] & !ls_sm_fsm[2];  // LS_RD, LS_WR 
@@ -403,7 +397,22 @@ assign r_ls_wr  = ls_sm_fsm[3];
 assign r_ls_sm_cyc = ls_sm_fsm[2];
 assign sm_wr_t1 = (ls_sm_fsm == `LS_WR_SM1);
 assign sm_wr_t2 = (ls_sm_fsm == `LS_WR_SM2);
+assign sm_read_t = (ls_sm_fsm == `LS_RD_SM_REQ);
+assign ls_r_done = (ls_sm_fsm == `LS_R_DONE);
 assign ls_done  = ls_sm_fsm[0];
+assign r_ls_rd_ss_wait_rs = (ls_sm_fsm == `LS_RD_SS_WAIT_RS);
+
+reg r_ls_r_done;    //1T delay from ls_r_done
+
+always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
+    if( !axis_rst_n ) begin
+        r_ls_r_done <= 0;
+    end else begin
+        r_ls_r_done <= ls_r_done;
+    end
+end    
+
+
 
 // interface signals  - axilite slave
 assign s_awready = r_ls_cyc & r_ls_wr & ls_done;
@@ -412,11 +421,28 @@ assign s_arready  = (ls_sm_fsm == `LS_RD);
 assign s_rvalid = r_ls_cyc & !r_ls_wr & ls_done;
 
 // interface signals  - axis master
-assign aa_as_tvalid = r_ls_sm_cyc;
-assign aa_as_tstrb = r_ls_wstrb;
+assign aa_as_tvalid = r_sm_cyc;                           //r_sm_cyc = r_ss_sm_cyc | r_ls_sm_cyc
+
+// ---- SM - data has several sources
+// 1. LS write - 1st T = r_ls_wstrb + r_ls_rw_addr
+//               2nd T = r_ls_wdata
+// 2. LS read = 4'b0000 + r_ls_rw_addr
+// 3. SS read response  : r_lm_rs_data
+// 
+assign aa_as_tdata =  ({32{sm_wr_t1}}  & {r_ls_wstrb, r_ls_rw_addr[27:0]} )     // from local to remote write, local_ls write t1 -> local_sm write 
+                   |  ({32{sm_wr_t2}}  & r_ls_wdata )                           // from local to remote write, local_ls write t2 -> local_sm write 
+                   |  ({32{sm_read_t}}  & {4'b0000, r_ls_rw_addr[27:0]} )       // from local to remote read, local_ls read -> local_sm read
+                   |  ({32{r_ss_sm_cyc & !ss_aa_reg}} & r_lm_rs_data )          // remote_ls read -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp
+                   |  ({32{r_ss_sm_cyc  &  ss_aa_reg}} & sm_aa_internal_data)   // remote_ls read -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp
+                   ;
+
+assign aa_as_tstrb = (r_ls_wr? r_ls_wstrb : 4'b1111);     //from local to remote write use r_ls_wstrb, local_ls write -> local_sm write 
+                                                          //from local to remote read use 4'b1111 ? local_ls read -> local_sm read
+                                                          //from remote remote_ls read  -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp use 4'b1111
 assign aa_as_tkeep = 0;
 assign aa_as_tlast = 0;
-assign aa_as_tuser = r_ls_wr? TUSER_AXILITE_WRITE : TUSER_AXILITE_READ_REQ;
+assign aa_as_tuser = r_ls_wr? TUSER_AXILITE_WRITE : 
+                              (sm_read_t? TUSER_AXILITE_READ_REQ : TUSER_AXILITE_READ_CPL) ;
 
 
 // control signals
@@ -481,7 +507,7 @@ reg [5:0] ss_lm_fsm;
 //  SS read AA inernal  SS_RD     -> SS_RD_SM_RS
 //  SS write AA internal SS_WR_S2 -> SS_DONE
 // 
-//                          {r_ss_cyc, r_ss_wr, r_lm_cyc, r_sm_cyc, w1/w2 or lm_read_ar/r, done}
+//                          {r_ss_cyc, r_ss_wr, r_lm_cyc, r_ss_sm_cyc, w1/w2 or lm_read_ar/r, done}
 `define SS_IDLE             6'b0_0_0_0_0_0
 `define SS_RD               6'b1_0_0_0_0_0
 `define SS_WR_S1            6'b1_1_0_0_0_0
@@ -498,7 +524,7 @@ assign r_ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];
 wire r_ss_only_cyc = ss_lm_fsm[5];
 wire r_ss_wr  = ss_lm_fsm[4];
 wire r_lm_cyc = ss_lm_fsm[3];
-wire r_ss_sm_cyc = ss_lm_fsm[2];
+assign r_ss_sm_cyc = ss_lm_fsm[2];
 wire ss_t1  = r_ss_wr & !ss_lm_fsm[1];
 //wire ss_t2  = r_ss_wr & ss_lm_fsm[1];
 assign ss_t2  = r_ss_wr & ss_lm_fsm[1];
@@ -507,10 +533,13 @@ wire ss_done  = ss_lm_fsm[0];
 wire r_ss_rd = ~r_ss_wr;
 
 // combine from lm->sm
-wire r_sm_cyc = r_ss_sm_cyc | r_ls_sm_cyc;
+assign r_sm_cyc = r_ss_sm_cyc | r_ls_sm_cyc;    //from r_ss_sm_cyc is from remote, r_ls_sm_cyc is from local
 
 // interface signals - axis slave
-assign aa_as_tready = r_ss_only_cyc;
+// 1. remote_sm to local_ss read
+// 2. remote_sm to local_ss write
+// 3. local_ls read -> loca_sm read -> remote_ss read -> remote_lm read_resp -> remote_sm read_resp -> local_ss read_resp
+assign aa_as_tready = r_ss_only_cyc | ls_r_done;
 
 // interface signal - axis master
 //   assign aa_as_tdata 
@@ -537,11 +566,11 @@ always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
             `SS_IDLE: 
                 if(ss_lm_enable) begin
                     if(ss_wr_cyc)             ss_lm_fsm <=  `SS_WR_S1;
-                    else if(ss_rd_cyc)        ss_lm_fsm <= `LS_RD;
-                    else                      ss_lm_fsm <= `LS_IDLE;
+                    else if(ss_rd_cyc)        ss_lm_fsm <= `SS_RD;
+                    else                      ss_lm_fsm <= `SS_IDLE;
                 end 
                 else begin
-                    ss_lm_fsm <= `LS_IDLE;
+                    ss_lm_fsm <= `SS_IDLE;
                 end
             `SS_WR_S1:  
                 if(as_aa_tvalid)   ss_lm_fsm <= `SS_WR_S2;
@@ -600,12 +629,17 @@ always @( posedge axis_clk ) begin              // T1 - address
     end
 end
 
+//r_ss_wdata come from below source
+// 1. r_ss_wdata come from as_aa_tdata
+//    when remote_ls write -> remote_sm write t2 -> local_ss write t2
+// 2. r_ss_wdata come from as_aa_tdata
+//    when local_ls read -> local_sm read -> remote_ss read -> remote_lm read_resp -> remote_sm read_resp -> local_ss read_resp
+
 always @(posedge axis_clk) begin                // T2 - data
-    if( r_ss_only_cyc & ss_t2 ) begin   //r_ss_only_cyc = aa_as_tready
-        r_ss_wdata <= as_aa_tdata;
-    end else begin
-        r_ss_wdata <= r_ss_wdata;
-    end
+    if( ( r_ss_only_cyc && ss_t2 ) || (as_aa_tvalid && r_ls_rd_ss_wait_rs ) )     //r_ss_only_cyc = aa_as_tready
+                                                                                  //early capture data when as_aa_tvalid
+          r_ss_wdata <= as_aa_tdata;                      //r_ss_rs_data = r_ss_wdata, it is share. 
+    else  r_ss_wdata <= r_ss_wdata;
 end
 
 
@@ -635,11 +669,11 @@ end
 
 
 // ---------- LM   --------------------
-//  r_lm_rs_data           // latch read response data used for SM to return RS data
+//  r_lm_rs_data           // latch read response data in LM used for SM to return RS data
 //
 always @( posedge axis_clk ) begin
-    if( ls_sm_fsm == `LS_RD_SS_WAIT_RS & ss_rs_ready ) begin
-        r_lm_rs_data <= as_aa_tdata;
+    if( m_rvalid && m_rready && ss_rs_ready ) begin   //get from lm interface to avoid latch data too late issue.
+        r_lm_rs_data <= m_rdata;
     end else begin
         r_lm_rs_data <= r_lm_rs_data;
     end
