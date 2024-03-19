@@ -19,13 +19,14 @@ module tb_test ();
 /// LM AR Channel
   wire          soc_m_arvalid;
   wire  [31: 0] soc_m_araddr;
-  reg          soc_m_arready;
+//  reg          soc_m_arready;
+  wire          soc_m_arready;
 
 // LM R Channel
   wire          soc_m_rready;
   reg          soc_m_rvalid;
-  reg  [31: 0] soc_m_rdata;
-
+//  reg  [31: 0] soc_m_rdata;
+  wire  [31: 0] soc_m_rdata;
 
 // LS - Axilite Slave
 // LS AW Channel
@@ -338,17 +339,17 @@ module tb_test ();
     begin
 // LM - Axilite Master
 // LM AW Channel   
-      soc_m_awready = 0;
+//      soc_m_awready = 0;
 
 // LM  W Channel
-      soc_m_wready = 0;
+//      soc_m_wready = 0;
 
 /// LM AR Channel      
-      soc_m_arready = 0;
+//      soc_m_arready = 0;
       
 // LM R Channel      
       soc_m_rvalid = 0;
-      soc_m_rdata = 0;
+//      soc_m_rdata = 0;
       
 // LS - Axilite Slave
 // LS AW Channel
@@ -442,49 +443,86 @@ module tb_test ();
     end
   endtask
 
-/*
 
-wire up_reg = ( m_awaddr[31:12] == 20'h0000_0 );
+wire soc_up_base_r = ( soc_m_araddr[27:12] == 16'h0000 );
+wire soc_up_base_w = ( soc_m_awaddr[27:12] == 16'h0000 );
 
-  //UP axil slave interface connect to lm
+wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
+
+  //soc UP axil slave interface connect to lm
   always @( posedge clk or negedge reset_n) begin
-    if ( reset_n ) begin
-      m_awready <= 1'b0;
-      m_wready <= 1'b0;
+    if ( !reset_n ) begin
+      soc_m_awready <= 1'b0;
+      soc_m_wready <= 1'b0;
 
     end else begin 
-      if ( m_awvalid && m_wvalid && !m_awready && !m_wready && up_reg) begin
-        m_awready <= 1'b1;
-        m_wready <= 1'b1;
+      if ( soc_m_awvalid && soc_m_wvalid && !soc_m_awready && !soc_m_wready && soc_up_base) begin
+      //if ( soc_m_awvalid && soc_m_wvalid && soc_up_base) begin
+        soc_m_awready <= 1'b1;
+        soc_m_wready <= 1'b1;
       end  
       else begin
-        m_awready <= 1'b0;
-        m_wready <= 1'b0;
+        soc_m_awready <= 1'b0;
+        soc_m_wready <= 1'b0;
       end
     end
   end    
 
-  reg   [31:0] up_regs[7:0];   // support 8*DW
+  reg   [31:0] soc_up_regs[7:0];   // support 8*DW
+  reg [31:0] soc_up_read_addr;
+  reg soc_up_read_addr_buffer_full;  
+  assign soc_m_rdata = soc_up_regs[soc_up_read_addr[4:2]];
+    
+  assign soc_m_arready = !soc_up_read_addr_buffer_full;
+  assign soc_m_rvalid = soc_up_read_addr_buffer_full;
   
-  inital  begin
+  always @( posedge clk or negedge reset_n) begin
+    if ( !reset_n ) begin
+      soc_up_read_addr <= 0;
+
+    end else begin 
+      if ( soc_m_arvalid && !soc_up_read_addr_buffer_full && soc_up_base) 
+            soc_up_read_addr <= soc_m_araddr;
+      else  soc_up_read_addr <= soc_up_read_addr;
+    end
+  end    
+
+  always @( posedge clk or negedge reset_n) begin
+    if ( !reset_n ) begin
+      soc_up_read_addr_buffer_full <= 0;
+
+    end else begin 
+      if ( soc_m_arvalid && !soc_up_read_addr_buffer_full && soc_up_base) 
+          soc_up_read_addr_buffer_full <= 1'b1;
+      else  if ( soc_m_rvalid && soc_m_rready) //imply soc_up_read_addr_buffer_full=1
+          soc_up_read_addr_buffer_full <= 1'b0;
+      else    
+          soc_up_read_addr_buffer_full <= soc_up_read_addr_buffer_full;
+    end
+  end    
+
+  
+  initial  begin
     //when lm write UP then save the data.
     while (1) begin
       @(posedge clk);
-      if (m_awvalid && m_wvalid && m_awready && m_wready && up_reg && (|m_wstrb) begin
-        if (m_awaddr[11:5] == 0 ) begin
-          if ( m_wstrb[0] ) up_regs[m_awaddr[4:2]][7:0] <= m_wdata[7:0];
-          else              up_regs[m_awaddr[4:2]][7:0] <= up_regs[m_awaddr[4:2]][7:0];
-          if ( m_wstrb[1] ) up_regs[m_awaddr[4:2]][15:8] <= m_wdata[15:8];
-          else              up_regs[m_awaddr[4:2]][15:8] <= up_regs[m_awaddr[4:2]][15:8];
-          if ( m_wstrb[2] ) up_regs[m_awaddr[4:2]][23:16] <= m_wdata[23:16];
-          else              up_regs[m_awaddr[4:2]][23:16] <= up_regs[m_awaddr[4:2]][23:16];
-          if ( m_wstrb[3] ) up_regs[m_awaddr[4:2]][31:24] <= m_wdata[31:24];
-          else              up_regs[m_awaddr[4:2]][31:24] <= up_regs[m_awaddr[4:2]][31:24];
+      if (soc_m_awvalid && soc_m_wvalid && soc_m_awready && soc_m_wready && soc_up_base && (|soc_m_wstrb) )begin
+        if (soc_m_awaddr[11:5] == 0 ) begin
+          if ( soc_m_wstrb[0] ) soc_up_regs[soc_m_awaddr[4:2]][7:0] <= soc_m_wdata[7:0];
+          else              soc_up_regs[soc_m_awaddr[4:2]][7:0] <= soc_up_regs[soc_m_awaddr[4:2]][7:0];
+          if ( soc_m_wstrb[1] ) soc_up_regs[soc_m_awaddr[4:2]][15:8] <= soc_m_wdata[15:8];
+          else              soc_up_regs[soc_m_awaddr[4:2]][15:8] <= soc_up_regs[soc_m_awaddr[4:2]][15:8];
+          if ( soc_m_wstrb[2] ) soc_up_regs[soc_m_awaddr[4:2]][23:16] <= soc_m_wdata[23:16];
+          else              soc_up_regs[soc_m_awaddr[4:2]][23:16] <= soc_up_regs[soc_m_awaddr[4:2]][23:16];
+          if ( soc_m_wstrb[3] ) soc_up_regs[soc_m_awaddr[4:2]][31:24] <= soc_m_wdata[31:24];
+          else              soc_up_regs[soc_m_awaddr[4:2]][31:24] <= soc_up_regs[soc_m_awaddr[4:2]][31:24];
         end        
-        $display($time, "=> LM write UP %x, %x, %x", m_awaddr, m_wstrb, m_wdata); 
+        $display($time, "=> soc LM write soc_up_regs %x, %x, %x", soc_m_awaddr, soc_m_wstrb, soc_m_wdata); 
       end      
     end    
   end
+
+/*
 
   //remote AS_SS interface connect to AA_SM
   always @( posedge clk or negedge reset_n) begin
@@ -682,4 +720,5 @@ wire up_reg = ( m_awaddr[31:12] == 20'h0000_0 );
 */
 
 endmodule
+
 

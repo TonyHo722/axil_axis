@@ -416,7 +416,7 @@ assign aa_as_tvalid = r_ls_sm_cyc;
 assign aa_as_tstrb = r_ls_wstrb;
 assign aa_as_tkeep = 0;
 assign aa_as_tlast = 0;
-assign aa_as_tuser = TUSER_AXILITE_WRITE;
+assign aa_as_tuser = r_ls_wr? TUSER_AXILITE_WRITE : TUSER_AXILITE_READ_REQ;
 
 
 // control signals
@@ -516,7 +516,7 @@ assign aa_as_tready = r_ss_only_cyc;
 //   assign aa_as_tdata 
 
 // LM interface signal - lm master
-assign m_awvdlid = r_lm_cyc & r_ss_wr;
+assign m_awvalid = r_lm_cyc & r_ss_wr;
 assign m_wvalid = m_awvalid;
 assign m_arvalid = r_lm_cyc & !r_ss_wr;
 assign m_rready  = m_arvalid;
@@ -588,7 +588,7 @@ end
 // -------------------------
 
 always @( posedge axis_clk ) begin              // T1 - address
-    if( r_ss_only_cyc & (!r_ss_wr | ss_t1) & aa_as_tready) begin
+    if( r_ss_only_cyc & (!r_ss_wr | ss_t1) ) begin     //r_ss_only_cyc = aa_as_tready
         r_ss_rw_addr <= as_aa_tdata;
         r_ss_wstrb <= as_aa_tstrb;
         r_tuser <= as_aa_tuser;
@@ -601,8 +601,8 @@ always @( posedge axis_clk ) begin              // T1 - address
 end
 
 always @(posedge axis_clk) begin                // T2 - data
-    if( r_ss_only_cyc & ss_t2 & aa_as_tready) begin
-        r_ss_wdata <= aa_as_tdata;
+    if( r_ss_only_cyc & ss_t2 ) begin   //r_ss_only_cyc = aa_as_tready
+        r_ss_wdata <= as_aa_tdata;
     end else begin
         r_ss_wdata <= r_ss_wdata;
     end
@@ -647,5 +647,6 @@ end
  
 
 endmodule // AXIL_AXIS
+
 
 
