@@ -10,12 +10,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="377 ns"></ZoomStartTime>
-      <ZoomEndTime time="645 ns"></ZoomEndTime>
+      <ZoomStartTime time="174 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,801 ns"></ZoomEndTime>
       <Cursor1Time time="445 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="333"></NameColumnWidth>
+      <NameColumnWidth column_width="325"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="7" />
@@ -25,7 +25,6 @@
    <wvobject type="group" fp_name="group46">
       <obj_property name="label">soc</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/tb_test/soc/axi_clk">
          <obj_property name="ElementShortName">axi_clk</obj_property>
          <obj_property name="ObjectShortName">axi_clk</obj_property>
@@ -163,14 +162,6 @@
             <obj_property name="ElementShortName">cc_aa_enable</obj_property>
             <obj_property name="ObjectShortName">cc_aa_enable</obj_property>
          </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/soc/r_ls_wr">
-            <obj_property name="ElementShortName">r_ls_wr</obj_property>
-            <obj_property name="ObjectShortName">r_ls_wr</obj_property>
-         </wvobject>
-         <wvobject type="logic" fp_name="/tb_test/soc/r_ls_cyc">
-            <obj_property name="ElementShortName">r_ls_cyc</obj_property>
-            <obj_property name="ObjectShortName">r_ls_cyc</obj_property>
-         </wvobject>
          <wvobject type="logic" fp_name="/tb_test/soc/ls_done">
             <obj_property name="ElementShortName">ls_done</obj_property>
             <obj_property name="ObjectShortName">ls_done</obj_property>
@@ -301,21 +292,9 @@
          <obj_property name="ElementShortName">ls_sm_fsm[4:0]</obj_property>
          <obj_property name="ObjectShortName">ls_sm_fsm[4:0]</obj_property>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc/r_ls_sm_cyc">
-         <obj_property name="ElementShortName">r_ls_sm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ls_sm_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc/r_lm_cyc">
-         <obj_property name="ElementShortName">r_lm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_lm_cyc</obj_property>
-      </wvobject>
       <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
          <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
          <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc/r_ss_sm_cyc">
-         <obj_property name="ElementShortName">r_ss_sm_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ss_sm_cyc</obj_property>
       </wvobject>
       <wvobject type="logic" fp_name="/tb_test/soc/ss_aa_reg">
          <obj_property name="ElementShortName">ss_aa_reg</obj_property>
@@ -366,10 +345,6 @@
          <obj_property name="ElementShortName">ss_lm_enable</obj_property>
          <obj_property name="ObjectShortName">ss_lm_enable</obj_property>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc/r_ls_cyc">
-         <obj_property name="ElementShortName">r_ls_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ls_cyc</obj_property>
-      </wvobject>
       <wvobject type="logic" fp_name="/tb_test/soc/ss_aa_internal">
          <obj_property name="ElementShortName">ss_aa_internal</obj_property>
          <obj_property name="ObjectShortName">ss_aa_internal</obj_property>
@@ -393,14 +368,6 @@
       <wvobject type="array" fp_name="/tb_test/soc/r_ss_wstrb">
          <obj_property name="ElementShortName">r_ss_wstrb[3:0]</obj_property>
          <obj_property name="ObjectShortName">r_ss_wstrb[3:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc/r_ss_only_cyc">
-         <obj_property name="ElementShortName">r_ss_only_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ss_only_cyc</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc/r_ss_wr">
-         <obj_property name="ElementShortName">r_ss_wr</obj_property>
-         <obj_property name="ObjectShortName">r_ss_wr</obj_property>
       </wvobject>
       <wvobject type="logic" fp_name="/tb_test/soc/ss_t1">
          <obj_property name="ElementShortName">ss_t1</obj_property>
@@ -447,7 +414,6 @@
    <wvobject type="group" fp_name="group87">
       <obj_property name="label">fpga</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/tb_test/fpga/axi_clk">
          <obj_property name="ElementShortName">axi_clk</obj_property>
          <obj_property name="ObjectShortName">axi_clk</obj_property>
@@ -556,17 +522,9 @@
          <obj_property name="ElementShortName">axis_clk</obj_property>
          <obj_property name="ObjectShortName">axis_clk</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/tb_test/fpga/r_ss_rs_data">
-         <obj_property name="ElementShortName">r_ss_rs_data[31:0]</obj_property>
-         <obj_property name="ObjectShortName">r_ss_rs_data[31:0]</obj_property>
-      </wvobject>
       <wvobject type="array" fp_name="/tb_test/fpga/r_ss_wdata">
          <obj_property name="ElementShortName">r_ss_wdata[31:0]</obj_property>
          <obj_property name="ObjectShortName">r_ss_wdata[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/fpga/r_ls_r_done">
-         <obj_property name="ElementShortName">r_ls_r_done</obj_property>
-         <obj_property name="ObjectShortName">r_ls_r_done</obj_property>
       </wvobject>
       <wvobject type="logic" fp_name="/tb_test/fpga/ls_r_done">
          <obj_property name="ElementShortName">ls_r_done</obj_property>
@@ -655,10 +613,6 @@
          <obj_property name="ElementShortName">r_ls_wstrb[3:0]</obj_property>
          <obj_property name="ObjectShortName">r_ls_wstrb[3:0]</obj_property>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/fpga/r_ls_only_cyc">
-         <obj_property name="ElementShortName">r_ls_only_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ls_only_cyc</obj_property>
-      </wvobject>
       <wvobject type="array" fp_name="/tb_test/fpga/ls_sm_fsm">
          <obj_property name="ElementShortName">ls_sm_fsm[4:0]</obj_property>
          <obj_property name="ObjectShortName">ls_sm_fsm[4:0]</obj_property>
@@ -670,10 +624,6 @@
       <wvobject type="logic" fp_name="/tb_test/fpga/ss_rs_ready">
          <obj_property name="ElementShortName">ss_rs_ready</obj_property>
          <obj_property name="ObjectShortName">ss_rs_ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/fpga/r_ss_only_cyc">
-         <obj_property name="ElementShortName">r_ss_only_cyc</obj_property>
-         <obj_property name="ObjectShortName">r_ss_only_cyc</obj_property>
       </wvobject>
       <wvobject type="group" fp_name="group98">
          <obj_property name="label">sm</obj_property>
@@ -767,14 +717,6 @@
       <obj_property name="label">tb</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject type="array" fp_name="/tb_test/soc_up_read_addr">
-         <obj_property name="ElementShortName">soc_up_read_addr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">soc_up_read_addr[31:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc_up_read_addr_buffer_full">
-         <obj_property name="ElementShortName">soc_up_read_addr_buffer_full</obj_property>
-         <obj_property name="ObjectShortName">soc_up_read_addr_buffer_full</obj_property>
-      </wvobject>
       <wvobject type="logic" fp_name="/tb_test/soc_m_awvalid">
          <obj_property name="ElementShortName">soc_m_awvalid</obj_property>
          <obj_property name="ObjectShortName">soc_m_awvalid</obj_property>
@@ -803,29 +745,47 @@
          <obj_property name="ElementShortName">soc_m_wready</obj_property>
          <obj_property name="ObjectShortName">soc_m_wready</obj_property>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc_m_arvalid">
-         <obj_property name="ElementShortName">soc_m_arvalid</obj_property>
-         <obj_property name="ObjectShortName">soc_m_arvalid</obj_property>
+      <wvobject type="array" fp_name="/tb_test/soc_up_read_addr">
+         <obj_property name="ElementShortName">soc_up_read_addr[31:0]</obj_property>
+         <obj_property name="ObjectShortName">soc_up_read_addr[31:0]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/tb_test/soc_m_araddr">
-         <obj_property name="ElementShortName">soc_m_araddr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">soc_m_araddr[31:0]</obj_property>
+      <wvobject type="logic" fp_name="/tb_test/soc_up_read_addr_buffer_full">
+         <obj_property name="ElementShortName">soc_up_read_addr_buffer_full</obj_property>
+         <obj_property name="ObjectShortName">soc_up_read_addr_buffer_full</obj_property>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc_m_arready">
-         <obj_property name="ElementShortName">soc_m_arready</obj_property>
-         <obj_property name="ObjectShortName">soc_m_arready</obj_property>
+      <wvobject type="group" fp_name="group205">
+         <obj_property name="label">AR</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="logic" fp_name="/tb_test/soc_m_arvalid">
+            <obj_property name="ElementShortName">soc_m_arvalid</obj_property>
+            <obj_property name="ObjectShortName">soc_m_arvalid</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/soc_m_arready">
+            <obj_property name="ElementShortName">soc_m_arready</obj_property>
+            <obj_property name="ObjectShortName">soc_m_arready</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/soc_m_araddr">
+            <obj_property name="ElementShortName">soc_m_araddr[31:0]</obj_property>
+            <obj_property name="ObjectShortName">soc_m_araddr[31:0]</obj_property>
+         </wvobject>
       </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc_m_rready">
-         <obj_property name="ElementShortName">soc_m_rready</obj_property>
-         <obj_property name="ObjectShortName">soc_m_rready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/tb_test/soc_m_rvalid">
-         <obj_property name="ElementShortName">soc_m_rvalid</obj_property>
-         <obj_property name="ObjectShortName">soc_m_rvalid</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/tb_test/soc_m_rdata">
-         <obj_property name="ElementShortName">soc_m_rdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">soc_m_rdata[31:0]</obj_property>
+      <wvobject type="group" fp_name="group206">
+         <obj_property name="label">R</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="logic" fp_name="/tb_test/soc_m_rvalid">
+            <obj_property name="ElementShortName">soc_m_rvalid</obj_property>
+            <obj_property name="ObjectShortName">soc_m_rvalid</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/tb_test/soc_m_rready">
+            <obj_property name="ElementShortName">soc_m_rready</obj_property>
+            <obj_property name="ObjectShortName">soc_m_rready</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/tb_test/soc_m_rdata">
+            <obj_property name="ElementShortName">soc_m_rdata[31:0]</obj_property>
+            <obj_property name="ObjectShortName">soc_m_rdata[31:0]</obj_property>
+         </wvobject>
       </wvobject>
    </wvobject>
 </wave_config>

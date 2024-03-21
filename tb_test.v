@@ -444,6 +444,9 @@ module tb_test ();
         @( posedge clk);
         fpga_ls_cfg_r( 15'h0000 + i);  //read UP in soc
       end
+      
+      fpga_ls_cfg_r( 15'h2100 + i);  //read AA_reg in soc - how to read AA_reg in remote?
+      
     end
   endtask
 
@@ -477,7 +480,7 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
   reg soc_up_read_addr_buffer_full;  
   assign soc_m_rdata = soc_up_regs[soc_up_read_addr[4:2]];
     
-  assign soc_m_arready = !soc_up_read_addr_buffer_full;
+  assign soc_m_arready = 1'b1;
   assign soc_m_rvalid = soc_up_read_addr_buffer_full;
   
   always @( posedge clk or negedge reset_n) begin
@@ -724,5 +727,6 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
 */
 
 endmodule
+
 
 
