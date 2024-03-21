@@ -160,6 +160,8 @@ module tb_test ();
   wire   [1: 0] fpga_sm_tuser;
   wire          fpga_ss_tready;
 
+  reg [31:0] i;
+
   AXIL_AXIS soc(
 
 // Clock & Reset - only use axis_clk, axis_rst_n
@@ -325,11 +327,24 @@ module tb_test ();
     #100;
     @ (posedge clk);
     soc_to_internal_aa_reg_access();
+
+    @ (posedge clk);
+//    soc_to_mailbox_access();
     
     @ (posedge clk);
     fpga_to_soc_cfg_access();
+
+    @ (posedge clk);
+    soc_to_mailbox_access();
     
     #100;
+    $finish;
+  end
+
+  initial begin
+    
+    #10000;
+    $display($time, "=> stop @ 10us");
     $finish;
   end
 
@@ -435,17 +450,20 @@ module tb_test ();
     end
   endtask
 
-  reg [31:0] i;
   
   task fpga_to_soc_cfg_access;
     begin
+
+      $display("fpga_to_soc_cfg_access - start"); 
+
       for (i=0; i<32; i=i+4) begin
         fpga_ls_cfg_w( 15'h0000 + i, 4'b1111, $random);  //write to UP in soc
         @( posedge clk);
         fpga_ls_cfg_r( 15'h0000 + i);  //read UP in soc
       end
       
-      fpga_ls_cfg_r( 15'h2100 + i);  //read AA_reg in soc - how to read AA_reg in remote?
+      //fpga_ls_cfg_r( 15'h2100 + i);  //read AA_reg in soc - how to read AA_reg in remote?
+      $display("fpga_to_soc_cfg_access - end"); 
       
     end
   endtask
@@ -578,12 +596,35 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
 
   task soc_to_internal_aa_reg_access;
     begin
+      $display("soc_to_internal_aa_reg_access - start"); 
       soc_ls_cfg_r( 15'h2100);  //read soc aa_reg intr_enable
-      soc_ls_cfg_w( 15'h2100, 32'h1, 4'b001);  //set soc aa_reg intr_enable = 1
+      soc_ls_cfg_w( 15'h2100, 4'b0001, 32'h1);  //set soc aa_reg intr_enable = 1
       soc_ls_cfg_r( 15'h2100);  //read soc aa_reg intr_enable
+      $display("soc_to_internal_aa_reg_access - end"); 
     end
   endtask
     
+  task soc_to_mailbox_access;
+    begin
+      $display("soc_to_mailbox_access - start"); 
+      //mailbox content do not reset, MUST write then read.
+      for (i=0; i<32; i=i+4) begin
+        soc_ls_cfg_w( 15'h2000 + i, 4'b1111, $random);  //write soc mb_regs[i]
+        @( posedge clk);
+        @( posedge clk);
+        @( posedge clk);
+        @( posedge clk);
+      end
+      
+      for (i=0; i<32; i=i+4) begin
+        soc_ls_cfg_r( 15'h2000 + i);                        //read soc mb_regs[i]
+        @( posedge clk);
+      end
+
+      $display("soc_to_mailbox_access - end"); 
+    end
+  endtask
+
 
   task soc_ls_cfg_w;
     input [14:0] address;

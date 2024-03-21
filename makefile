@@ -1,4 +1,4 @@
-.PHONY:sim clean wave
+.PHONY:sim clean wave w
 
 sim:
 	xvlog -sv -i ../ tb_test.v -f filelist
@@ -15,4 +15,4 @@ clean:
 wave:
 	# gtkwave top_bench.vcd &
 	vivado -source open_wave.tcl &
-
+w:	wave
