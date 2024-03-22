@@ -359,7 +359,7 @@ always @(posedge axis_clk or negedge axis_rst_n) begin
             else              mb_regs[s_awaddr[4:2]][31:24] <= mb_regs[s_awaddr[4:2]][31:24];
         end    
         else if( r_ss_t2  & ss_aa_mbox_latch ) begin
-            $display($time, "=> ss_aa_mbox %x, %x, %x", r_ss_rw_addr, r_ss_wstrb, r_ss_wdata);
+            $display($time, "=> detect ss_aa_mbox_latch write %x, %x, %x", r_ss_rw_addr, r_ss_wstrb, r_ss_wdata);        
             if ( r_ss_wstrb[0] ) mb_regs[r_ss_rw_addr[4:2]][7:0] <= r_ss_wdata[7:0];
             else              mb_regs[r_ss_rw_addr[4:2]][7:0] <= mb_regs[r_ss_rw_addr[4:2]][7:0];
             if ( r_ss_wstrb[1] ) mb_regs[r_ss_rw_addr[4:2]][15:8] <= r_ss_wdata[15:8];
@@ -696,6 +696,7 @@ end
  
 
 endmodule // AXIL_AXIS
+
 
 
 

@@ -1,5 +1,37 @@
 module tb_test ();
 
+  localparam SOC_LOCAL_UP_AXILBASE=15'h0000;
+  localparam SOC_LOCAL_LA_AXILBASE=15'h1000;
+  localparam SOC_LOCAL_AA_AXILBASE=15'h2000;
+  localparam SOC_LOCAL_IS_AXILBASE=15'h3000;
+  localparam SOC_LOCAL_AS_AXILBASE=15'h4000;
+  localparam SOC_LOCAL_CC_AXILBASE=15'h5000;
+  
+  //localparam FPGA_to_SOC_AA_LMBASE=15'h2000; //limitation: not support
+  localparam FPGA_to_SOC_UP_AXILBASE=15'h0000;
+  localparam FPGA_to_SOC_LA_AXILBASE=15'h1000;
+  localparam FPGA_to_SOC_IS_AXILBASE=15'h3000;
+  localparam FPGA_to_SOC_AS_AXILBASE=15'h3000;
+  
+  localparam AA_MailBox_Reg_BASE=12'h000;
+  localparam AA_Internal_Reg_BASE=12'h100;
+
+  localparam AA_MailBox_Reg0_Offset=SOC_LOCAL_AA_AXILBASE + AA_MailBox_Reg_BASE + 8'h00;
+  
+  localparam AA_intr_enable_offset=SOC_LOCAL_AA_AXILBASE + AA_Internal_Reg_BASE + 8'h00;
+  localparam AA_intr_status_offset=SOC_LOCAL_AA_AXILBASE + AA_Internal_Reg_BASE + 8'h04;
+  
+  localparam TUSER_AXIS = 2'b00;
+  localparam TUSER_AXILITE_WRITE = 2'b01;
+  localparam TUSER_AXILITE_READ_REQ = 2'b10;
+  localparam TUSER_AXILITE_READ_CPL = 2'b11;
+  
+  localparam TID_DN_UP = 2'b00;
+  localparam TID_DN_AA = 2'b01;
+  localparam TID_UP_UP = 2'b00;
+  localparam TID_UP_AA = 2'b01;
+  localparam TID_UP_LA = 2'b10;
+
 // Clock & Reset - only use axis_clk, axis_rst_n
   reg reset_n;
   reg clk;
@@ -160,7 +192,7 @@ module tb_test ();
   wire   [1: 0] fpga_sm_tuser;
   wire          fpga_ss_tready;
 
-  reg [31:0] i;
+  reg [31:0] i, j;
 
   AXIL_AXIS soc(
 
@@ -326,16 +358,19 @@ module tb_test ();
     reset_n = 1;
     #100;
     @ (posedge clk);
-    soc_to_internal_aa_reg_access();
+    soc_local_aa_reg_access();
 
     @ (posedge clk);
-//    soc_to_mailbox_access();
+//    soc_local_mailbox_access();
     
     @ (posedge clk);
     fpga_to_soc_cfg_access();
 
     @ (posedge clk);
-    soc_to_mailbox_access();
+    soc_local_mailbox_access();
+    
+    @ (posedge clk);
+    soc_local_mailbox_BE_test();
     
     #100;
     $finish;
@@ -456,10 +491,24 @@ module tb_test ();
 
       $display("fpga_to_soc_cfg_access - start"); 
 
+
+      //BE test
       for (i=0; i<32; i=i+4) begin
-        fpga_ls_cfg_w( 15'h0000 + i, 4'b1111, $random);  //write to UP in soc
+        for (j=0; j<4 ; j=j+1) begin
+          @( posedge clk);
+          fpga_ls_cfg_w( FPGA_to_SOC_UP_AXILBASE + i, 1<<j, (i+j) << (j*8));  //fpga write to UP in soc
+        end  
+      end
+
+      for (i=0; i<32; i=i+4) begin
         @( posedge clk);
-        fpga_ls_cfg_r( 15'h0000 + i);  //read UP in soc
+        fpga_ls_cfg_r( FPGA_to_SOC_UP_AXILBASE + i);  //read UP in soc
+      end
+
+      for (i=0; i<32; i=i+4) begin
+        fpga_ls_cfg_w( FPGA_to_SOC_UP_AXILBASE + i, 4'b1111, $random);  //fpga write to UP in soc
+        @( posedge clk);
+        fpga_ls_cfg_r( FPGA_to_SOC_UP_AXILBASE + i);  //read UP in soc
       end
       
       //fpga_ls_cfg_r( 15'h2100 + i);  //read AA_reg in soc - how to read AA_reg in remote?
@@ -594,22 +643,22 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
 */
 
 
-  task soc_to_internal_aa_reg_access;
+  task soc_local_aa_reg_access;
     begin
-      $display("soc_to_internal_aa_reg_access - start"); 
-      soc_ls_cfg_r( 15'h2100);  //read soc aa_reg intr_enable
-      soc_ls_cfg_w( 15'h2100, 4'b0001, 32'h1);  //set soc aa_reg intr_enable = 1
-      soc_ls_cfg_r( 15'h2100);  //read soc aa_reg intr_enable
-      $display("soc_to_internal_aa_reg_access - end"); 
+      $display("soc_local_aa_reg_access - start"); 
+      soc_ls_cfg_r( AA_intr_enable_offset );  //read soc aa_reg intr_enable
+      soc_ls_cfg_w( AA_intr_enable_offset, 4'b0001, 32'h1);  //set soc aa_reg intr_enable = 1
+      soc_ls_cfg_r( AA_intr_enable_offset);  //read soc aa_reg intr_enable
+      $display("soc_local_aa_reg_access - end"); 
     end
   endtask
     
-  task soc_to_mailbox_access;
+  task soc_local_mailbox_access;
     begin
-      $display("soc_to_mailbox_access - start"); 
+      $display("soc_local_mailbox_access - start"); 
       //mailbox content do not reset, MUST write then read.
       for (i=0; i<32; i=i+4) begin
-        soc_ls_cfg_w( 15'h2000 + i, 4'b1111, $random);  //write soc mb_regs[i]
+        soc_ls_cfg_w( AA_MailBox_Reg0_Offset + i, 4'b1111, $random);  //write soc mb_regs[i]
         @( posedge clk);
         @( posedge clk);
         @( posedge clk);
@@ -617,11 +666,46 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
       end
       
       for (i=0; i<32; i=i+4) begin
-        soc_ls_cfg_r( 15'h2000 + i);                        //read soc mb_regs[i]
+        soc_ls_cfg_r( AA_MailBox_Reg0_Offset + i);                        //read soc mb_regs[i]
         @( posedge clk);
       end
 
-      $display("soc_to_mailbox_access - end"); 
+      $display("soc_local_mailbox_access - end"); 
+    end
+  endtask
+
+  task soc_local_mailbox_BE_test;
+    begin
+      $display("soc_local_mailbox_BE_test - start"); 
+      //mailbox content do not reset, MUST write then read.
+      
+      //init mailbox
+      for (i=0; i<32; i=i+4) begin
+        soc_ls_cfg_w( AA_MailBox_Reg0_Offset + i, 4'b1111, 0);  //write soc mb_regs[i]
+        @( posedge clk);
+        @( posedge clk);
+        @( posedge clk);
+        @( posedge clk);
+      end
+      
+      
+      //BE test
+      for (i=0; i<32; i=i+4) begin
+        for (j=0; j<4 ; j=j+1) begin
+          soc_ls_cfg_w( AA_MailBox_Reg0_Offset + i, 1<<j, (i+j) << (j*8));  //write soc mb_regs[i]
+          @( posedge clk);
+          @( posedge clk);
+          @( posedge clk);
+          @( posedge clk);
+        end  
+      end
+      
+      for (i=0; i<32; i=i+4) begin
+        soc_ls_cfg_r( AA_MailBox_Reg0_Offset + i);                        //read soc mb_regs[i]
+        @( posedge clk);
+      end
+
+      $display("soc_local_mailbox_BE_test - end"); 
     end
   endtask
 
@@ -768,6 +852,7 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
 */
 
 endmodule
+
 
 
 
