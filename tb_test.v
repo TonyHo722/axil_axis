@@ -371,6 +371,9 @@ module tb_test ();
     
     @ (posedge clk);
     soc_local_mailbox_BE_test();
+
+    @ (posedge clk);
+    LS_and_SS_in_soc_burnin_test();
     
     #100;
     $finish;
@@ -378,8 +381,8 @@ module tb_test ();
 
   initial begin
     
-    #10000;
-    $display($time, "=> stop @ 10us");
+    #20000;
+    $display($time, "=> stop @ 20us");
     $finish;
   end
 
@@ -708,6 +711,35 @@ wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
       $display("soc_local_mailbox_BE_test - end"); 
     end
   endtask
+
+  task LS_and_SS_in_soc_burnin_test;
+    begin
+      $display("LS_and_SS_in_soc_burnin_test - start"); 
+      //Try to make LS and SS in IDLE state and wants goto next state in the same clock.
+      //SS should with higher priority then SS.
+
+      //1. soc issue a mailbox write
+      //2. fgpa issue a mailbox write
+      
+      fork 
+        //soc init mailbox
+        for (i=0; i<32/2; i=i+4) begin
+          soc_ls_cfg_w( AA_MailBox_Reg0_Offset + i, 4'b1111, 32'h1111_1111 * (i/4));  //write soc mb_regs[i]
+          @( posedge clk);
+        end
+
+        //soc init mailbox
+        for (j=32/2; j<32; j=j+4) begin
+          fpga_ls_cfg_w( AA_MailBox_Reg0_Offset + j, 4'b1111, 32'h1111_1111 * (j/4));  //write soc mb_regs[i]
+          @( posedge clk);
+        end
+        
+      join  
+
+      $display("LS_and_SS_in_soc_burnin_test - end"); 
+    end
+  endtask
+
 
 
   task soc_ls_cfg_w;
