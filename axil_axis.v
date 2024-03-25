@@ -12,7 +12,15 @@
 //   mailbox - support on 8 DW register (DW#0 - FSIC, DW#1 - FPGA)
 // 
 
-
+`define SS_IDLE             6'b0_0_0_0_0_0
+`define SS_RD               6'b1_0_0_0_0_0
+`define SS_WR_S1            6'b1_1_0_0_0_0
+`define SS_WR_S2            6'b1_1_0_0_1_0
+`define SS_WR_LM            6'b0_1_1_0_0_0
+`define SS_RD_LM_AR         6'b0_0_1_0_0_0
+`define SS_RD_LM_R          6'b0_0_1_0_1_0
+`define SS_RD_SM_RS         6'b0_0_0_1_0_0
+`define SS_DONE             6'b0_0_0_0_0_1
 
 module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
                     parameter pDATA_WIDTH   = 32
@@ -128,6 +136,8 @@ wire aa_reset_n = axis_rst_n;
 // move here for early declaraion before use it to avoid error in simulation
 wire ss_sm_cyc;
 wire ss_t2;
+reg [5:0] ss_lm_fsm;
+wire ss_lm_enable;
 //
 //   SS Cycle type - decode from tuser, refer to fsic-axis specification
 //   tuser = 2'b00    - axis cycle, ignored, we don't handle pure axi-stream transaction
@@ -451,8 +461,9 @@ assign aa_as_tuser = ls_wr? TUSER_AXILITE_WRITE :
 
 // control signals
 // {ls_sm_enable, ls_sm_wr, sm_ready, sm_rs_ready}
-// Note: LS, SS State machine is exclusive 
-wire ls_sm_enable = !ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arvalid);   // axilite AW & W AR request asserts
+// Note: LS, SS State machine is exclusive - when ss_cyc is ongoing then pending ls_sm_enable until ss_cyc done.
+// SS state machine with higher priority then LS State machine when both in IDLE state and try to move to next state.
+wire ls_sm_enable = !((ss_lm_fsm == `SS_IDLE) & ss_lm_enable) & !ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arvalid);   // axilite AW & W AR request asserts
 wire ls_sm_wr = s_awvalid;                  // axilite AW - write transaction
 wire sm_ready = as_aa_tready;               // sm bus ready if write 2 cycle
 wire ss_rs_ready = as_aa_tvalid & ss_rs_cyc; // axis slave receives read completion
@@ -514,14 +525,15 @@ end
 
 // ------------------------------------------------------
 // SS State machine - tracking SS -> LM 
-reg [5:0] ss_lm_fsm;
+//reg [5:0] ss_lm_fsm;
 
 //
 // sm fsm state encoding is used to generate related control signal
 //  SS read AA inernal  SS_RD     -> SS_RD_SM_RS
 //  SS write AA internal SS_WR_S2 -> SS_DONE
 // 
-//                          {ss_cyc, ss_wr, lm_cyc, ss_sm_cyc, w1/w2 or lm_read_ar/r, done}
+/*
+                          {ss_only_cyc, ss_wr, lm_cyc, ss_sm_cyc, w1/w2 or RD_LM_AR/R, done}
 `define SS_IDLE             6'b0_0_0_0_0_0
 `define SS_RD               6'b1_0_0_0_0_0
 `define SS_WR_S1            6'b1_1_0_0_0_0
@@ -531,19 +543,19 @@ reg [5:0] ss_lm_fsm;
 `define SS_RD_LM_R          6'b0_0_1_0_1_0
 `define SS_RD_SM_RS         6'b0_0_0_1_0_0
 `define SS_DONE             6'b0_0_0_0_0_1
+*/
 
 // cycle indicator and control signal generaion
-assign ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];
+assign ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];   //ss_only_cyc + lm_cyc + ss_sm_cyc
 wire ss_only_cyc = ss_lm_fsm[5];
 wire ss_wr  = ss_lm_fsm[4];
 wire lm_cyc = ss_lm_fsm[3];
 assign ss_sm_cyc = ss_lm_fsm[2];
 wire ss_t1  = ss_wr & !ss_lm_fsm[1];
-//wire ss_t2  = ss_wr & ss_lm_fsm[1];
 assign ss_t2  = ss_wr & ss_lm_fsm[1];
 wire ss_done  = ss_lm_fsm[0];
 
-wire ss_rd = ~ss_wr;
+//wire ss_rd = ~ss_wr;
 
 // combine from lm->sm
 assign sm_cyc = ss_sm_cyc | ls_sm_cyc;    //from ss_sm_cyc is from remote, ls_sm_cyc is from local
@@ -567,7 +579,8 @@ assign m_rready  = m_arvalid;
 // control signals
 // Note: LS, SS state mchine are exclusive
 //wire ss_aa_internal = ss_aa_reg || ss_aa_mbox;
-wire ss_lm_enable = !ls_cyc & as_aa_tvalid & !ss_aa_reg;
+//wire ss_lm_enable = !ls_cyc & as_aa_tvalid & !ss_aa_reg;    //limitation: dead lock issue, if remote send a request and ss_aa_reg=1.
+assign ss_lm_enable = !ls_cyc & as_aa_tvalid & !ss_aa_reg;    //limitation: dead lock issue, if remote send a request and ss_aa_reg=1.
 wire lm_wr_ready  = m_awready & m_wready;
 
         
