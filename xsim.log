@@ -2,8 +2,8 @@
 # xsim v2022.2 (64-bit)
 # SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
 # IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
-# Start of session at: Mon Mar 25 11:26:55 2024
-# Process ID: 1824714
+# Start of session at: Mon Mar 25 15:10:23 2024
+# Process ID: 1964328
 # Current directory: /ADATA2T/home/tonyho/workspace/axil_axis
 # Command line: xsim -mode tcl -source {xsim.dir/tb_test_xelab/xsim_script.tcl}
 # Log file: /ADATA2T/home/tonyho/workspace/axil_axis/xsim.log
@@ -275,7 +275,19 @@ LS_and_SS_in_soc_burnin_test - start
                 9685=> fpga_ls_cfg_w 2010, f, 44444444
                 9735=> fpga_ls_cfg_w 2014, f, 55555555
                 9735=> soc_ls_cfg_w 2004, f, 11111111
-               20000=> stop @ 20us
-$finish called at time : 20 us : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 386
+                9755=> detect ss_aa_mbox_latch write f0002000, f, 00000000
+                9755=> detect ss_aa_mbox_latch write f0002010, f, 44444444
+                9795=> fpga_ls_cfg_w 2018, f, 66666666
+                9795=> soc_ls_cfg_w 2008, f, 22222222
+                9815=> detect ss_aa_mbox_latch write f0002004, f, 11111111
+                9815=> detect ss_aa_mbox_latch write f0002014, f, 55555555
+                9855=> fpga_ls_cfg_w 201c, f, 77777777
+                9855=> soc_ls_cfg_w 200c, f, 33333333
+                9875=> detect ss_aa_mbox_latch write f0002008, f, 22222222
+                9875=> detect ss_aa_mbox_latch write f0002018, f, 66666666
+LS_and_SS_in_soc_burnin_test - end
+                9935=> detect ss_aa_mbox_latch write f000200c, f, 33333333
+                9935=> detect ss_aa_mbox_latch write f000201c, f, 77777777
+$finish called at time : 10015 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 379
 ## quit
-INFO: [Common 17-206] Exiting xsim at Mon Mar 25 11:26:58 2024...
+INFO: [Common 17-206] Exiting xsim at Mon Mar 25 15:10:25 2024...

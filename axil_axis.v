@@ -577,10 +577,17 @@ assign m_arvalid = lm_cyc & !ss_wr;
 assign m_rready  = m_arvalid;
 
 // control signals
-// Note: LS, SS state mchine are exclusive
-//wire ss_aa_internal = ss_aa_reg || ss_aa_mbox;
-//wire ss_lm_enable = !ls_cyc & as_aa_tvalid & !ss_aa_reg;    //limitation: dead lock issue, if remote send a request and ss_aa_reg=1.
-assign ss_lm_enable = !ls_cyc & as_aa_tvalid & !ss_aa_reg;    //limitation: dead lock issue, if remote send a request and ss_aa_reg=1.
+// Note:  1. LS, SS state mchine are exclusive
+//        2. limitation: dead lock issue, if remote side send a request and ss_aa_reg=1. current design do not assert tready in SS then dead lock.
+//        3. dead lock issue - both side issue mailbox write
+//            workaround - SS state mahcine from IDLE to next state when ss_wr_cyc=1
+
+// ss_lm_enable in below conditions
+// 1. no on going ls cycle and current request from remote sm to local ss read cycle address not in aa_reg range.
+//    - for remote sm to local ss read_resp cycle (ss_rs_cyc) do not let ss_lm_enable=1
+// 2. remote sm to local ss is write cycle 
+assign ss_lm_enable = (!ls_cyc & ss_rd_cyc & !ss_aa_reg & as_aa_tvalid ) || (ss_wr_cyc & as_aa_tvalid );
+
 wire lm_wr_ready  = m_awready & m_wready;
 
         
