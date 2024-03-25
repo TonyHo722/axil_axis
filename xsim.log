@@ -2,8 +2,8 @@
 # xsim v2022.2 (64-bit)
 # SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
 # IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
-# Start of session at: Mon Mar 25 18:10:26 2024
-# Process ID: 2070957
+# Start of session at: Mon Mar 25 20:37:52 2024
+# Process ID: 2174136
 # Current directory: /ADATA2T/home/tonyho/workspace/axil_axis
 # Command line: xsim -mode tcl -source {xsim.dir/tb_test_xelab/xsim_script.tcl}
 # Log file: /ADATA2T/home/tonyho/workspace/axil_axis/xsim.log
@@ -436,4 +436,4 @@ soc_mailbox_write_and_fpga_to_soc_cfg_read_test - start
 soc_mailbox_write_and_fpga_to_soc_cfg_read_test - end
 $finish called at time : 15685 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 382
 ## quit
-INFO: [Common 17-206] Exiting xsim at Mon Mar 25 18:10:28 2024...
+INFO: [Common 17-206] Exiting xsim at Mon Mar 25 20:37:54 2024...
