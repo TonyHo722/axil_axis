@@ -463,7 +463,8 @@ assign aa_as_tuser = ls_wr? TUSER_AXILITE_WRITE :
 // {ls_sm_enable, ls_sm_wr, sm_ready, sm_rs_ready}
 // Note: LS, SS State machine is exclusive - when ss_cyc is ongoing then pending ls_sm_enable until ss_cyc done.
 // SS state machine with higher priority then LS State machine when both in IDLE state and try to move to next state.
-wire ls_sm_enable = !((ss_lm_fsm == `SS_IDLE) & ss_lm_enable) & !ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arvalid);   // axilite AW & W AR request asserts
+//wire ls_sm_enable = !((ss_lm_fsm == `SS_IDLE) & ss_lm_enable) & !ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arvalid);   // axilite AW & W AR request asserts
+wire ls_sm_enable = !ss_cyc & cc_aa_enable & ((s_awvalid & s_wvalid) | s_arvalid);   // axilite AW & W AR request asserts
 wire ls_sm_wr = s_awvalid;                  // axilite AW - write transaction
 wire sm_ready = as_aa_tready;               // sm bus ready if write 2 cycle
 wire ss_rs_ready = as_aa_tvalid & ss_rs_cyc; // axis slave receives read completion
