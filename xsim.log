@@ -2,8 +2,8 @@
 # xsim v2022.2 (64-bit)
 # SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
 # IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
-# Start of session at: Mon Mar 25 15:10:23 2024
-# Process ID: 1964328
+# Start of session at: Mon Mar 25 18:10:26 2024
+# Process ID: 2070957
 # Current directory: /ADATA2T/home/tonyho/workspace/axil_axis
 # Command line: xsim -mode tcl -source {xsim.dir/tb_test_xelab/xsim_script.tcl}
 # Log file: /ADATA2T/home/tonyho/workspace/axil_axis/xsim.log
@@ -270,7 +270,7 @@ soc_local_mailbox_BE_test - start
                 9625=> soc_ls_cfg_r 201c
                 9665=> soc_ls_cfg_r result = 1f1e1d1c
 soc_local_mailbox_BE_test - end
-LS_and_SS_in_soc_burnin_test - start
+both_side_mailbox_write_test - start
                 9685=> soc_ls_cfg_w 2000, f, 00000000
                 9685=> fpga_ls_cfg_w 2010, f, 44444444
                 9735=> fpga_ls_cfg_w 2014, f, 55555555
@@ -285,9 +285,155 @@ LS_and_SS_in_soc_burnin_test - start
                 9855=> soc_ls_cfg_w 200c, f, 33333333
                 9875=> detect ss_aa_mbox_latch write f0002008, f, 22222222
                 9875=> detect ss_aa_mbox_latch write f0002018, f, 66666666
-LS_and_SS_in_soc_burnin_test - end
                 9935=> detect ss_aa_mbox_latch write f000200c, f, 33333333
                 9935=> detect ss_aa_mbox_latch write f000201c, f, 77777777
-$finish called at time : 10015 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 379
+both_side_mailbox_write_test - end
+soc_mailbox_write_and_fpga_to_soc_cfg_read_test - start
+                9965=> fpga_ls_cfg_w 0000, f, 00000000
+               10035=> soc LM write soc_up_regs f0000000, f, 00000000
+               10045=> fpga_ls_cfg_w 0004, f, 11111111
+               10115=> soc LM write soc_up_regs f0000004, f, 11111111
+               10125=> fpga_ls_cfg_w 0008, f, 22222222
+               10195=> soc LM write soc_up_regs f0000008, f, 22222222
+               10205=> fpga_ls_cfg_w 000c, f, 33333333
+               10275=> soc LM write soc_up_regs f000000c, f, 33333333
+               10285=> fpga_ls_cfg_w 0010, f, 44444444
+               10355=> soc LM write soc_up_regs f0000010, f, 44444444
+               10365=> fpga_ls_cfg_w 0014, f, 55555555
+               10435=> soc LM write soc_up_regs f0000014, f, 55555555
+               10445=> fpga_ls_cfg_w 0018, f, 66666666
+               10515=> soc LM write soc_up_regs f0000018, f, 66666666
+               10525=> fpga_ls_cfg_w 001c, f, 77777777
+               10595=> soc LM write soc_up_regs f000001c, f, 77777777
+               10605=> soc_ls_cfg_w 2000, f, 00000000
+               10635=> fpga_ls_cfg_r 0000
+               10655=> soc_ls_cfg_w 2004, f, 11111111
+               10675=> detect ss_aa_mbox_latch write f0002000, f, 00000000
+               10715=> soc_ls_cfg_w 2008, f, 22222222
+               10735=> detect ss_aa_mbox_latch write f0002004, f, 11111111
+               10795=> fpga_ls_cfg_r result = 00000000
+               10835=> fpga_ls_cfg_r 0004
+               10835=> soc_ls_cfg_w 200c, f, 33333333
+               10855=> detect ss_aa_mbox_latch write f0002008, f, 22222222
+               10895=> soc_ls_cfg_w 2010, f, 44444444
+               10915=> detect ss_aa_mbox_latch write f000200c, f, 33333333
+               10975=> fpga_ls_cfg_r result = 11111111
+               11015=> fpga_ls_cfg_r 0008
+               11015=> soc_ls_cfg_w 2014, f, 55555555
+               11035=> detect ss_aa_mbox_latch write f0002010, f, 44444444
+               11075=> soc_ls_cfg_w 2018, f, 66666666
+               11095=> detect ss_aa_mbox_latch write f0002014, f, 55555555
+               11155=> fpga_ls_cfg_r result = 22222222
+               11195=> fpga_ls_cfg_r 000c
+               11195=> soc_ls_cfg_w 201c, f, 77777777
+               11215=> detect ss_aa_mbox_latch write f0002018, f, 66666666
+               11255=> soc_ls_cfg_w 2000, f, 00000000
+               11275=> detect ss_aa_mbox_latch write f000201c, f, 77777777
+               11335=> fpga_ls_cfg_r result = 33333333
+               11375=> fpga_ls_cfg_r 0010
+               11375=> soc_ls_cfg_w 2004, f, 11111111
+               11395=> detect ss_aa_mbox_latch write f0002000, f, 00000000
+               11435=> soc_ls_cfg_w 2008, f, 22222222
+               11455=> detect ss_aa_mbox_latch write f0002004, f, 11111111
+               11515=> fpga_ls_cfg_r result = 44444444
+               11555=> fpga_ls_cfg_r 0014
+               11555=> soc_ls_cfg_w 200c, f, 33333333
+               11575=> detect ss_aa_mbox_latch write f0002008, f, 22222222
+               11615=> soc_ls_cfg_w 2010, f, 44444444
+               11635=> detect ss_aa_mbox_latch write f000200c, f, 33333333
+               11695=> fpga_ls_cfg_r result = 55555555
+               11735=> fpga_ls_cfg_r 0018
+               11735=> soc_ls_cfg_w 2014, f, 55555555
+               11755=> detect ss_aa_mbox_latch write f0002010, f, 44444444
+               11795=> soc_ls_cfg_w 2018, f, 66666666
+               11815=> detect ss_aa_mbox_latch write f0002014, f, 55555555
+               11875=> fpga_ls_cfg_r result = 66666666
+               11915=> fpga_ls_cfg_r 001c
+               11915=> soc_ls_cfg_w 201c, f, 77777777
+               11935=> detect ss_aa_mbox_latch write f0002018, f, 66666666
+               11975=> soc_ls_cfg_w 2000, f, 00000000
+               11995=> detect ss_aa_mbox_latch write f000201c, f, 77777777
+               12055=> fpga_ls_cfg_r result = 77777777
+               12095=> fpga_ls_cfg_r 0000
+               12095=> soc_ls_cfg_w 2004, f, 11111111
+               12115=> detect ss_aa_mbox_latch write f0002000, f, 00000000
+               12155=> soc_ls_cfg_w 2008, f, 22222222
+               12175=> detect ss_aa_mbox_latch write f0002004, f, 11111111
+               12235=> fpga_ls_cfg_r result = 00000000
+               12275=> fpga_ls_cfg_r 0004
+               12275=> soc_ls_cfg_w 200c, f, 33333333
+               12295=> detect ss_aa_mbox_latch write f0002008, f, 22222222
+               12335=> soc_ls_cfg_w 2010, f, 44444444
+               12355=> detect ss_aa_mbox_latch write f000200c, f, 33333333
+               12415=> fpga_ls_cfg_r result = 11111111
+               12455=> fpga_ls_cfg_r 0008
+               12455=> soc_ls_cfg_w 2014, f, 55555555
+               12475=> detect ss_aa_mbox_latch write f0002010, f, 44444444
+               12515=> soc_ls_cfg_w 2018, f, 66666666
+               12535=> detect ss_aa_mbox_latch write f0002014, f, 55555555
+               12595=> fpga_ls_cfg_r result = 22222222
+               12635=> fpga_ls_cfg_r 000c
+               12635=> soc_ls_cfg_w 201c, f, 77777777
+               12655=> detect ss_aa_mbox_latch write f0002018, f, 66666666
+               12695=> soc_ls_cfg_w 2000, f, 00000000
+               12715=> detect ss_aa_mbox_latch write f000201c, f, 77777777
+               12775=> fpga_ls_cfg_r result = 33333333
+               12815=> fpga_ls_cfg_r 0010
+               12815=> soc_ls_cfg_w 2004, f, 11111111
+               12835=> detect ss_aa_mbox_latch write f0002000, f, 00000000
+               12875=> soc_ls_cfg_w 2008, f, 22222222
+               12895=> detect ss_aa_mbox_latch write f0002004, f, 11111111
+               12955=> fpga_ls_cfg_r result = 44444444
+               12995=> fpga_ls_cfg_r 0014
+               12995=> soc_ls_cfg_w 200c, f, 33333333
+               13015=> detect ss_aa_mbox_latch write f0002008, f, 22222222
+               13055=> soc_ls_cfg_w 2010, f, 44444444
+               13075=> detect ss_aa_mbox_latch write f000200c, f, 33333333
+               13135=> fpga_ls_cfg_r result = 55555555
+               13175=> fpga_ls_cfg_r 0018
+               13175=> soc_ls_cfg_w 2014, f, 55555555
+               13195=> detect ss_aa_mbox_latch write f0002010, f, 44444444
+               13235=> soc_ls_cfg_w 2018, f, 66666666
+               13255=> detect ss_aa_mbox_latch write f0002014, f, 55555555
+               13315=> fpga_ls_cfg_r result = 66666666
+               13355=> fpga_ls_cfg_r 001c
+               13355=> soc_ls_cfg_w 201c, f, 77777777
+               13375=> detect ss_aa_mbox_latch write f0002018, f, 66666666
+               13435=> detect ss_aa_mbox_latch write f000201c, f, 77777777
+               13495=> fpga_ls_cfg_r result = 77777777
+               13535=> fpga_ls_cfg_r 0000
+               13625=> fpga_ls_cfg_r result = 00000000
+               13665=> fpga_ls_cfg_r 0004
+               13755=> fpga_ls_cfg_r result = 11111111
+               13795=> fpga_ls_cfg_r 0008
+               13885=> fpga_ls_cfg_r result = 22222222
+               13925=> fpga_ls_cfg_r 000c
+               14015=> fpga_ls_cfg_r result = 33333333
+               14055=> fpga_ls_cfg_r 0010
+               14145=> fpga_ls_cfg_r result = 44444444
+               14185=> fpga_ls_cfg_r 0014
+               14275=> fpga_ls_cfg_r result = 55555555
+               14315=> fpga_ls_cfg_r 0018
+               14405=> fpga_ls_cfg_r result = 66666666
+               14445=> fpga_ls_cfg_r 001c
+               14535=> fpga_ls_cfg_r result = 77777777
+               14575=> fpga_ls_cfg_r 0000
+               14665=> fpga_ls_cfg_r result = 00000000
+               14705=> fpga_ls_cfg_r 0004
+               14795=> fpga_ls_cfg_r result = 11111111
+               14835=> fpga_ls_cfg_r 0008
+               14925=> fpga_ls_cfg_r result = 22222222
+               14965=> fpga_ls_cfg_r 000c
+               15055=> fpga_ls_cfg_r result = 33333333
+               15095=> fpga_ls_cfg_r 0010
+               15185=> fpga_ls_cfg_r result = 44444444
+               15225=> fpga_ls_cfg_r 0014
+               15315=> fpga_ls_cfg_r result = 55555555
+               15355=> fpga_ls_cfg_r 0018
+               15445=> fpga_ls_cfg_r result = 66666666
+               15485=> fpga_ls_cfg_r 001c
+               15575=> fpga_ls_cfg_r result = 77777777
+soc_mailbox_write_and_fpga_to_soc_cfg_read_test - end
+$finish called at time : 15685 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 382
 ## quit
-INFO: [Common 17-206] Exiting xsim at Mon Mar 25 15:10:25 2024...
+INFO: [Common 17-206] Exiting xsim at Mon Mar 25 18:10:28 2024...
