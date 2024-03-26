@@ -524,8 +524,8 @@ module tb_test ();
   endtask
 
 
-wire soc_up_base_r = ( soc_m_araddr[27:12] == 16'h0000 );
-wire soc_up_base_w = ( soc_m_awaddr[27:12] == 16'h0000 );
+wire soc_up_base_r = ( soc_m_araddr[31:28] == 4'h3 ) && ( soc_m_araddr[27:12] == 16'h0000 );
+wire soc_up_base_w = ( soc_m_araddr[31:28] == 4'h3 ) && ( soc_m_awaddr[27:12] == 16'h0000 );
 
 wire soc_up_base = (soc_m_awvalid? soc_up_base_w: soc_up_base_r);
 
@@ -955,6 +955,7 @@ task soc_LS_and_soc_SS_exit_IDLE_simultaneous_test;
 */
 
 endmodule
+
 
 
 
