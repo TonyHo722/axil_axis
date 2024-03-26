@@ -454,7 +454,7 @@ assign aa_as_tstrb = (ls_wr? r_ls_wstrb : 4'b1111);     //from local to remote w
                                                           //from local to remote read use 4'b1111 ? local_ls read -> local_sm read
                                                           //from remote remote_ls read  -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp use 4'b1111
 assign aa_as_tkeep = 0;
-assign aa_as_tlast = 0;
+assign aa_as_tlast = 1'b1;
 assign aa_as_tuser = ls_wr? TUSER_AXILITE_WRITE : 
                               (sm_read_t? TUSER_AXILITE_READ_REQ : TUSER_AXILITE_READ_CPL) ;
 
@@ -664,7 +664,7 @@ end
 always @( posedge axis_clk ) begin              // T1 - address
     if( ss_only_cyc && (!ss_wr | ss_t1) ) begin     //ss_only_cyc = aa_as_tready
                                                         //latch addr, strb and user when read or ss_t1
-        r_ss_rw_addr <= as_aa_tdata;
+        r_ss_rw_addr <= as_aa_tdata | 32'h3000_0000;    //for received cfg R/W request in ss, update address bit[31:28]= 4'h3 in local for send to lm connect to config control.
         r_ss_wstrb <= as_aa_tstrb;
         r_tuser <= as_aa_tuser;
     end else begin
