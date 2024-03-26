@@ -7,9 +7,10 @@ module tb_test ();
   localparam SOC_LOCAL_AS_AXILBASE=15'h4000;
   localparam SOC_LOCAL_CC_AXILBASE=15'h5000;
   
-  //localparam FPGA_to_SOC_AA_LMBASE=15'h2000; //limitation: not support
   localparam FPGA_to_SOC_UP_AXILBASE=15'h0000;
   localparam FPGA_to_SOC_LA_AXILBASE=15'h1000;
+  //localparam FPGA_to_SOC_AA_AXILBASE=15'h2000;  //limitation: not support remote cfg access target to AA_reg range
+                                                  //the cycle will be cliam locally and do not pass to remote side.
   localparam FPGA_to_SOC_IS_AXILBASE=15'h3000;
   localparam FPGA_to_SOC_AS_AXILBASE=15'h3000;
   
@@ -497,6 +498,20 @@ module tb_test ();
 
       $display("fpga_to_soc_cfg_access - start"); 
 
+      fpga_to_soc_UP_cfg_access();
+      //fpga_to_soc_AA_cfg_access();  //limitation: not support remote cfg access target to AA_reg range
+                                      //the cycle will be cliam locally and do not pass to remote side.
+
+      $display("fpga_to_soc_cfg_access - end"); 
+      
+    end
+  endtask
+
+  task fpga_to_soc_UP_cfg_access;
+    begin
+
+      $display("fpga_to_soc_UP_cfg_access - start"); 
+
 
       //BE test
       for (i=0; i<32; i=i+4) begin
@@ -518,11 +533,35 @@ module tb_test ();
       end
       
       //fpga_ls_cfg_r( 15'h2100 + i);  //read AA_reg in soc - how to read AA_reg in remote?
-      $display("fpga_to_soc_cfg_access - end"); 
+      $display("fpga_to_soc_UP_cfg_access - end"); 
       
     end
   endtask
 
+/*
+//limitation: not support remote cfg access target to AA_reg range
+//the cycle will be cliam locally and do not pass to remote side.
+
+  task fpga_to_soc_AA_cfg_access;
+    begin
+
+      $display("fpga_to_soc_AA_cfg_access - start"); 
+
+
+      @( posedge clk);
+      fpga_ls_cfg_w( AA_intr_enable_offset, 4'b0001, 32'h1);  //fpga write to AA in soc
+
+      @( posedge clk);
+      fpga_ls_cfg_r(AA_intr_enable_offset);  //fpga read to AA in soc
+
+      @( posedge clk);
+      
+      //fpga_ls_cfg_r( 15'h2100 + i);  //read AA_reg in soc - how to read AA_reg in remote?
+      $display("fpga_to_soc_AA_cfg_access - end"); 
+      
+    end
+  endtask
+*/
 
 wire soc_up_base_r = ( soc_m_araddr[31:28] == 4'h3 ) && ( soc_m_araddr[27:12] == 16'h0000 );
 wire soc_up_base_w = ( soc_m_araddr[31:28] == 4'h3 ) && ( soc_m_awaddr[27:12] == 16'h0000 );

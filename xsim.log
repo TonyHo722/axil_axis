@@ -2,8 +2,8 @@
 # xsim v2022.2 (64-bit)
 # SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
 # IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
-# Start of session at: Tue Mar 26 17:00:10 2024
-# Process ID: 2990789
+# Start of session at: Tue Mar 26 20:08:25 2024
+# Process ID: 3154858
 # Current directory: /ADATA2T/home/tonyho/workspace/axil_axis
 # Command line: xsim -mode tcl -source {xsim.dir/tb_test_xelab/xsim_script.tcl}
 # Log file: /ADATA2T/home/tonyho/workspace/axil_axis/xsim.log
@@ -25,6 +25,7 @@ soc_local_aa_reg_access - start
                  275=> soc_ls_cfg_r result = 00000001
 soc_local_aa_reg_access - end
 fpga_to_soc_cfg_access - start
+fpga_to_soc_UP_cfg_access - start
                  305=> fpga_ls_cfg_w 0000, 1, 00000000
                  375=> soc LM write soc_up_regs 30000000, 1, 00000000
                  385=> fpga_ls_cfg_w 0000, 2, 00000100
@@ -137,6 +138,7 @@ fpga_to_soc_cfg_access - start
                 5065=> soc LM write soc_up_regs 3000001c, f, 89375212
                 5075=> fpga_ls_cfg_r 001c
                 5175=> fpga_ls_cfg_r result = 89375212
+fpga_to_soc_UP_cfg_access - end
 fpga_to_soc_cfg_access - end
 soc_local_mailbox_access - start
                 5185=> soc_ls_cfg_w 2000, f, 00f3e301
@@ -434,6 +436,6 @@ soc_mailbox_write_and_fpga_to_soc_cfg_read_test - start
                15955=> fpga_ls_cfg_r 001c
                16055=> fpga_ls_cfg_r result = 77777777
 soc_mailbox_write_and_fpga_to_soc_cfg_read_test - end
-$finish called at time : 16165 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 382
+$finish called at time : 16165 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 383
 ## quit
-INFO: [Common 17-206] Exiting xsim at Tue Mar 26 17:00:12 2024...
+INFO: [Common 17-206] Exiting xsim at Tue Mar 26 20:08:27 2024...
