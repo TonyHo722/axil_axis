@@ -586,6 +586,17 @@ assign m_rready  = m_arvalid;
 // 1. no on going ls cycle and current request from remote sm to local ss read cycle address not in aa_reg range.
 //    - for remote sm to local ss read_resp cycle (ss_rs_cyc) do not let ss_lm_enable=1
 // 2. remote sm to local ss is write cycle 
+//
+// limitation : dead lock when both side issue cfg read to remote side at the same time
+// - for example 
+//    A. soc  issue cfg read request to fpga then the soc  ls_cyc=1 and isseu read req from soc's  SM to fpga's ss.
+//    in soc's view point, the ls_sys=1 and ss_rd_cyc=1 then keep ss_lm_enable = 0
+//    B. fpga issue cfg read request to soc  then the fpga ls_cyc=1 and isseu read req from fpga's SM to soc's ss.
+//    in fpga's view point, the ls_sys=1 and ss_rd_cyc=1 then keep ss_lm_enable = 0
+//    - dead lock in both side, the ss_lm_enable keep = 0.
+// - usage : in most case only fpga need issue remote cfg read for debugging.
+// - improve solution: use mailbox as a communication chaneel for sw to grant/release the remote cfg access right. The spec is defeined by software if need.(TBD)
+
 assign ss_lm_enable = (!ls_cyc & ss_rd_cyc & !ss_aa_reg & as_aa_tvalid ) || (ss_wr_cyc & as_aa_tvalid );
 
 wire lm_wr_ready  = m_awready & m_wready;
