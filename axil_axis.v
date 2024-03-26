@@ -550,6 +550,7 @@ assign ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];   //ss_only_cyc + lm
 wire ss_only_cyc = ss_lm_fsm[5];
 wire ss_wr  = ss_lm_fsm[4];
 wire lm_cyc = ss_lm_fsm[3];
+assign lm_ar_cyc = ( ss_lm_fsm == `SS_RD_LM_AR);
 assign ss_sm_cyc = ss_lm_fsm[2];
 wire ss_t1  = ss_wr & !ss_lm_fsm[1];
 assign ss_t2  = ss_wr & ss_lm_fsm[1];
@@ -570,11 +571,33 @@ assign aa_as_tready = ss_only_cyc | ls_r_done;
 // interface signal - axis master
 //   assign aa_as_tdata 
 
+
+reg r_m_arvalid;
+// set by lm_cyc & !ss_wr;
+// clear by m_arready
+always @(posedge axis_clk or negedge axis_rst_n) begin   
+    if( !axis_rst_n ) r_m_arvalid <= 1'b0;
+    else if (r_m_arvalid == 1'b0 &&  lm_ar_cyc && !ss_wr )  r_m_arvalid <= 1'b1;
+    else if ( (r_m_arvalid == 1'b1) && (m_arready == 1'b1) ) r_m_arvalid <= 1'b0;
+    else r_m_arvalid <= r_m_arvalid;
+end
+
+reg r_m_rready;
+// set by lm_cyc & !ss_wr;
+// clear by m_rvalid
+always @(posedge axis_clk or negedge axis_rst_n) begin   
+    if( !axis_rst_n ) r_m_rready <= 1'b0;
+    else if (r_m_rready == 1'b0 &&  lm_ar_cyc && !ss_wr )  r_m_rready <= 1'b1;
+    else if ( (r_m_rready == 1'b1) && (m_rvalid == 1'b1) ) r_m_rready <= 1'b0;
+    else r_m_rready <= r_m_rready;
+end
+
 // LM interface signal - lm master
 assign m_awvalid = lm_cyc & ss_wr;
 assign m_wvalid = m_awvalid;
-assign m_arvalid = lm_cyc & !ss_wr;
-assign m_rready  = m_arvalid;
+assign m_arvalid = r_m_arvalid; // m_arvalid de-assert when detect m_arready assert
+assign m_rready  = r_m_rready;  // m_rready de-assert when detect m_rvalid assert
+
 
 // control signals
 // Note:  1. LS, SS state mchine are exclusive
@@ -664,7 +687,7 @@ end
 always @( posedge axis_clk ) begin              // T1 - address
     if( ss_only_cyc && (!ss_wr | ss_t1) ) begin     //ss_only_cyc = aa_as_tready
                                                         //latch addr, strb and user when read or ss_t1
-        r_ss_rw_addr <= as_aa_tdata | 32'h3000_0000;    //for received cfg R/W request in ss, update address bit[31:28]= 4'h3 in local for send to lm connect to config control.
+        r_ss_rw_addr <= as_aa_tdata[27:0] | 32'h3000_0000;    //for received cfg R/W request in ss, update address bit[31:28]= 4'h3 in local for send to lm connect to config control.
         r_ss_wstrb <= as_aa_tstrb;
         r_tuser <= as_aa_tuser;
     end else begin
@@ -727,6 +750,7 @@ end
  
 
 endmodule // AXIL_AXIS
+
 
 
 

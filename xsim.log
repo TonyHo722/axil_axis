@@ -2,8 +2,8 @@
 # xsim v2022.2 (64-bit)
 # SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
 # IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
-# Start of session at: Tue Mar 26 13:05:45 2024
-# Process ID: 2794130
+# Start of session at: Tue Mar 26 17:00:10 2024
+# Process ID: 2990789
 # Current directory: /ADATA2T/home/tonyho/workspace/axil_axis
 # Command line: xsim -mode tcl -source {xsim.dir/tb_test_xelab/xsim_script.tcl}
 # Log file: /ADATA2T/home/tonyho/workspace/axil_axis/xsim.log
@@ -30,410 +30,410 @@ fpga_to_soc_cfg_access - start
                  385=> fpga_ls_cfg_w 0000, 2, 00000100
                  455=> soc LM write soc_up_regs 30000000, 2, 00000100
                  465=> fpga_ls_cfg_w 0000, 4, 00020000
-                 535=> soc LM write soc_up_regs 70000000, 4, 00020000
+                 535=> soc LM write soc_up_regs 30000000, 4, 00020000
                  545=> fpga_ls_cfg_w 0000, 8, 03000000
-                 615=> soc LM write soc_up_regs b0000000, 8, 03000000
+                 615=> soc LM write soc_up_regs 30000000, 8, 03000000
                  625=> fpga_ls_cfg_w 0004, 1, 00000004
                  695=> soc LM write soc_up_regs 30000004, 1, 00000004
                  705=> fpga_ls_cfg_w 0004, 2, 00000500
                  775=> soc LM write soc_up_regs 30000004, 2, 00000500
                  785=> fpga_ls_cfg_w 0004, 4, 00060000
-                 855=> soc LM write soc_up_regs 70000004, 4, 00060000
+                 855=> soc LM write soc_up_regs 30000004, 4, 00060000
                  865=> fpga_ls_cfg_w 0004, 8, 07000000
-                 935=> soc LM write soc_up_regs b0000004, 8, 07000000
+                 935=> soc LM write soc_up_regs 30000004, 8, 07000000
                  945=> fpga_ls_cfg_w 0008, 1, 00000008
                 1015=> soc LM write soc_up_regs 30000008, 1, 00000008
                 1025=> fpga_ls_cfg_w 0008, 2, 00000900
                 1095=> soc LM write soc_up_regs 30000008, 2, 00000900
                 1105=> fpga_ls_cfg_w 0008, 4, 000a0000
-                1175=> soc LM write soc_up_regs 70000008, 4, 000a0000
+                1175=> soc LM write soc_up_regs 30000008, 4, 000a0000
                 1185=> fpga_ls_cfg_w 0008, 8, 0b000000
-                1255=> soc LM write soc_up_regs b0000008, 8, 0b000000
+                1255=> soc LM write soc_up_regs 30000008, 8, 0b000000
                 1265=> fpga_ls_cfg_w 000c, 1, 0000000c
                 1335=> soc LM write soc_up_regs 3000000c, 1, 0000000c
                 1345=> fpga_ls_cfg_w 000c, 2, 00000d00
                 1415=> soc LM write soc_up_regs 3000000c, 2, 00000d00
                 1425=> fpga_ls_cfg_w 000c, 4, 000e0000
-                1495=> soc LM write soc_up_regs 7000000c, 4, 000e0000
+                1495=> soc LM write soc_up_regs 3000000c, 4, 000e0000
                 1505=> fpga_ls_cfg_w 000c, 8, 0f000000
-                1575=> soc LM write soc_up_regs b000000c, 8, 0f000000
+                1575=> soc LM write soc_up_regs 3000000c, 8, 0f000000
                 1585=> fpga_ls_cfg_w 0010, 1, 00000010
                 1655=> soc LM write soc_up_regs 30000010, 1, 00000010
                 1665=> fpga_ls_cfg_w 0010, 2, 00001100
                 1735=> soc LM write soc_up_regs 30000010, 2, 00001100
                 1745=> fpga_ls_cfg_w 0010, 4, 00120000
-                1815=> soc LM write soc_up_regs 70000010, 4, 00120000
+                1815=> soc LM write soc_up_regs 30000010, 4, 00120000
                 1825=> fpga_ls_cfg_w 0010, 8, 13000000
-                1895=> soc LM write soc_up_regs b0000010, 8, 13000000
+                1895=> soc LM write soc_up_regs 30000010, 8, 13000000
                 1905=> fpga_ls_cfg_w 0014, 1, 00000014
                 1975=> soc LM write soc_up_regs 30000014, 1, 00000014
                 1985=> fpga_ls_cfg_w 0014, 2, 00001500
                 2055=> soc LM write soc_up_regs 30000014, 2, 00001500
                 2065=> fpga_ls_cfg_w 0014, 4, 00160000
-                2135=> soc LM write soc_up_regs 70000014, 4, 00160000
+                2135=> soc LM write soc_up_regs 30000014, 4, 00160000
                 2145=> fpga_ls_cfg_w 0014, 8, 17000000
-                2215=> soc LM write soc_up_regs b0000014, 8, 17000000
+                2215=> soc LM write soc_up_regs 30000014, 8, 17000000
                 2225=> fpga_ls_cfg_w 0018, 1, 00000018
                 2295=> soc LM write soc_up_regs 30000018, 1, 00000018
                 2305=> fpga_ls_cfg_w 0018, 2, 00001900
                 2375=> soc LM write soc_up_regs 30000018, 2, 00001900
                 2385=> fpga_ls_cfg_w 0018, 4, 001a0000
-                2455=> soc LM write soc_up_regs 70000018, 4, 001a0000
+                2455=> soc LM write soc_up_regs 30000018, 4, 001a0000
                 2465=> fpga_ls_cfg_w 0018, 8, 1b000000
-                2535=> soc LM write soc_up_regs b0000018, 8, 1b000000
+                2535=> soc LM write soc_up_regs 30000018, 8, 1b000000
                 2545=> fpga_ls_cfg_w 001c, 1, 0000001c
                 2615=> soc LM write soc_up_regs 3000001c, 1, 0000001c
                 2625=> fpga_ls_cfg_w 001c, 2, 00001d00
                 2695=> soc LM write soc_up_regs 3000001c, 2, 00001d00
                 2705=> fpga_ls_cfg_w 001c, 4, 001e0000
-                2775=> soc LM write soc_up_regs 7000001c, 4, 001e0000
+                2775=> soc LM write soc_up_regs 3000001c, 4, 001e0000
                 2785=> fpga_ls_cfg_w 001c, 8, 1f000000
-                2855=> soc LM write soc_up_regs b000001c, 8, 1f000000
+                2855=> soc LM write soc_up_regs 3000001c, 8, 1f000000
                 2865=> fpga_ls_cfg_r 0000
-                2955=> fpga_ls_cfg_r result = 03020100
-                2965=> fpga_ls_cfg_r 0004
-                3055=> fpga_ls_cfg_r result = 07060504
-                3065=> fpga_ls_cfg_r 0008
-                3155=> fpga_ls_cfg_r result = 0b0a0908
-                3165=> fpga_ls_cfg_r 000c
-                3255=> fpga_ls_cfg_r result = 0f0e0d0c
-                3265=> fpga_ls_cfg_r 0010
-                3355=> fpga_ls_cfg_r result = 13121110
-                3365=> fpga_ls_cfg_r 0014
-                3455=> fpga_ls_cfg_r result = 17161514
-                3465=> fpga_ls_cfg_r 0018
-                3555=> fpga_ls_cfg_r result = 1b1a1918
-                3565=> fpga_ls_cfg_r 001c
-                3655=> fpga_ls_cfg_r result = 1f1e1d1c
-                3655=> fpga_ls_cfg_w 0000, f, 12153524
-                3725=> soc LM write soc_up_regs f0000000, f, 12153524
-                3735=> fpga_ls_cfg_r 0000
-                3825=> fpga_ls_cfg_r result = 12153524
-                3825=> fpga_ls_cfg_w 0004, f, c0895e81
-                3895=> soc LM write soc_up_regs f0000004, f, c0895e81
-                3905=> fpga_ls_cfg_r 0004
-                3995=> fpga_ls_cfg_r result = c0895e81
-                3995=> fpga_ls_cfg_w 0008, f, 8484d609
-                4065=> soc LM write soc_up_regs f0000008, f, 8484d609
-                4075=> fpga_ls_cfg_r 0008
-                4165=> fpga_ls_cfg_r result = 8484d609
-                4165=> fpga_ls_cfg_w 000c, f, b1f05663
-                4235=> soc LM write soc_up_regs f000000c, f, b1f05663
-                4245=> fpga_ls_cfg_r 000c
-                4335=> fpga_ls_cfg_r result = b1f05663
-                4335=> fpga_ls_cfg_w 0010, f, 06b97b0d
-                4405=> soc LM write soc_up_regs f0000010, f, 06b97b0d
-                4415=> fpga_ls_cfg_r 0010
-                4505=> fpga_ls_cfg_r result = 06b97b0d
-                4505=> fpga_ls_cfg_w 0014, f, 46df998d
-                4575=> soc LM write soc_up_regs f0000014, f, 46df998d
-                4585=> fpga_ls_cfg_r 0014
-                4675=> fpga_ls_cfg_r result = 46df998d
-                4675=> fpga_ls_cfg_w 0018, f, b2c28465
-                4745=> soc LM write soc_up_regs f0000018, f, b2c28465
-                4755=> fpga_ls_cfg_r 0018
-                4845=> fpga_ls_cfg_r result = b2c28465
-                4845=> fpga_ls_cfg_w 001c, f, 89375212
-                4915=> soc LM write soc_up_regs f000001c, f, 89375212
-                4925=> fpga_ls_cfg_r 001c
-                5015=> fpga_ls_cfg_r result = 89375212
+                2965=> fpga_ls_cfg_r result = 03020100
+                2975=> fpga_ls_cfg_r 0004
+                3075=> fpga_ls_cfg_r result = 07060504
+                3085=> fpga_ls_cfg_r 0008
+                3185=> fpga_ls_cfg_r result = 0b0a0908
+                3195=> fpga_ls_cfg_r 000c
+                3295=> fpga_ls_cfg_r result = 0f0e0d0c
+                3305=> fpga_ls_cfg_r 0010
+                3405=> fpga_ls_cfg_r result = 13121110
+                3415=> fpga_ls_cfg_r 0014
+                3515=> fpga_ls_cfg_r result = 17161514
+                3525=> fpga_ls_cfg_r 0018
+                3625=> fpga_ls_cfg_r result = 1b1a1918
+                3635=> fpga_ls_cfg_r 001c
+                3735=> fpga_ls_cfg_r result = 1f1e1d1c
+                3735=> fpga_ls_cfg_w 0000, f, 12153524
+                3805=> soc LM write soc_up_regs 30000000, f, 12153524
+                3815=> fpga_ls_cfg_r 0000
+                3915=> fpga_ls_cfg_r result = 12153524
+                3915=> fpga_ls_cfg_w 0004, f, c0895e81
+                3985=> soc LM write soc_up_regs 30000004, f, c0895e81
+                3995=> fpga_ls_cfg_r 0004
+                4095=> fpga_ls_cfg_r result = c0895e81
+                4095=> fpga_ls_cfg_w 0008, f, 8484d609
+                4165=> soc LM write soc_up_regs 30000008, f, 8484d609
+                4175=> fpga_ls_cfg_r 0008
+                4275=> fpga_ls_cfg_r result = 8484d609
+                4275=> fpga_ls_cfg_w 000c, f, b1f05663
+                4345=> soc LM write soc_up_regs 3000000c, f, b1f05663
+                4355=> fpga_ls_cfg_r 000c
+                4455=> fpga_ls_cfg_r result = b1f05663
+                4455=> fpga_ls_cfg_w 0010, f, 06b97b0d
+                4525=> soc LM write soc_up_regs 30000010, f, 06b97b0d
+                4535=> fpga_ls_cfg_r 0010
+                4635=> fpga_ls_cfg_r result = 06b97b0d
+                4635=> fpga_ls_cfg_w 0014, f, 46df998d
+                4705=> soc LM write soc_up_regs 30000014, f, 46df998d
+                4715=> fpga_ls_cfg_r 0014
+                4815=> fpga_ls_cfg_r result = 46df998d
+                4815=> fpga_ls_cfg_w 0018, f, b2c28465
+                4885=> soc LM write soc_up_regs 30000018, f, b2c28465
+                4895=> fpga_ls_cfg_r 0018
+                4995=> fpga_ls_cfg_r result = b2c28465
+                4995=> fpga_ls_cfg_w 001c, f, 89375212
+                5065=> soc LM write soc_up_regs 3000001c, f, 89375212
+                5075=> fpga_ls_cfg_r 001c
+                5175=> fpga_ls_cfg_r result = 89375212
 fpga_to_soc_cfg_access - end
 soc_local_mailbox_access - start
-                5025=> soc_ls_cfg_w 2000, f, 00f3e301
-                5095=> detect ss_aa_mbox_latch write f0002000, f, 00f3e301
-                5105=> soc_ls_cfg_w 2004, f, 06d7cd0d
-                5175=> detect ss_aa_mbox_latch write f0002004, f, 06d7cd0d
-                5185=> soc_ls_cfg_w 2008, f, 3b23f176
-                5255=> detect ss_aa_mbox_latch write f0002008, f, 3b23f176
-                5265=> soc_ls_cfg_w 200c, f, 1e8dcd3d
-                5335=> detect ss_aa_mbox_latch write f000200c, f, 1e8dcd3d
-                5345=> soc_ls_cfg_w 2010, f, 76d457ed
-                5415=> detect ss_aa_mbox_latch write f0002010, f, 76d457ed
-                5425=> soc_ls_cfg_w 2014, f, 462df78c
-                5495=> detect ss_aa_mbox_latch write f0002014, f, 462df78c
-                5505=> soc_ls_cfg_w 2018, f, 7cfde9f9
-                5575=> detect ss_aa_mbox_latch write f0002018, f, 7cfde9f9
-                5585=> soc_ls_cfg_w 201c, f, e33724c6
-                5655=> detect ss_aa_mbox_latch write f000201c, f, e33724c6
-                5665=> soc_ls_cfg_r 2000
-                5705=> soc_ls_cfg_r result = 00f3e301
-                5715=> soc_ls_cfg_r 2004
-                5755=> soc_ls_cfg_r result = 06d7cd0d
-                5765=> soc_ls_cfg_r 2008
-                5805=> soc_ls_cfg_r result = 3b23f176
-                5815=> soc_ls_cfg_r 200c
-                5855=> soc_ls_cfg_r result = 1e8dcd3d
-                5865=> soc_ls_cfg_r 2010
-                5905=> soc_ls_cfg_r result = 76d457ed
-                5915=> soc_ls_cfg_r 2014
-                5955=> soc_ls_cfg_r result = 462df78c
-                5965=> soc_ls_cfg_r 2018
-                6005=> soc_ls_cfg_r result = 7cfde9f9
-                6015=> soc_ls_cfg_r 201c
-                6055=> soc_ls_cfg_r result = e33724c6
+                5185=> soc_ls_cfg_w 2000, f, 00f3e301
+                5255=> detect ss_aa_mbox_latch write 30002000, f, 00f3e301
+                5265=> soc_ls_cfg_w 2004, f, 06d7cd0d
+                5335=> detect ss_aa_mbox_latch write 30002004, f, 06d7cd0d
+                5345=> soc_ls_cfg_w 2008, f, 3b23f176
+                5415=> detect ss_aa_mbox_latch write 30002008, f, 3b23f176
+                5425=> soc_ls_cfg_w 200c, f, 1e8dcd3d
+                5495=> detect ss_aa_mbox_latch write 3000200c, f, 1e8dcd3d
+                5505=> soc_ls_cfg_w 2010, f, 76d457ed
+                5575=> detect ss_aa_mbox_latch write 30002010, f, 76d457ed
+                5585=> soc_ls_cfg_w 2014, f, 462df78c
+                5655=> detect ss_aa_mbox_latch write 30002014, f, 462df78c
+                5665=> soc_ls_cfg_w 2018, f, 7cfde9f9
+                5735=> detect ss_aa_mbox_latch write 30002018, f, 7cfde9f9
+                5745=> soc_ls_cfg_w 201c, f, e33724c6
+                5815=> detect ss_aa_mbox_latch write 3000201c, f, e33724c6
+                5825=> soc_ls_cfg_r 2000
+                5865=> soc_ls_cfg_r result = 00f3e301
+                5875=> soc_ls_cfg_r 2004
+                5915=> soc_ls_cfg_r result = 06d7cd0d
+                5925=> soc_ls_cfg_r 2008
+                5965=> soc_ls_cfg_r result = 3b23f176
+                5975=> soc_ls_cfg_r 200c
+                6015=> soc_ls_cfg_r result = 1e8dcd3d
+                6025=> soc_ls_cfg_r 2010
+                6065=> soc_ls_cfg_r result = 76d457ed
+                6075=> soc_ls_cfg_r 2014
+                6115=> soc_ls_cfg_r result = 462df78c
+                6125=> soc_ls_cfg_r 2018
+                6165=> soc_ls_cfg_r result = 7cfde9f9
+                6175=> soc_ls_cfg_r 201c
+                6215=> soc_ls_cfg_r result = e33724c6
 soc_local_mailbox_access - end
 soc_local_mailbox_BE_test - start
-                6075=> soc_ls_cfg_w 2000, f, 00000000
-                6145=> detect ss_aa_mbox_latch write f0002000, f, 00000000
-                6155=> soc_ls_cfg_w 2004, f, 00000000
-                6225=> detect ss_aa_mbox_latch write f0002004, f, 00000000
-                6235=> soc_ls_cfg_w 2008, f, 00000000
-                6305=> detect ss_aa_mbox_latch write f0002008, f, 00000000
-                6315=> soc_ls_cfg_w 200c, f, 00000000
-                6385=> detect ss_aa_mbox_latch write f000200c, f, 00000000
-                6395=> soc_ls_cfg_w 2010, f, 00000000
-                6465=> detect ss_aa_mbox_latch write f0002010, f, 00000000
-                6475=> soc_ls_cfg_w 2014, f, 00000000
-                6545=> detect ss_aa_mbox_latch write f0002014, f, 00000000
-                6555=> soc_ls_cfg_w 2018, f, 00000000
-                6625=> detect ss_aa_mbox_latch write f0002018, f, 00000000
-                6635=> soc_ls_cfg_w 201c, f, 00000000
-                6705=> detect ss_aa_mbox_latch write f000201c, f, 00000000
-                6715=> soc_ls_cfg_w 2000, 1, 00000000
-                6785=> detect ss_aa_mbox_latch write 30002000, 1, 00000000
-                6795=> soc_ls_cfg_w 2000, 2, 00000100
-                6865=> detect ss_aa_mbox_latch write 30002000, 2, 00000100
-                6875=> soc_ls_cfg_w 2000, 4, 00020000
-                6945=> detect ss_aa_mbox_latch write 70002000, 4, 00020000
-                6955=> soc_ls_cfg_w 2000, 8, 03000000
-                7025=> detect ss_aa_mbox_latch write b0002000, 8, 03000000
-                7035=> soc_ls_cfg_w 2004, 1, 00000004
-                7105=> detect ss_aa_mbox_latch write 30002004, 1, 00000004
-                7115=> soc_ls_cfg_w 2004, 2, 00000500
-                7185=> detect ss_aa_mbox_latch write 30002004, 2, 00000500
-                7195=> soc_ls_cfg_w 2004, 4, 00060000
-                7265=> detect ss_aa_mbox_latch write 70002004, 4, 00060000
-                7275=> soc_ls_cfg_w 2004, 8, 07000000
-                7345=> detect ss_aa_mbox_latch write b0002004, 8, 07000000
-                7355=> soc_ls_cfg_w 2008, 1, 00000008
-                7425=> detect ss_aa_mbox_latch write 30002008, 1, 00000008
-                7435=> soc_ls_cfg_w 2008, 2, 00000900
-                7505=> detect ss_aa_mbox_latch write 30002008, 2, 00000900
-                7515=> soc_ls_cfg_w 2008, 4, 000a0000
-                7585=> detect ss_aa_mbox_latch write 70002008, 4, 000a0000
-                7595=> soc_ls_cfg_w 2008, 8, 0b000000
-                7665=> detect ss_aa_mbox_latch write b0002008, 8, 0b000000
-                7675=> soc_ls_cfg_w 200c, 1, 0000000c
-                7745=> detect ss_aa_mbox_latch write 3000200c, 1, 0000000c
-                7755=> soc_ls_cfg_w 200c, 2, 00000d00
-                7825=> detect ss_aa_mbox_latch write 3000200c, 2, 00000d00
-                7835=> soc_ls_cfg_w 200c, 4, 000e0000
-                7905=> detect ss_aa_mbox_latch write 7000200c, 4, 000e0000
-                7915=> soc_ls_cfg_w 200c, 8, 0f000000
-                7985=> detect ss_aa_mbox_latch write b000200c, 8, 0f000000
-                7995=> soc_ls_cfg_w 2010, 1, 00000010
-                8065=> detect ss_aa_mbox_latch write 30002010, 1, 00000010
-                8075=> soc_ls_cfg_w 2010, 2, 00001100
-                8145=> detect ss_aa_mbox_latch write 30002010, 2, 00001100
-                8155=> soc_ls_cfg_w 2010, 4, 00120000
-                8225=> detect ss_aa_mbox_latch write 70002010, 4, 00120000
-                8235=> soc_ls_cfg_w 2010, 8, 13000000
-                8305=> detect ss_aa_mbox_latch write b0002010, 8, 13000000
-                8315=> soc_ls_cfg_w 2014, 1, 00000014
-                8385=> detect ss_aa_mbox_latch write 30002014, 1, 00000014
-                8395=> soc_ls_cfg_w 2014, 2, 00001500
-                8465=> detect ss_aa_mbox_latch write 30002014, 2, 00001500
-                8475=> soc_ls_cfg_w 2014, 4, 00160000
-                8545=> detect ss_aa_mbox_latch write 70002014, 4, 00160000
-                8555=> soc_ls_cfg_w 2014, 8, 17000000
-                8625=> detect ss_aa_mbox_latch write b0002014, 8, 17000000
-                8635=> soc_ls_cfg_w 2018, 1, 00000018
-                8705=> detect ss_aa_mbox_latch write 30002018, 1, 00000018
-                8715=> soc_ls_cfg_w 2018, 2, 00001900
-                8785=> detect ss_aa_mbox_latch write 30002018, 2, 00001900
-                8795=> soc_ls_cfg_w 2018, 4, 001a0000
-                8865=> detect ss_aa_mbox_latch write 70002018, 4, 001a0000
-                8875=> soc_ls_cfg_w 2018, 8, 1b000000
-                8945=> detect ss_aa_mbox_latch write b0002018, 8, 1b000000
-                8955=> soc_ls_cfg_w 201c, 1, 0000001c
-                9025=> detect ss_aa_mbox_latch write 3000201c, 1, 0000001c
-                9035=> soc_ls_cfg_w 201c, 2, 00001d00
-                9105=> detect ss_aa_mbox_latch write 3000201c, 2, 00001d00
-                9115=> soc_ls_cfg_w 201c, 4, 001e0000
-                9185=> detect ss_aa_mbox_latch write 7000201c, 4, 001e0000
-                9195=> soc_ls_cfg_w 201c, 8, 1f000000
-                9265=> detect ss_aa_mbox_latch write b000201c, 8, 1f000000
-                9275=> soc_ls_cfg_r 2000
-                9315=> soc_ls_cfg_r result = 03020100
-                9325=> soc_ls_cfg_r 2004
-                9365=> soc_ls_cfg_r result = 07060504
-                9375=> soc_ls_cfg_r 2008
-                9415=> soc_ls_cfg_r result = 0b0a0908
-                9425=> soc_ls_cfg_r 200c
-                9465=> soc_ls_cfg_r result = 0f0e0d0c
-                9475=> soc_ls_cfg_r 2010
-                9515=> soc_ls_cfg_r result = 13121110
-                9525=> soc_ls_cfg_r 2014
-                9565=> soc_ls_cfg_r result = 17161514
-                9575=> soc_ls_cfg_r 2018
-                9615=> soc_ls_cfg_r result = 1b1a1918
-                9625=> soc_ls_cfg_r 201c
-                9665=> soc_ls_cfg_r result = 1f1e1d1c
+                6235=> soc_ls_cfg_w 2000, f, 00000000
+                6305=> detect ss_aa_mbox_latch write 30002000, f, 00000000
+                6315=> soc_ls_cfg_w 2004, f, 00000000
+                6385=> detect ss_aa_mbox_latch write 30002004, f, 00000000
+                6395=> soc_ls_cfg_w 2008, f, 00000000
+                6465=> detect ss_aa_mbox_latch write 30002008, f, 00000000
+                6475=> soc_ls_cfg_w 200c, f, 00000000
+                6545=> detect ss_aa_mbox_latch write 3000200c, f, 00000000
+                6555=> soc_ls_cfg_w 2010, f, 00000000
+                6625=> detect ss_aa_mbox_latch write 30002010, f, 00000000
+                6635=> soc_ls_cfg_w 2014, f, 00000000
+                6705=> detect ss_aa_mbox_latch write 30002014, f, 00000000
+                6715=> soc_ls_cfg_w 2018, f, 00000000
+                6785=> detect ss_aa_mbox_latch write 30002018, f, 00000000
+                6795=> soc_ls_cfg_w 201c, f, 00000000
+                6865=> detect ss_aa_mbox_latch write 3000201c, f, 00000000
+                6875=> soc_ls_cfg_w 2000, 1, 00000000
+                6945=> detect ss_aa_mbox_latch write 30002000, 1, 00000000
+                6955=> soc_ls_cfg_w 2000, 2, 00000100
+                7025=> detect ss_aa_mbox_latch write 30002000, 2, 00000100
+                7035=> soc_ls_cfg_w 2000, 4, 00020000
+                7105=> detect ss_aa_mbox_latch write 30002000, 4, 00020000
+                7115=> soc_ls_cfg_w 2000, 8, 03000000
+                7185=> detect ss_aa_mbox_latch write 30002000, 8, 03000000
+                7195=> soc_ls_cfg_w 2004, 1, 00000004
+                7265=> detect ss_aa_mbox_latch write 30002004, 1, 00000004
+                7275=> soc_ls_cfg_w 2004, 2, 00000500
+                7345=> detect ss_aa_mbox_latch write 30002004, 2, 00000500
+                7355=> soc_ls_cfg_w 2004, 4, 00060000
+                7425=> detect ss_aa_mbox_latch write 30002004, 4, 00060000
+                7435=> soc_ls_cfg_w 2004, 8, 07000000
+                7505=> detect ss_aa_mbox_latch write 30002004, 8, 07000000
+                7515=> soc_ls_cfg_w 2008, 1, 00000008
+                7585=> detect ss_aa_mbox_latch write 30002008, 1, 00000008
+                7595=> soc_ls_cfg_w 2008, 2, 00000900
+                7665=> detect ss_aa_mbox_latch write 30002008, 2, 00000900
+                7675=> soc_ls_cfg_w 2008, 4, 000a0000
+                7745=> detect ss_aa_mbox_latch write 30002008, 4, 000a0000
+                7755=> soc_ls_cfg_w 2008, 8, 0b000000
+                7825=> detect ss_aa_mbox_latch write 30002008, 8, 0b000000
+                7835=> soc_ls_cfg_w 200c, 1, 0000000c
+                7905=> detect ss_aa_mbox_latch write 3000200c, 1, 0000000c
+                7915=> soc_ls_cfg_w 200c, 2, 00000d00
+                7985=> detect ss_aa_mbox_latch write 3000200c, 2, 00000d00
+                7995=> soc_ls_cfg_w 200c, 4, 000e0000
+                8065=> detect ss_aa_mbox_latch write 3000200c, 4, 000e0000
+                8075=> soc_ls_cfg_w 200c, 8, 0f000000
+                8145=> detect ss_aa_mbox_latch write 3000200c, 8, 0f000000
+                8155=> soc_ls_cfg_w 2010, 1, 00000010
+                8225=> detect ss_aa_mbox_latch write 30002010, 1, 00000010
+                8235=> soc_ls_cfg_w 2010, 2, 00001100
+                8305=> detect ss_aa_mbox_latch write 30002010, 2, 00001100
+                8315=> soc_ls_cfg_w 2010, 4, 00120000
+                8385=> detect ss_aa_mbox_latch write 30002010, 4, 00120000
+                8395=> soc_ls_cfg_w 2010, 8, 13000000
+                8465=> detect ss_aa_mbox_latch write 30002010, 8, 13000000
+                8475=> soc_ls_cfg_w 2014, 1, 00000014
+                8545=> detect ss_aa_mbox_latch write 30002014, 1, 00000014
+                8555=> soc_ls_cfg_w 2014, 2, 00001500
+                8625=> detect ss_aa_mbox_latch write 30002014, 2, 00001500
+                8635=> soc_ls_cfg_w 2014, 4, 00160000
+                8705=> detect ss_aa_mbox_latch write 30002014, 4, 00160000
+                8715=> soc_ls_cfg_w 2014, 8, 17000000
+                8785=> detect ss_aa_mbox_latch write 30002014, 8, 17000000
+                8795=> soc_ls_cfg_w 2018, 1, 00000018
+                8865=> detect ss_aa_mbox_latch write 30002018, 1, 00000018
+                8875=> soc_ls_cfg_w 2018, 2, 00001900
+                8945=> detect ss_aa_mbox_latch write 30002018, 2, 00001900
+                8955=> soc_ls_cfg_w 2018, 4, 001a0000
+                9025=> detect ss_aa_mbox_latch write 30002018, 4, 001a0000
+                9035=> soc_ls_cfg_w 2018, 8, 1b000000
+                9105=> detect ss_aa_mbox_latch write 30002018, 8, 1b000000
+                9115=> soc_ls_cfg_w 201c, 1, 0000001c
+                9185=> detect ss_aa_mbox_latch write 3000201c, 1, 0000001c
+                9195=> soc_ls_cfg_w 201c, 2, 00001d00
+                9265=> detect ss_aa_mbox_latch write 3000201c, 2, 00001d00
+                9275=> soc_ls_cfg_w 201c, 4, 001e0000
+                9345=> detect ss_aa_mbox_latch write 3000201c, 4, 001e0000
+                9355=> soc_ls_cfg_w 201c, 8, 1f000000
+                9425=> detect ss_aa_mbox_latch write 3000201c, 8, 1f000000
+                9435=> soc_ls_cfg_r 2000
+                9475=> soc_ls_cfg_r result = 03020100
+                9485=> soc_ls_cfg_r 2004
+                9525=> soc_ls_cfg_r result = 07060504
+                9535=> soc_ls_cfg_r 2008
+                9575=> soc_ls_cfg_r result = 0b0a0908
+                9585=> soc_ls_cfg_r 200c
+                9625=> soc_ls_cfg_r result = 0f0e0d0c
+                9635=> soc_ls_cfg_r 2010
+                9675=> soc_ls_cfg_r result = 13121110
+                9685=> soc_ls_cfg_r 2014
+                9725=> soc_ls_cfg_r result = 17161514
+                9735=> soc_ls_cfg_r 2018
+                9775=> soc_ls_cfg_r result = 1b1a1918
+                9785=> soc_ls_cfg_r 201c
+                9825=> soc_ls_cfg_r result = 1f1e1d1c
 soc_local_mailbox_BE_test - end
 both_side_mailbox_write_test - start
-                9685=> soc_ls_cfg_w 2000, f, 00000000
-                9685=> fpga_ls_cfg_w 2010, f, 44444444
-                9735=> fpga_ls_cfg_w 2014, f, 55555555
-                9735=> soc_ls_cfg_w 2004, f, 11111111
-                9755=> detect ss_aa_mbox_latch write f0002000, f, 00000000
-                9755=> detect ss_aa_mbox_latch write f0002010, f, 44444444
-                9795=> fpga_ls_cfg_w 2018, f, 66666666
-                9795=> soc_ls_cfg_w 2008, f, 22222222
-                9815=> detect ss_aa_mbox_latch write f0002004, f, 11111111
-                9815=> detect ss_aa_mbox_latch write f0002014, f, 55555555
-                9855=> fpga_ls_cfg_w 201c, f, 77777777
-                9855=> soc_ls_cfg_w 200c, f, 33333333
-                9875=> detect ss_aa_mbox_latch write f0002008, f, 22222222
-                9875=> detect ss_aa_mbox_latch write f0002018, f, 66666666
-                9935=> detect ss_aa_mbox_latch write f000200c, f, 33333333
-                9935=> detect ss_aa_mbox_latch write f000201c, f, 77777777
+                9845=> soc_ls_cfg_w 2000, f, 00000000
+                9845=> fpga_ls_cfg_w 2010, f, 44444444
+                9895=> fpga_ls_cfg_w 2014, f, 55555555
+                9895=> soc_ls_cfg_w 2004, f, 11111111
+                9915=> detect ss_aa_mbox_latch write 30002000, f, 00000000
+                9915=> detect ss_aa_mbox_latch write 30002010, f, 44444444
+                9955=> fpga_ls_cfg_w 2018, f, 66666666
+                9955=> soc_ls_cfg_w 2008, f, 22222222
+                9975=> detect ss_aa_mbox_latch write 30002004, f, 11111111
+                9975=> detect ss_aa_mbox_latch write 30002014, f, 55555555
+               10015=> fpga_ls_cfg_w 201c, f, 77777777
+               10015=> soc_ls_cfg_w 200c, f, 33333333
+               10035=> detect ss_aa_mbox_latch write 30002008, f, 22222222
+               10035=> detect ss_aa_mbox_latch write 30002018, f, 66666666
+               10095=> detect ss_aa_mbox_latch write 3000200c, f, 33333333
+               10095=> detect ss_aa_mbox_latch write 3000201c, f, 77777777
 both_side_mailbox_write_test - end
 soc_mailbox_write_and_fpga_to_soc_cfg_read_test - start
-                9965=> fpga_ls_cfg_w 0000, f, 00000000
-               10035=> soc LM write soc_up_regs f0000000, f, 00000000
-               10045=> fpga_ls_cfg_w 0004, f, 11111111
-               10115=> soc LM write soc_up_regs f0000004, f, 11111111
-               10125=> fpga_ls_cfg_w 0008, f, 22222222
-               10195=> soc LM write soc_up_regs f0000008, f, 22222222
-               10205=> fpga_ls_cfg_w 000c, f, 33333333
-               10275=> soc LM write soc_up_regs f000000c, f, 33333333
-               10285=> fpga_ls_cfg_w 0010, f, 44444444
-               10355=> soc LM write soc_up_regs f0000010, f, 44444444
-               10365=> fpga_ls_cfg_w 0014, f, 55555555
-               10435=> soc LM write soc_up_regs f0000014, f, 55555555
-               10445=> fpga_ls_cfg_w 0018, f, 66666666
-               10515=> soc LM write soc_up_regs f0000018, f, 66666666
-               10525=> fpga_ls_cfg_w 001c, f, 77777777
-               10595=> soc LM write soc_up_regs f000001c, f, 77777777
-               10605=> soc_ls_cfg_w 2000, f, 00000000
-               10635=> fpga_ls_cfg_r 0000
-               10655=> soc_ls_cfg_w 2004, f, 11111111
-               10675=> detect ss_aa_mbox_latch write f0002000, f, 00000000
-               10715=> soc_ls_cfg_w 2008, f, 22222222
-               10735=> detect ss_aa_mbox_latch write f0002004, f, 11111111
-               10795=> fpga_ls_cfg_r result = 00000000
-               10835=> fpga_ls_cfg_r 0004
-               10835=> soc_ls_cfg_w 200c, f, 33333333
-               10855=> detect ss_aa_mbox_latch write f0002008, f, 22222222
-               10895=> soc_ls_cfg_w 2010, f, 44444444
-               10915=> detect ss_aa_mbox_latch write f000200c, f, 33333333
-               10975=> fpga_ls_cfg_r result = 11111111
-               11015=> fpga_ls_cfg_r 0008
-               11015=> soc_ls_cfg_w 2014, f, 55555555
-               11035=> detect ss_aa_mbox_latch write f0002010, f, 44444444
-               11075=> soc_ls_cfg_w 2018, f, 66666666
-               11095=> detect ss_aa_mbox_latch write f0002014, f, 55555555
-               11155=> fpga_ls_cfg_r result = 22222222
-               11195=> fpga_ls_cfg_r 000c
-               11195=> soc_ls_cfg_w 201c, f, 77777777
-               11215=> detect ss_aa_mbox_latch write f0002018, f, 66666666
-               11255=> soc_ls_cfg_w 2000, f, 00000000
-               11275=> detect ss_aa_mbox_latch write f000201c, f, 77777777
-               11335=> fpga_ls_cfg_r result = 33333333
-               11375=> fpga_ls_cfg_r 0010
-               11375=> soc_ls_cfg_w 2004, f, 11111111
-               11395=> detect ss_aa_mbox_latch write f0002000, f, 00000000
-               11435=> soc_ls_cfg_w 2008, f, 22222222
-               11455=> detect ss_aa_mbox_latch write f0002004, f, 11111111
-               11515=> fpga_ls_cfg_r result = 44444444
-               11555=> fpga_ls_cfg_r 0014
-               11555=> soc_ls_cfg_w 200c, f, 33333333
-               11575=> detect ss_aa_mbox_latch write f0002008, f, 22222222
-               11615=> soc_ls_cfg_w 2010, f, 44444444
-               11635=> detect ss_aa_mbox_latch write f000200c, f, 33333333
-               11695=> fpga_ls_cfg_r result = 55555555
-               11735=> fpga_ls_cfg_r 0018
-               11735=> soc_ls_cfg_w 2014, f, 55555555
-               11755=> detect ss_aa_mbox_latch write f0002010, f, 44444444
-               11795=> soc_ls_cfg_w 2018, f, 66666666
-               11815=> detect ss_aa_mbox_latch write f0002014, f, 55555555
-               11875=> fpga_ls_cfg_r result = 66666666
-               11915=> fpga_ls_cfg_r 001c
-               11915=> soc_ls_cfg_w 201c, f, 77777777
-               11935=> detect ss_aa_mbox_latch write f0002018, f, 66666666
-               11975=> soc_ls_cfg_w 2000, f, 00000000
-               11995=> detect ss_aa_mbox_latch write f000201c, f, 77777777
-               12055=> fpga_ls_cfg_r result = 77777777
-               12095=> fpga_ls_cfg_r 0000
-               12095=> soc_ls_cfg_w 2004, f, 11111111
-               12115=> detect ss_aa_mbox_latch write f0002000, f, 00000000
-               12155=> soc_ls_cfg_w 2008, f, 22222222
-               12175=> detect ss_aa_mbox_latch write f0002004, f, 11111111
-               12235=> fpga_ls_cfg_r result = 00000000
-               12275=> fpga_ls_cfg_r 0004
-               12275=> soc_ls_cfg_w 200c, f, 33333333
-               12295=> detect ss_aa_mbox_latch write f0002008, f, 22222222
-               12335=> soc_ls_cfg_w 2010, f, 44444444
-               12355=> detect ss_aa_mbox_latch write f000200c, f, 33333333
-               12415=> fpga_ls_cfg_r result = 11111111
-               12455=> fpga_ls_cfg_r 0008
-               12455=> soc_ls_cfg_w 2014, f, 55555555
-               12475=> detect ss_aa_mbox_latch write f0002010, f, 44444444
-               12515=> soc_ls_cfg_w 2018, f, 66666666
-               12535=> detect ss_aa_mbox_latch write f0002014, f, 55555555
-               12595=> fpga_ls_cfg_r result = 22222222
-               12635=> fpga_ls_cfg_r 000c
-               12635=> soc_ls_cfg_w 201c, f, 77777777
-               12655=> detect ss_aa_mbox_latch write f0002018, f, 66666666
-               12695=> soc_ls_cfg_w 2000, f, 00000000
-               12715=> detect ss_aa_mbox_latch write f000201c, f, 77777777
-               12775=> fpga_ls_cfg_r result = 33333333
-               12815=> fpga_ls_cfg_r 0010
-               12815=> soc_ls_cfg_w 2004, f, 11111111
-               12835=> detect ss_aa_mbox_latch write f0002000, f, 00000000
-               12875=> soc_ls_cfg_w 2008, f, 22222222
-               12895=> detect ss_aa_mbox_latch write f0002004, f, 11111111
-               12955=> fpga_ls_cfg_r result = 44444444
-               12995=> fpga_ls_cfg_r 0014
-               12995=> soc_ls_cfg_w 200c, f, 33333333
-               13015=> detect ss_aa_mbox_latch write f0002008, f, 22222222
-               13055=> soc_ls_cfg_w 2010, f, 44444444
-               13075=> detect ss_aa_mbox_latch write f000200c, f, 33333333
-               13135=> fpga_ls_cfg_r result = 55555555
-               13175=> fpga_ls_cfg_r 0018
-               13175=> soc_ls_cfg_w 2014, f, 55555555
-               13195=> detect ss_aa_mbox_latch write f0002010, f, 44444444
-               13235=> soc_ls_cfg_w 2018, f, 66666666
-               13255=> detect ss_aa_mbox_latch write f0002014, f, 55555555
-               13315=> fpga_ls_cfg_r result = 66666666
-               13355=> fpga_ls_cfg_r 001c
-               13355=> soc_ls_cfg_w 201c, f, 77777777
-               13375=> detect ss_aa_mbox_latch write f0002018, f, 66666666
-               13435=> detect ss_aa_mbox_latch write f000201c, f, 77777777
-               13495=> fpga_ls_cfg_r result = 77777777
-               13535=> fpga_ls_cfg_r 0000
-               13625=> fpga_ls_cfg_r result = 00000000
-               13665=> fpga_ls_cfg_r 0004
-               13755=> fpga_ls_cfg_r result = 11111111
-               13795=> fpga_ls_cfg_r 0008
-               13885=> fpga_ls_cfg_r result = 22222222
-               13925=> fpga_ls_cfg_r 000c
-               14015=> fpga_ls_cfg_r result = 33333333
-               14055=> fpga_ls_cfg_r 0010
-               14145=> fpga_ls_cfg_r result = 44444444
-               14185=> fpga_ls_cfg_r 0014
-               14275=> fpga_ls_cfg_r result = 55555555
-               14315=> fpga_ls_cfg_r 0018
-               14405=> fpga_ls_cfg_r result = 66666666
-               14445=> fpga_ls_cfg_r 001c
-               14535=> fpga_ls_cfg_r result = 77777777
-               14575=> fpga_ls_cfg_r 0000
-               14665=> fpga_ls_cfg_r result = 00000000
-               14705=> fpga_ls_cfg_r 0004
-               14795=> fpga_ls_cfg_r result = 11111111
-               14835=> fpga_ls_cfg_r 0008
-               14925=> fpga_ls_cfg_r result = 22222222
-               14965=> fpga_ls_cfg_r 000c
-               15055=> fpga_ls_cfg_r result = 33333333
-               15095=> fpga_ls_cfg_r 0010
-               15185=> fpga_ls_cfg_r result = 44444444
-               15225=> fpga_ls_cfg_r 0014
-               15315=> fpga_ls_cfg_r result = 55555555
-               15355=> fpga_ls_cfg_r 0018
-               15445=> fpga_ls_cfg_r result = 66666666
-               15485=> fpga_ls_cfg_r 001c
-               15575=> fpga_ls_cfg_r result = 77777777
+               10125=> fpga_ls_cfg_w 0000, f, 00000000
+               10195=> soc LM write soc_up_regs 30000000, f, 00000000
+               10205=> fpga_ls_cfg_w 0004, f, 11111111
+               10275=> soc LM write soc_up_regs 30000004, f, 11111111
+               10285=> fpga_ls_cfg_w 0008, f, 22222222
+               10355=> soc LM write soc_up_regs 30000008, f, 22222222
+               10365=> fpga_ls_cfg_w 000c, f, 33333333
+               10435=> soc LM write soc_up_regs 3000000c, f, 33333333
+               10445=> fpga_ls_cfg_w 0010, f, 44444444
+               10515=> soc LM write soc_up_regs 30000010, f, 44444444
+               10525=> fpga_ls_cfg_w 0014, f, 55555555
+               10595=> soc LM write soc_up_regs 30000014, f, 55555555
+               10605=> fpga_ls_cfg_w 0018, f, 66666666
+               10675=> soc LM write soc_up_regs 30000018, f, 66666666
+               10685=> fpga_ls_cfg_w 001c, f, 77777777
+               10755=> soc LM write soc_up_regs 3000001c, f, 77777777
+               10765=> soc_ls_cfg_w 2000, f, 00000000
+               10795=> fpga_ls_cfg_r 0000
+               10815=> soc_ls_cfg_w 2004, f, 11111111
+               10835=> detect ss_aa_mbox_latch write 30002000, f, 00000000
+               10875=> soc_ls_cfg_w 2008, f, 22222222
+               10895=> detect ss_aa_mbox_latch write 30002004, f, 11111111
+               10965=> fpga_ls_cfg_r result = 00000000
+               11005=> soc_ls_cfg_w 200c, f, 33333333
+               11005=> fpga_ls_cfg_r 0004
+               11025=> detect ss_aa_mbox_latch write 30002008, f, 22222222
+               11065=> soc_ls_cfg_w 2010, f, 44444444
+               11085=> detect ss_aa_mbox_latch write 3000200c, f, 33333333
+               11155=> fpga_ls_cfg_r result = 11111111
+               11195=> fpga_ls_cfg_r 0008
+               11195=> soc_ls_cfg_w 2014, f, 55555555
+               11215=> detect ss_aa_mbox_latch write 30002010, f, 44444444
+               11255=> soc_ls_cfg_w 2018, f, 66666666
+               11275=> detect ss_aa_mbox_latch write 30002014, f, 55555555
+               11345=> fpga_ls_cfg_r result = 22222222
+               11385=> soc_ls_cfg_w 201c, f, 77777777
+               11385=> fpga_ls_cfg_r 000c
+               11405=> detect ss_aa_mbox_latch write 30002018, f, 66666666
+               11445=> soc_ls_cfg_w 2000, f, 00000000
+               11465=> detect ss_aa_mbox_latch write 3000201c, f, 77777777
+               11535=> fpga_ls_cfg_r result = 33333333
+               11575=> fpga_ls_cfg_r 0010
+               11575=> soc_ls_cfg_w 2004, f, 11111111
+               11595=> detect ss_aa_mbox_latch write 30002000, f, 00000000
+               11635=> soc_ls_cfg_w 2008, f, 22222222
+               11655=> detect ss_aa_mbox_latch write 30002004, f, 11111111
+               11725=> fpga_ls_cfg_r result = 44444444
+               11765=> soc_ls_cfg_w 200c, f, 33333333
+               11765=> fpga_ls_cfg_r 0014
+               11785=> detect ss_aa_mbox_latch write 30002008, f, 22222222
+               11825=> soc_ls_cfg_w 2010, f, 44444444
+               11845=> detect ss_aa_mbox_latch write 3000200c, f, 33333333
+               11915=> fpga_ls_cfg_r result = 55555555
+               11955=> fpga_ls_cfg_r 0018
+               11955=> soc_ls_cfg_w 2014, f, 55555555
+               11975=> detect ss_aa_mbox_latch write 30002010, f, 44444444
+               12015=> soc_ls_cfg_w 2018, f, 66666666
+               12035=> detect ss_aa_mbox_latch write 30002014, f, 55555555
+               12105=> fpga_ls_cfg_r result = 66666666
+               12145=> soc_ls_cfg_w 201c, f, 77777777
+               12145=> fpga_ls_cfg_r 001c
+               12165=> detect ss_aa_mbox_latch write 30002018, f, 66666666
+               12205=> soc_ls_cfg_w 2000, f, 00000000
+               12225=> detect ss_aa_mbox_latch write 3000201c, f, 77777777
+               12295=> fpga_ls_cfg_r result = 77777777
+               12335=> fpga_ls_cfg_r 0000
+               12335=> soc_ls_cfg_w 2004, f, 11111111
+               12355=> detect ss_aa_mbox_latch write 30002000, f, 00000000
+               12395=> soc_ls_cfg_w 2008, f, 22222222
+               12415=> detect ss_aa_mbox_latch write 30002004, f, 11111111
+               12485=> fpga_ls_cfg_r result = 00000000
+               12525=> soc_ls_cfg_w 200c, f, 33333333
+               12525=> fpga_ls_cfg_r 0004
+               12545=> detect ss_aa_mbox_latch write 30002008, f, 22222222
+               12585=> soc_ls_cfg_w 2010, f, 44444444
+               12605=> detect ss_aa_mbox_latch write 3000200c, f, 33333333
+               12675=> fpga_ls_cfg_r result = 11111111
+               12715=> fpga_ls_cfg_r 0008
+               12715=> soc_ls_cfg_w 2014, f, 55555555
+               12735=> detect ss_aa_mbox_latch write 30002010, f, 44444444
+               12775=> soc_ls_cfg_w 2018, f, 66666666
+               12795=> detect ss_aa_mbox_latch write 30002014, f, 55555555
+               12865=> fpga_ls_cfg_r result = 22222222
+               12905=> soc_ls_cfg_w 201c, f, 77777777
+               12905=> fpga_ls_cfg_r 000c
+               12925=> detect ss_aa_mbox_latch write 30002018, f, 66666666
+               12965=> soc_ls_cfg_w 2000, f, 00000000
+               12985=> detect ss_aa_mbox_latch write 3000201c, f, 77777777
+               13055=> fpga_ls_cfg_r result = 33333333
+               13095=> fpga_ls_cfg_r 0010
+               13095=> soc_ls_cfg_w 2004, f, 11111111
+               13115=> detect ss_aa_mbox_latch write 30002000, f, 00000000
+               13155=> soc_ls_cfg_w 2008, f, 22222222
+               13175=> detect ss_aa_mbox_latch write 30002004, f, 11111111
+               13245=> fpga_ls_cfg_r result = 44444444
+               13285=> soc_ls_cfg_w 200c, f, 33333333
+               13285=> fpga_ls_cfg_r 0014
+               13305=> detect ss_aa_mbox_latch write 30002008, f, 22222222
+               13345=> soc_ls_cfg_w 2010, f, 44444444
+               13365=> detect ss_aa_mbox_latch write 3000200c, f, 33333333
+               13435=> fpga_ls_cfg_r result = 55555555
+               13475=> fpga_ls_cfg_r 0018
+               13475=> soc_ls_cfg_w 2014, f, 55555555
+               13495=> detect ss_aa_mbox_latch write 30002010, f, 44444444
+               13535=> soc_ls_cfg_w 2018, f, 66666666
+               13555=> detect ss_aa_mbox_latch write 30002014, f, 55555555
+               13625=> fpga_ls_cfg_r result = 66666666
+               13665=> soc_ls_cfg_w 201c, f, 77777777
+               13665=> fpga_ls_cfg_r 001c
+               13685=> detect ss_aa_mbox_latch write 30002018, f, 66666666
+               13745=> detect ss_aa_mbox_latch write 3000201c, f, 77777777
+               13815=> fpga_ls_cfg_r result = 77777777
+               13855=> fpga_ls_cfg_r 0000
+               13955=> fpga_ls_cfg_r result = 00000000
+               13995=> fpga_ls_cfg_r 0004
+               14095=> fpga_ls_cfg_r result = 11111111
+               14135=> fpga_ls_cfg_r 0008
+               14235=> fpga_ls_cfg_r result = 22222222
+               14275=> fpga_ls_cfg_r 000c
+               14375=> fpga_ls_cfg_r result = 33333333
+               14415=> fpga_ls_cfg_r 0010
+               14515=> fpga_ls_cfg_r result = 44444444
+               14555=> fpga_ls_cfg_r 0014
+               14655=> fpga_ls_cfg_r result = 55555555
+               14695=> fpga_ls_cfg_r 0018
+               14795=> fpga_ls_cfg_r result = 66666666
+               14835=> fpga_ls_cfg_r 001c
+               14935=> fpga_ls_cfg_r result = 77777777
+               14975=> fpga_ls_cfg_r 0000
+               15075=> fpga_ls_cfg_r result = 00000000
+               15115=> fpga_ls_cfg_r 0004
+               15215=> fpga_ls_cfg_r result = 11111111
+               15255=> fpga_ls_cfg_r 0008
+               15355=> fpga_ls_cfg_r result = 22222222
+               15395=> fpga_ls_cfg_r 000c
+               15495=> fpga_ls_cfg_r result = 33333333
+               15535=> fpga_ls_cfg_r 0010
+               15635=> fpga_ls_cfg_r result = 44444444
+               15675=> fpga_ls_cfg_r 0014
+               15775=> fpga_ls_cfg_r result = 55555555
+               15815=> fpga_ls_cfg_r 0018
+               15915=> fpga_ls_cfg_r result = 66666666
+               15955=> fpga_ls_cfg_r 001c
+               16055=> fpga_ls_cfg_r result = 77777777
 soc_mailbox_write_and_fpga_to_soc_cfg_read_test - end
-$finish called at time : 15685 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 382
+$finish called at time : 16165 ns : File "/ADATA2T/home/tonyho/workspace/axil_axis/tb_test.v" Line 382
 ## quit
-INFO: [Common 17-206] Exiting xsim at Tue Mar 26 13:05:48 2024...
+INFO: [Common 17-206] Exiting xsim at Tue Mar 26 17:00:12 2024...
