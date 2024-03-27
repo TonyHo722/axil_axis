@@ -415,17 +415,17 @@ reg [6:0] ls_sm_fsm;
 wire sm_tvalid;
 
 // cycle indicator and control signal generaion
-assign ls_mbox = ls_sm_fsm[5];
+wire   ls_mbox = ls_sm_fsm[5];
 assign ls_cyc = ls_sm_fsm[4];
 wire   ls_only_cyc = ls_sm_fsm[4] & !ls_sm_fsm[2];  // LS_RD, LS_WR 
 assign ls_wr  = ls_sm_fsm[3];
-assign ls_sm_tvalid_cyc = ls_sm_fsm[2];
-assign sm_wr_t1 = (ls_sm_fsm == `LS_WR_SM1) || (ls_sm_fsm == `LS_MBOXW_SM1);
-assign sm_wr_t2 = (ls_sm_fsm == `LS_WR_SM2) || (ls_sm_fsm == `LS_MBOXW_SM2);
-assign sm_read_t = (ls_sm_fsm == `LS_RD_SM_REQ);
-assign ls_r_done = (ls_sm_fsm == `LS_R_DONE);
-assign ls_done  = ls_sm_fsm[0];
-assign ls_rd_ss_wait_rs = (ls_sm_fsm == `LS_RD_SS_WAIT_RS);
+wire   ls_sm_tvalid_cyc = ls_sm_fsm[2];
+wire   sm_wr_t1 = (ls_sm_fsm == `LS_WR_SM1) || (ls_sm_fsm == `LS_MBOXW_SM1);
+wire   sm_wr_t2 = (ls_sm_fsm == `LS_WR_SM2) || (ls_sm_fsm == `LS_MBOXW_SM2);
+wire   sm_read_t = (ls_sm_fsm == `LS_RD_SM_REQ);
+wire   ls_r_done = (ls_sm_fsm == `LS_R_DONE);
+wire   ls_done  = ls_sm_fsm[0];
+wire   ls_rd_ss_wait_rs = (ls_sm_fsm == `LS_RD_SS_WAIT_RS);
 
 
 // interface signals  - axilite slave
@@ -446,8 +446,8 @@ assign aa_as_tvalid = sm_tvalid;                           //sm_tvalid = ss_sm_c
 assign aa_as_tdata =  ({32{sm_wr_t1}}  & {r_ls_wstrb, r_ls_rw_addr[27:0]} )     // from local to remote write(include mbox write), local_ls write t1 -> local_sm write 
                    |  ({32{sm_wr_t2}}  & r_ls_wdata )                           // from local to remote write(include mbox write), local_ls write t2 -> local_sm write 
                    |  ({32{sm_read_t}}  & {4'b0000, r_ls_rw_addr[27:0]} )       // from local to remote read, local_ls read -> local_sm read
-                   |  ({32{ss_sm_cyc & !ss_aa_reg}} & r_lm_rs_data )          // remote_ls read -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp
-                   |  ({32{ss_sm_cyc  &  ss_aa_reg}} & sm_aa_internal_data)   // remote_ls read -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp
+                   |  ({32{ss_sm_cyc & !ss_aa_reg_latch}} & r_lm_rs_data )          // remote_ls read -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp
+                   |  ({32{ss_sm_cyc  &  ss_aa_reg_latch}} & sm_aa_internal_data)   // remote_ls read -> remote_sm read -> local_ss read -> local_lm read_resp -> local_sm read_resp
                    ;
 
 assign aa_as_tstrb = (ls_wr? r_ls_wstrb : 4'b1111);     //from local to remote write use r_ls_wstrb, local_ls write -> local_sm write 
@@ -550,7 +550,7 @@ assign ss_cyc = ss_lm_fsm[5] | ss_lm_fsm[3] | ss_lm_fsm[2];   //ss_only_cyc + lm
 wire ss_only_cyc = ss_lm_fsm[5];
 wire ss_wr  = ss_lm_fsm[4];
 wire lm_cyc = ss_lm_fsm[3];
-assign lm_ar_cyc = ( ss_lm_fsm == `SS_RD_LM_AR);
+wire   lm_ar_cyc = ( ss_lm_fsm == `SS_RD_LM_AR);
 assign ss_sm_cyc = ss_lm_fsm[2];
 wire ss_t1  = ss_wr & !ss_lm_fsm[1];
 assign ss_t2  = ss_wr & ss_lm_fsm[1];
