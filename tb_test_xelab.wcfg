@@ -10,12 +10,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2,635 ns"></ZoomStartTime>
-      <ZoomEndTime time="3,076 ns"></ZoomEndTime>
-      <Cursor1Time time="2,832 ns"></Cursor1Time>
+      <ZoomStartTime time="312 ns"></ZoomStartTime>
+      <ZoomEndTime time="436 ns"></ZoomEndTime>
+      <Cursor1Time time="355 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="257"></NameColumnWidth>
+      <NameColumnWidth column_width="253"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="8" />
@@ -100,8 +100,8 @@
          <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-         <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-         <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+         <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+         <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
       </wvobject>
       <wvobject type="group" fp_name="group150">
          <obj_property name="label">ls</obj_property>
@@ -348,8 +348,8 @@
          <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/tb_test/fpga/ss_lm_fsm">
-         <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-         <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+         <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+         <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
       </wvobject>
       <wvobject type="group" fp_name="group90">
          <obj_property name="label">ls</obj_property>
@@ -682,8 +682,8 @@
             <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="group" fp_name="group186">
             <obj_property name="label">tb</obj_property>
@@ -1010,8 +1010,8 @@
             <obj_property name="ObjectShortName">axi_reset_n</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="logic" fp_name="/tb_test/soc/ss_aa_reg">
             <obj_property name="ElementShortName">ss_aa_reg</obj_property>
@@ -1134,8 +1134,8 @@
             <obj_property name="ObjectShortName">ss_wr</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="logic" fp_name="/tb_test/soc/ss_only_cyc">
             <obj_property name="ElementShortName">ss_only_cyc</obj_property>
@@ -1186,8 +1186,8 @@
             <obj_property name="ObjectShortName">s_arvalid</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/fpga/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="logic" fp_name="/tb_test/fpga/ss_lm_enable">
             <obj_property name="ElementShortName">ss_lm_enable</obj_property>
@@ -1419,8 +1419,8 @@
             </wvobject>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/fpga/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="logic" fp_name="/tb_test/fpga/ss_aa_reg">
             <obj_property name="ElementShortName">ss_aa_reg</obj_property>
@@ -1501,8 +1501,8 @@
             <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="group" fp_name="group150">
             <obj_property name="label">ls</obj_property>
@@ -1738,6 +1738,7 @@
    <wvobject type="group" fp_name="group560">
       <obj_property name="label">fpga_to_soc_cfg_access - write part</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject type="group" fp_name="group87">
          <obj_property name="label">fpga</obj_property>
          <obj_property name="DisplayName">label</obj_property>
@@ -1754,8 +1755,8 @@
             <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/fpga/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="group" fp_name="group90">
             <obj_property name="label">ls</obj_property>
@@ -1987,8 +1988,8 @@
             <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="group" fp_name="group150">
             <obj_property name="label">ls</obj_property>
@@ -2204,7 +2205,6 @@
    <wvobject type="group" fp_name="group560">
       <obj_property name="label">fpga_to_soc_cfg_access - read part</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="group" fp_name="group87">
          <obj_property name="label">fpga</obj_property>
          <obj_property name="DisplayName">label</obj_property>
@@ -2415,8 +2415,8 @@
             <obj_property name="ObjectShortName">ls_sm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/tb_test/soc/ss_lm_fsm">
-            <obj_property name="ElementShortName">ss_lm_fsm[5:0]</obj_property>
-            <obj_property name="ObjectShortName">ss_lm_fsm[5:0]</obj_property>
+            <obj_property name="ElementShortName">ss_lm_fsm[6:0]</obj_property>
+            <obj_property name="ObjectShortName">ss_lm_fsm[6:0]</obj_property>
          </wvobject>
          <wvobject type="group" fp_name="group150">
             <obj_property name="label">ls</obj_property>

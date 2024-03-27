@@ -12,15 +12,18 @@
 //   mailbox - support on 8 DW register (DW#0 - FSIC, DW#1 - FPGA)
 // 
 
-`define SS_IDLE             6'b0_0_0_0_0_0
-`define SS_RD               6'b1_0_0_0_0_0
-`define SS_WR_S1            6'b1_1_0_0_0_0
-`define SS_WR_S2            6'b1_1_0_0_1_0
-`define SS_WR_LM            6'b0_1_1_0_0_0
-`define SS_RD_LM_AR         6'b0_0_1_0_0_0
-`define SS_RD_LM_R          6'b0_0_1_0_1_0
-`define SS_RD_SM_RS         6'b0_0_0_1_0_0
-`define SS_DONE             6'b0_0_0_0_0_1
+//reg [6:0] ss_lm_fsm;
+`define SS_IDLE             7'b0_0_0_0_0_0_0
+`define SS_RD               7'b0_1_0_0_0_0_0
+`define SS_WR_S1            7'b0_1_1_0_0_0_0
+`define SS_WR_S2            7'b0_1_1_0_0_1_0
+`define SS_WR_LM            7'b0_0_1_1_0_0_0
+`define SS_WR_LM_AW         7'b1_0_1_1_0_0_0
+`define SS_RD_LM_AR         7'b0_0_0_1_0_0_0
+`define SS_RD_LM_R          7'b0_0_0_1_0_1_0
+`define SS_RD_SM_RS         7'b0_0_0_0_1_0_0
+`define SS_DONE             7'b0_0_0_0_0_0_1
+
 
 module AXIL_AXIS #( parameter pADDR_WIDTH   = 12,
                     parameter pDATA_WIDTH   = 32
@@ -136,7 +139,7 @@ wire aa_reset_n = axis_rst_n;
 // move here for early declaraion before use it to avoid error in simulation
 wire ss_sm_cyc;
 wire ss_t2;
-reg [5:0] ss_lm_fsm;
+reg [6:0] ss_lm_fsm;
 wire ss_lm_enable;
 //
 //   SS Cycle type - decode from tuser, refer to fsic-axis specification
@@ -525,7 +528,7 @@ end
 
 // ------------------------------------------------------
 // SS State machine - tracking SS -> LM 
-//reg [5:0] ss_lm_fsm;
+//reg [6:0] ss_lm_fsm;
 
 //
 // sm fsm state encoding is used to generate related control signal
@@ -534,15 +537,16 @@ end
 // 
 /*
                           {ss_only_cyc, ss_wr, lm_cyc, ss_sm_cyc, w1/w2 or RD_LM_AR/R, done}
-`define SS_IDLE             6'b0_0_0_0_0_0
-`define SS_RD               6'b1_0_0_0_0_0
-`define SS_WR_S1            6'b1_1_0_0_0_0
-`define SS_WR_S2            6'b1_1_0_0_1_0
-`define SS_WR_LM            6'b0_1_1_0_0_0
-`define SS_RD_LM_AR         6'b0_0_1_0_0_0
-`define SS_RD_LM_R          6'b0_0_1_0_1_0
-`define SS_RD_SM_RS         6'b0_0_0_1_0_0
-`define SS_DONE             6'b0_0_0_0_0_1
+`define SS_IDLE             7'b0_0_0_0_0_0_0
+`define SS_RD               7'b0_1_0_0_0_0_0
+`define SS_WR_S1            7'b0_1_1_0_0_0_0
+`define SS_WR_S2            7'b0_1_1_0_0_1_0
+`define SS_WR_LM            7'b0_0_1_1_0_0_0
+`define SS_WR_LM_AW         7'b1_0_1_1_0_0_0
+`define SS_RD_LM_AR         7'b0_0_0_1_0_0_0
+`define SS_RD_LM_R          7'b0_0_0_1_0_1_0
+`define SS_RD_SM_RS         7'b0_0_0_0_1_0_0
+`define SS_DONE             7'b0_0_0_0_0_0_1
 */
 
 // cycle indicator and control signal generaion
@@ -593,15 +597,16 @@ always @(posedge axis_clk or negedge axis_rst_n) begin
 end
 
 // LM interface signal - lm master
-assign m_awvalid = lm_cyc & ss_wr;
-assign m_wvalid = m_awvalid;
+//support slave device in lm interface assert m_awready then assert m_wready or at the same clock.
+assign m_awvalid = lm_cyc & ss_wr & (ss_lm_fsm == `SS_WR_LM);
+assign m_wvalid  = lm_cyc & ss_wr & ( (ss_lm_fsm == `SS_WR_LM) | (ss_lm_fsm == `SS_WR_LM_AW) );
 assign m_arvalid = r_m_arvalid; // m_arvalid de-assert when detect m_arready assert
 assign m_rready  = r_m_rready;  // m_rready de-assert when detect m_rvalid assert
 
 
 // control signals
 // Note:  1. LS, SS state mchine are exclusive
-//        2. limitation: dead lock issue, if remote side send a request and ss_aa_reg=1. current design do not assert tready in SS then dead lock.
+//        2. limitation: dead lock issue, if remote side send a read request and ss_aa_reg=1. current design do not assert tready in SS then dead lock.
 //        3. dead lock issue - both side issue mailbox write
 //            workaround - SS state mahcine from IDLE to next state when ss_wr_cyc=1
 
@@ -621,8 +626,6 @@ assign m_rready  = r_m_rready;  // m_rready de-assert when detect m_rvalid asser
 // - improve solution: use mailbox as a communication chaneel for sw to grant/release the remote cfg access right. The spec is defeined by software if need.(TBD)
 
 assign ss_lm_enable = (!ls_cyc & ss_rd_cyc & !ss_aa_reg & as_aa_tvalid ) || (ss_wr_cyc & as_aa_tvalid );
-
-wire lm_wr_ready  = m_awready & m_wready;
 
         
 // State Machine - ss_lm_fsm
@@ -652,8 +655,12 @@ always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
                     ss_lm_fsm <= `SS_WR_S2;
                 end
             `SS_WR_LM:
-                if(lm_wr_ready)     ss_lm_fsm <= `SS_DONE;
-                else                ss_lm_fsm <= `SS_WR_LM;
+                if(m_awready && m_wready)       ss_lm_fsm <= `SS_DONE;      
+                else if(m_awready)              ss_lm_fsm <= `SS_WR_LM_AW;
+                else                            ss_lm_fsm <= `SS_WR_LM;
+            `SS_WR_LM_AW:
+                if(m_wready)        ss_lm_fsm <= `SS_DONE;
+                else                ss_lm_fsm <= `SS_WR_LM_AW;
             `SS_RD:
                 if(ss_aa_reg | ss_aa_mbox) ss_lm_fsm <= `SS_RD_SM_RS;
                 else                      ss_lm_fsm <= `SS_RD_LM_AR;    //read cfg target not in AA
