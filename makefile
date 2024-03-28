@@ -1,7 +1,7 @@
 .PHONY:sim clean wave w
 
 sim:
-	xvlog -sv -i ../ tb_test.v -f filelist
+	xvlog -sv -i ../ tb_test.v -f filelist -d SIMULATION=1
 	xelab tb_test -debug typical --snapshot tb_test_xelab --timescale 1ns/1ns
 	xsim tb_test_xelab --tclbatch log_wave.tcl
 
