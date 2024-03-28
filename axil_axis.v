@@ -475,7 +475,7 @@ wire ls_ready  = ls_sm_wr ? ls_done : ls_done & s_rready;      // ls read need t
 // State Machine - ls_sm_fsm
 always @(posedge axis_clk or negedge axis_rst_n) begin   // asynchronous reset
     if( !axis_rst_n ) begin
-        ls_sm_fsm = `LS_IDLE;
+        ls_sm_fsm <= `LS_IDLE;
     end else begin
         case(ls_sm_fsm) 
             `LS_IDLE : 
